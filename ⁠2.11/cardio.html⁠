@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UE 2.11 - Médicaments de Cardiologie</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #FAF7F2; color: #2B1E1A; padding: 24px; margin: 0; }
+        .quiz-container { max-width: 680px; margin: 0 auto; background: #FFFDF9; border: 2px solid #E2D1BC; border-radius: 16px; padding: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { font-size: 1.3rem; color: #D05A3F; margin-bottom: 20px; font-weight: 800; }
+        .question { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #EFE4D2; }
+        .q-title { font-weight: 700; font-size: 1rem; margin-bottom: 12px; }
+        .opt-btn { display: block; width: 100%; text-align: left; padding: 12px 14px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #E2D1BC; background: #F7F1E5; font-size: 0.9rem; cursor: pointer; color: #2B1E1A; }
+        .opt-btn:hover { background: #FAD7A0; }
+        .opt-btn.correct { background: #6B8E7B; color: white; border-color: #446252; font-weight: 600; }
+        .opt-btn.wrong { background: #D05A3F; color: white; border-color: #A83E26; }
+        .explanation { display: none; margin-top: 10px; padding: 12px; background: #EFE4D2; border-left: 4px solid #D05A3F; font-size: 0.88rem; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>💊 UE 2.11 - Médicaments en Cardiologie</h1>
+
+        <!-- Question 1 -->
+        <div class="question" id="q1">
+            <div class="q-title">1. Quel paramètre clinique prioritaire l'IDE doit-il contrôler impérativement avant d'administrer un bêta-bloquant (ex. Bisoprolol) ?</div>
+            <button class="opt-btn" onclick="check(this, false, 'exp1')">A) La diurèse des dernières 24 heures</button>
+            <button class="opt-btn" onclick="check(this, true, 'exp1')">B) La fréquence cardiaque et la pression artérielle</button>
+            <button class="opt-btn" onclick="check(this, false, 'exp1')">C) La glycémie capillaire</button>
+            <button class="opt-btn" onclick="check(this, false, 'exp1')">D) La saturation pulsée en oxygène (SpO2)</button>
+            <div class="explanation" id="exp1">
+                <strong>Raisonnement IFSI :</strong> Les bêta-bloquants sont des chrono-tropes et inotropes négatifs (ils ralentissent le cœur et diminuent la pression artérielle). En règle générale, on sursoit et on alerte si FC &lt; 50-60 bpm ou PAS &lt; 90-100 mmHg.
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question" id="q2">
+            <div class="q-title">2. Devant quel effet indésirable grave typique l'IDE doit-il alerter immédiatement pour un patient sous IEC (ex. Ramipril) ?</div>
+            <button class="opt-btn" onclick="check(this, false, 'exp2')">A) Une somnolence diurne</button>
+            <button class="opt-btn" onclick="check(this, false, 'exp2')">B) Une constipation opiniâtre</button>
+            <button class="opt-btn" onclick="check(this, true, 'exp2')">C) Un œdème de Quincke (angio-œdème) ou une toux sèche rebelle</button>
+            <button class="opt-btn" onclick="check(this, false, 'exp2')">D) Une prise de poids rapide</button>
+            <div class="explanation" id="exp2">
+                <strong>Raisonnement IFSI :</strong> Les IEC empêchent la dégradation de la bradykinine, provoquant souvent une toux sèche invalidante et plus rarement une urgence vitale : l'œdème de Quincke (angio-œdème de la face et de la glotte).
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function check(btn, isCorrect, expId) {
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.opt-btn');
+            buttons.forEach(b => b.disabled = true);
+            if (isCorrect) {
+                btn.classList.add('correct');
+            } else {
+                btn.classList.add('wrong');
+            }
+            document.getElementById(expId).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
