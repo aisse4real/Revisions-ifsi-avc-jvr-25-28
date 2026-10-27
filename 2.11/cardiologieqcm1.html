@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>UE 2.11 - Quiz Hémodynamique et Pharmacologie Cardiovasculaire</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --success: #15803d;
+            --success-light: #dcfce7;
+            --error: #b91c1c;
+            --error-light: #fee2e2;
+            --gray-border: #cbd5e1;
+            --gray-text: #334155;
+            --bg: #f8fafc;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--gray-text);
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 24px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 12px;
+            margin-top: 0;
+        }
+        .instructions {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary);
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        .score-board {
+            position: sticky;
+            top: 12px;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid var(--gray-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            z-index: 100;
+        }
+        .question-card {
+            border: 1px solid var(--gray-border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 14px;
+            color: #0f172a;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            margin-bottom: 8px;
+        }
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 14px;
+            border: 1px solid var(--gray-border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .option-label:hover {
+            background-color: var(--primary-light);
+        }
+        .option-label input {
+            margin-top: 3px;
+            margin-right: 12px;
+        }
+        .btn-validate {
+            margin-top: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-validate:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+        .feedback {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            display: none;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .feedback.correct {
+            background-color: var(--success-light);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        .feedback.incorrect {
+            background-color: var(--error-light);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+        .option-label.is-correct {
+            background-color: var(--success-light);
+            border-color: var(--success);
+            font-weight: 500;
+        }
+        .option-label.is-wrong {
+            background-color: var(--error-light);
+            border-color: var(--error);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Contrôle de Connaissances : Hémodynamique & Pharmacologie Cardiovasculaire</h1>
+    <div class="instructions">
+        <strong>Consignes de validation :</strong> Réponds à chaque item en cochant une ou plusieurs réponses (entre 1 et 3 réponses exactes par question). Valide ensuite chaque question pour afficher la correction immédiate et le rationnel clinique.
+    </div>
+
+    <div class="score-board">
+        <span><strong>Questions traitées :</strong> <span id="answered-count">0</span> / 40</span>
+        <span><strong>Score :</strong> <span id="score-count">0</span> / 40</span>
+    </div>
+
+    <div id="quiz-mount"></div>
+</div>
+
+<script>
+const quizData = [
+    {
+        q: "1. Selon les lois fondamentales de l'hémodynamique, la pression artérielle dépend directement de quelles variables ?",
+        options: [
+            "A. Des résistances vasculaires périphériques",
+            "B. De la pression oncotique plasmatique",
+            "C. Du débit cardiaque",
+            "D. Du taux d'hématocrite isolé"
+        ],
+        correct: [0, 2],
+        rationale: "La formule fondamentale est PA = Débit cardiaque (DC) × Résistances vasculaires périphériques (RVP)."
+    },
+    {
+        q: "2. Quelles composantes déterminent mathématiquement le débit cardiaque ?",
+        options: [
+            "A. La surface corporelle totale",
+            "B. Le volume d'éjection systolique",
+            "C. La fréquence cardiaque",
+            "D. La compliance veineuse cérébrale"
+        ],
+        correct: [1, 2],
+        rationale: "Le débit cardiaque est le produit du volume d'éjection systolique (VES) par la fréquence cardiaque (FC)."
+    },
+    {
+        q: "3. La régulation de la pression artérielle fait intervenir :",
+        options: [
+            "A. Le système nerveux autonome",
+            "B. La filtration glomérulaire tubulaire purement passive",
+            "C. Le système rénine-angiotensine-aldostérone",
+            "D. Le surfactant pulmonaire"
+        ],
+        correct: [0, 2],
+        rationale: "La PA est régulée à court terme par le système nerveux autonome (baroréflexe) et à moyen/long terme par le système hormonal rénine-angiotensine-aldostérone."
+    },
+    {
+        q: "4. La précharge ventriculaire correspond à :",
+        options: [
+            "A. La force opposée à l'ouverture de la valve aortique",
+            "B. La résistance artérielle périphérique",
+            "C. La pression ou étirement du myocarde en fin de diastole",
+            "D. La force contractile intrinsèque des cardiomyocytes"
+        ],
+        correct: [2],
+        rationale: "La précharge est la contrainte imposée à la paroi ventriculaire en fin de diastole, directement liée au volume de remplissage."
+    },
+    {
+        q: "5. La postcharge ventriculaire est augmentée par :",
+        options: [
+            "A. Une vasoconstriction artérielle",
+            "B. Une vasodilatation capillaire",
+            "C. Une élévation des résistances vasculaires systémiques",
+            "D. Une hypovolémie sévère"
+        ],
+        correct: [0, 2],
+        rationale: "La postcharge représente la résistance à l'éjection ventriculaire, augmentée par la rigidité pariétale artérielle et la vasoconstriction artérielle systémique."
+    },
+    {
+        q: "6. Une substance ayant un effet inotrope négatif entraîne :",
+        options: [
+            "A. Une accélération de la conduction auriculo-ventriculaire",
+            "B. Une diminution de la force contractile du myocarde",
+            "C. Une baisse du volume d'éjection systolique",
+            "D. Une hausse primitive de la fréquence cardiaque"
+        ],
+        correct: [1, 2],
+        rationale: "L'inotropisme qualifie la contractilité musculaire : un inotrope négatif affaiblit la contraction myocardique et réduit le volume expulsé."
+    },
+    {
+        q: "7. Quels termes sémiologiques et pharmacologiques sont exacts concernant les propriétés cardiaques ?",
+        options: [
+            "A. Chronotrope concerne la fréquence cardiaque",
+            "B. Dromotrope concerne la vitesse de conduction électrique",
+            "C. Inotrope concerne l'excitabilité membranaire",
+            "D. Bathmotrope concerne l'excitabilité cellulaire"
+        ],
+        correct: [0, 1, 3],
+        rationale: "Chronotrope = fréquence, dromotrope = conduction, bathmotrope = excitabilité, inotrope = contractilité."
+    },
+    {
+        q: "8. Les récepteurs bêta-1 adrénergiques sont principalement localisés au niveau :",
+        options: [
+            "A. Des cellules musculaires bronchiques",
+            "B. Du myocarde et du tissu nodal",
+            "C. Des sphincters vésicaux",
+            "D. De l'appareil juxtaglomérulaire rénal"
+        ],
+        correct: [1, 3],
+        rationale: "Les récepteurs bêta-1 se situent sur le cœur (stimulation inotrope/chronotrope) et sur les cellules juxtaglomérulaires rénales (sécrétion de rénine)."
+    },
+    {
+        q: "9. La stimulation des récepteurs bêta-2 entraîne physiologiquement :",
+        options: [
+            "A. Une bronchoconstriction intense",
+            "B. Une bronchodilatation",
+            "C. Une relaxation des muscles lisses vasculaires périphériques",
+            "D. Une inhibition de la sécrétion de salive"
+        ],
+        correct: [1, 2],
+        rationale: "L'activation bêta-2 induit le relâchement des fibres musculaires lisses : bronchodilatation et vasodilatation artériolaire."
+    },
+    {
+        q: "10. Quels sont les effets cardiovasculaires induits par le blocage des récepteurs bêta-1 ?",
+        options: [
+            "A. Un effet chronotrope négatif",
+            "B. Un effet dromotrope positif",
+            "C. Un effet inotrope négatif",
+            "D. Une élévation de la consommation myocardique en oxygène"
+        ],
+        correct: [0, 2],
+        rationale: "Les bêtabloquants réduisent la fréquence cardiaque (chronotrope -), ralentissent la conduction (dromotrope -) et diminuent la force contractile (inotrope -), ce qui abaisse le travail cardiaque et l'ischémie."
+    },
+    {
+        q: "11. Pourquoi les bêtabloquants non sélectifs sont-ils formellement contre-indiqués chez l'asthmatique ?",
+        options: [
+            "A. Ils bloquent les récepteurs bêta-2 bronchiques",
+            "B. Ils risquent de provoquer un bronchospasme aigu sévère",
+            "C. Ils dégradent directement le surfactant",
+            "D. Ils augmentent la clairance hépatique de la théophylline"
+        ],
+        correct: [0, 1],
+        rationale: "Le blocage concomitant des récepteurs bêta-2 inhibe la bronchodilatation physiologique et peut induire une crise d'asthme aiguë potentiellement mortelle."
+    },
+    {
+        q: "12. Parmi les molécules suivantes, lesquelles sont des bêtabloquants cardiosélectifs (bêta-1 sélectifs) ?",
+        options: [
+            "A. Le propranolol",
+            "B. Le bisoprolol",
+            "C. Le métoprolol",
+            "D. Le sotalol"
+        ],
+        correct: [1, 2],
+        rationale: "Le bisoprolol et le métoprolol sont cardiosélectifs bêta-1 préférentiels, contrairement au propranolol et au sotalol qui sont non sélectifs."
+    },
+    {
+        q: "13. Quelles sont les contre-indications absolues à l'instauration d'un traitement bêtabloquant ?",
+        options: [
+            "A. Un bloc auriculo-ventriculaire (BAV) de haut degré non appareillé",
+            "B. Une bradycardie sinusale sévère (< 45-50 bpm)",
+            "C. Une hypertension artérielle isolée",
+            "D. Un choc cardiogénique"
+        ],
+        correct: [0, 1, 3],
+        rationale: "Par leurs effets inotrope, chronotrope et dromotrope négatifs, ils aggravent drastiquement les blocs de conduction, les bradycardies critiques et l'état de choc."
+    },
+    {
+        q: "14. Quels paramètres cliniques l'infirmier doit-il obligatoirement vérifier avant d'administrer un bêtabloquant ?",
+        options: [
+            "A. La glycémie capillaire systématique",
+            "B. La fréquence cardiaque (pouls)",
+            "C. La pression artérielle systolique et diastolique",
+            "D. La température tympanique"
+        ],
+        correct: [1, 2],
+        rationale: "Le contrôle préalable de la FC et de la PA est obligatoire. En cas de FC < 50 bpm ou d'hypotension marquée, le soignant sursoit à l'administration et alerte."
+    },
+    {
+        q: "15. Chez le patient diabétique traité, quel risque spécifique impose la prise de bêtabloquants ?",
+        options: [
+            "A. L'induction d'une cétonurie systématique",
+            "B. Le masquage des signes neurovégétatifs d'hypoglycémie (tachycardie, sueurs)",
+            "C. Une stimulation inappropriée de la glycogénolyse",
+            "D. Une destruction des îlots pancréatiques"
+        ],
+        correct: [1],
+        rationale: "Les bêtabloquants effacent les signes sympathiques d'alarme de l'hypoglycémie (palpitations, tremblements), retardant son identification par le patient."
+    },
+    {
+        q: "16. Le phénomène de Raynaud et les extrémités froides sous bêtabloquant s'expliquent par :",
+        options: [
+            "A. Une vasodilatation veineuse profonde",
+            "B. L'inhibition de la vasodilatation périphérique à médiation bêta-2",
+            "C. Une micro-embolie de cholestérol",
+            "D. Une nécrose cutanée aiguë"
+        ],
+        correct: [1],
+        rationale: "Le blocage des récepteurs bêta-2 vasculaires laisse prédominer l'action vasoconstrictrice alpha-1 sur les artères distales."
+    },
+    {
+        q: "17. Le rôle biologique essentiel du calcium dans les cellules myocardiques et vasculaires est :",
+        options: [
+            "A. De bloquer la repolarisation potassique",
+            "B. De déclencher le couplage excitation-contraction musculaire",
+            "C. D'activer la pompe à protons membranaire",
+            "D. De stimuler la synthèse d'angiotensinogène"
+        ],
+        correct: [1],
+        rationale: "L'afflux intracellulaire d'ions calcium via les canaux lents déclenche l'interaction actine-myosine nécessaire à la contraction mécanique du muscle lisse et du cardiomyocyte."
+    },
+    {
+        q: "18. Les inhibiteurs calciques de la famille des dihydropyridines (suffixe -dipine) agissent principalement sur :",
+        options: [
+            "A. Le tissu nodal sino-auriculaire uniquement",
+            "B. Les cellules musculaires lisses des parois artérielles",
+            "C. Les glomérules rénaux",
+            "D. La réabsorption tubulaire du potassium"
+        ],
+        correct: [1],
+        rationale: "Les dihydropyridines (amlodipine, nifédipine, lercanidipine) ont un tropisme vasculaire prédominant, provoquant une vasodilatation artérielle périphérique."
+    },
+    {
+        q: "19. Les inhibiteurs calciques non-dihydropyridines (vérapamil, diltiazem) se caractérisent par :",
+        options: [
+            "A. Un effet bradycardisant et dromotrope négatif marqué",
+            "B. Une absence totale de pénétration cellulaire",
+            "C. Une action dépressive sur le myocarde et la conduction auriculo-ventriculaire",
+            "D. Une stimulation du système orthosympathique"
+        ],
+        correct: [0, 2],
+        rationale: "Le vérapamil et le diltiazem possèdent un tropisme cardiaque net, ralentissant le nœud AV et la contractilité cardiaque."
+    },
+    {
+        q: "20. L'association conjointe d'un bêtabloquant et de vérapamil par voie injectable est proscrite car elle risque d'induire :",
+        options: [
+            "A. Une tachycardie ventriculaire en salves",
+            "B. Un collapsus hémodynamique et une asystolie / BAV complet",
+            "C. Une embolie pulmonaire massive",
+            "D. Une hypokaliémie foudroyante"
+        ],
+        correct: [1],
+        rationale: "Leur synergie dépressive sur le nœud auriculo-ventriculaire et la contractilité myocardique peut entraîner un arrêt cardiaque ou un bloc de conduction irréversible."
+    },
+    {
+        q: "21. Quel effet indésirable périphérique très fréquent l'infirmier surveille-t-il sous inhibiteur calcique dihydropyridine (ex. amlodipine) ?",
+        options: [
+            "A. Une ulcération gastro-duodénale aiguë",
+            "B. Des œdèmes des membres inférieurs (OMI) bilatéraux et blancs",
+            "C. Une alopécie diffuse précoce",
+            "D. Des bouffées congestives vasomotrices avec céphalées"
+        ],
+        correct: [1, 3],
+        rationale: "La vasodilatation artériolaire précapillaire favorise l'hyperpression hydrostatique et les œdèmes de chevilles, ainsi que des flushes faciaux avec céphalées."
+    },
+    {
+        q: "22. La digoxine est un glucoside cardiotonique dont le mécanisme cellulaire principal est :",
+        options: [
+            "A. L'inhibition de l'enzyme de conversion de l'angiotensine",
+            "B. L'inhibition de la pompe Na+/K+-ATPase membranaire",
+            "C. Le blocage sélectif des récepteurs à l'aldostérone",
+            "D. L'activation directe des récepteurs bêta-2"
+        ],
+        correct: [1],
+        rationale: "En inhibant la pompe sodium-potassium ATPase, la digoxine augmente le sodium intracellulaire puis le calcium, augmentant l'inotropisme."
+    },
+    {
+        q: "23. Les effets cardiaques globaux de la digoxine correspondent classiquement à :",
+        options: [
+            "A. Inotrope positif (augmente la force de contraction)",
+            "B. Chronotrope négatif (ralentit la fréquence cardiaque)",
+            "C. Dromotrope négatif (ralentit la conduction AV)",
+            "D. Inotrope négatif et chronotrope positif"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La digoxine renforce la contraction du myocarde (inotrope +), tout en ralentissant la fréquence sinusale (chronotrope -) et la traversée du nœud AV (dromotrope -)."
+    },
+    {
+        q: "24. Quels signes cliniques doivent immédiatement faire suspecter un surdosage toxique en digoxine ?",
+        options: [
+            "A. Troubles visuels avec dyschromatopsie (vision jaune/verte)",
+            "B. Troubles digestifs (nausées, vomissements, anorexie)",
+            "C. Troubles du rythme cardiaque ou de conduction (bradycardie, extrasystoles)",
+            "D. Prurit généralisé sans lésion cutanée"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'intoxication digitalique associe typiquement nausées/vomissements précoces, anomalies visuelles colorées et arythmies/bradycardies sévères."
+    },
+    {
+        q: "25. Quel trouble électrolytique majore drastiquement la toxicité cardiaque de la digoxine ?",
+        options: [
+            "A. Une hyperchlorémie",
+            "B. Une hypokaliémie",
+            "C. Une hyperphosphorémie",
+            "D. Une hyponatrémie modérée isolée"
+        ],
+        correct: [1],
+        rationale: "L'hypokaliémie potentialise la liaison de la digoxine sur la pompe Na+/K+-ATPase, précipitant le risque d'intoxication et de troubles du rythme mortels."
+    },
+    {
+        q: "26. L'amiodarone est un anti-arythmique de classe III caractérisé par :",
+        options: [
+            "A. Une surcharge tissulaire et une demi-vie plasmatique très longue (plusieurs semaines)",
+            "B. La présence d'iode dans sa structure chimique",
+            "C. Une élimination rénale ultra-rapide en moins d'une heure",
+            "D. Un effet allongeant la durée du potentiel d'action et l'intervalle QT"
+        ],
+        correct: [0, 1, 3],
+        rationale: "Molécule iodée à élimination très lente, l'amiodarone allonge la repolarisation (QT) et s'accumule dans de multiples tissus (thyroïde, poumons, foie, cornée)."
+    },
+    {
+        q: "27. Quels bilans de surveillance l'infirmier doit-il s'assurer de faire réaliser chez un patient sous amiodarone au long cours ?",
+        options: [
+            "A. Bilan thyroïdien régulier (TSH)",
+            "B. Bilan hépatique (transaminases)",
+            "C. Électrocardiogramme (mesure de l'intervalle QTc)",
+            "D. Bilan cuprique sérique"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La surveillance sous amiodarone impose l'ECG (allongement QT, bradycardie), la TSH (dysthyroïdies iodo-induites) et le bilan hépatique régulier."
+    },
+    {
+        q: "28. Dans la cascade du système rénine-angiotensine-aldostérone, l'enzyme de conversion transforme :",
+        options: [
+            "A. L'angiotensinogène en angiotensine I",
+            "B. L'angiotensine I en angiotensine II",
+            "C. L'aldostérone en rénine active",
+            "D. La bradykinine en métabolites inactifs"
+        ],
+        correct: [1, 3],
+        rationale: "L'ECA convertit l'angiotensine I en angiotensine II (puissant vasoconstricteur) et participe physiologiquement à la dégradation de la bradykinine."
+    },
+    {
+        q: "29. Quels sont les effets physiologiques directs de l'angiotensine II sur l'organisme ?",
+        options: [
+            "A. Une vasoconstriction artérielle puissante",
+            "B. La stimulation de la sécrétion corticale d'aldostérone",
+            "C. Une élimination urinaire massive de chlorure de sodium",
+            "D. Une baisse immédiate de la postcharge"
+        ],
+        correct: [0, 1],
+        rationale: "L'angiotensine II contracte directement les artérioles (augmente la postcharge) et stimule l'aldostérone qui retient le sodium et l'eau."
+    },
+    {
+        q: "30. Les Inhibiteurs de l'Enzyme de Conversion (IEC, molécules en -pril) ont pour effets :",
+        options: [
+            "A. Une vasodilatation et une réduction des résistances périphériques",
+            "B. Une baisse de la sécrétion d'aldostérone",
+            "C. Une inhibition de la filtration glomérulaire sans impact hémodynamique",
+            "D. Une diminution de la volémie efficace et de la pression artérielle"
+        ],
+        correct: [0, 1, 3],
+        rationale: "En bloquant la genèse de l'angiotensine II, les IEC réduisent la vasoconstriction, la volémie (chute d'aldostérone) et la pression de perfusion systémique."
+    },
+    {
+        q: "31. Quelle réaction indésirable pulmonaire sèche, quinteuse et rebelle est typiquement imputable aux IEC ?",
+        options: [
+            "A. Une toux sèche chronique induite par l'accumulation de bradykinine",
+            "B. Un œdème aigu lésionnel immédiat",
+            "C. Une embolie gazeuse bronchiolaire",
+            "D. Une fibrose interstitielle diffuse précoce"
+        ],
+        correct: [0],
+        rationale: "L'inhibition de la dégradation de la bradykinine entraîne son accumulation bronchique, provoquant une toux sèche réfractaire qui impose l'arrêt de l'IEC."
+    },
+    {
+        q: "32. Quelle complication immuno-allergique aiguë rare mais potentiellement mortelle sous IEC requiert l'arrêt immédiat et l'alerte du réanimateur ?",
+        options: [
+            "A. L'œdème de Quincke / angioedème bradykinique de la face et des voies aériennes",
+            "B. Le purpura thrombopénique aigu idiopathique",
+            "C. Le syndrome de Lyell étendu",
+            "D. Le syndrome néphrotique à lésions glomérulaires minimes"
+        ],
+        correct: [0],
+        rationale: "L'angio-œdème sous IEC provoque un gonflement sous-muqueux de la langue, du pharynx et du larynx engageant le pronostic respiratoire vital."
+    },
+    {
+        q: "33. Les Antagonistes des Récepteurs de l'Angiotensine II (ARA-2 ou sartans) présentent comme propriété :",
+        options: [
+            "A. De bloquer directement et sélectivement les récepteurs AT1 de l'angiotensine II",
+            "B. D'induire beaucoup moins de toux sèche que les IEC par absence d'accumulation de bradykinine",
+            "C. D'être des inducteurs puissants de l'aldostérone",
+            "D. De provoquer une hypokaliémie majeure constante"
+        ],
+        correct: [0, 1],
+        rationale: "Les sartans ciblent directement le récepteur AT1 sans inhiber la dégradation de la bradykinine, ce qui élimine quasi-totalement la survenue de toux."
+    },
+    {
+        q: "34. Quelle surveillance biologique conjointe est indispensable lors de la mise en route ou de l'ajustement d'un traitement par IEC ou ARA-2 ?",
+        options: [
+            "A. L'uricémie et le bilan lipidique",
+            "B. Le ionogramme sanguin (dépistage d'une hyperkaliémie)",
+            "C. La fonction rénale (créatininémie et clairance/DFG)",
+            "D. L'hémostase complète (TP, TCA, INR)"
+        ],
+        correct: [1, 2],
+        rationale: "Le blocage du SRAA diminue la filtration glomérulaire (risque d'insuffisance rénale fonctionnelle) et réduit l'élimination de potassium (risque d'hyperkaliémie)."
+    },
+    {
+        q: "35. L'association conjointe d'un IEC ou d'un ARA-2 avec un Anti-Inflammatoire Non Stéroïdien (AINS) majore sévèrement le risque :",
+        options: [
+            "A. D'insuffisance rénale aiguë par baisse critique du débit de filtration glomérulaire",
+            "B. De rupture d'anévrisme cérébral immédiat",
+            "C. De pancréatite aiguë nécrosante",
+            "D. D'alcalose respiratoire décompensée"
+        ],
+        correct: [0],
+        rationale: "Les AINS bloquent les prostaglandines vasodilatatrices de l'artériole afférente glomérulaire tandis que l'IEC vasodilate l'artériole efférente : la pression intraglomérulaire s'effondre."
+    },
+    {
+        q: "36. Le furosémide (Lasilix®) est un diurétique agissant préférentiellement au niveau de :",
+        options: [
+            "A. La branche large ascendante de l'anse de Henle",
+            "B. Le tube contourné proximal uniquement",
+            "C. Le canal collecteur médullaire",
+            "D. L'anse capillaire glomérulaire"
+        ],
+        correct: [0],
+        rationale: "Le furosémide est un diurétique de l'anse : il inhibe le co-transporteur Na+/K+/2Cl- dans la branche ascendante de l'anse de Henle."
+    },
+    {
+        q: "37. Quels désordres hydro-électrolytiques et sanguins sont fréquemment induits par de fortes doses de furosémide ?",
+        options: [
+            "A. Une hypokaliémie",
+            "B. Une hyponatrémie et déshydratation extracellulaire",
+            "C. Une hyperkaliémie menaçante isolée",
+            "D. Une hypotension artérielle orthostatique"
+        ],
+        correct: [0, 1, 3],
+        rationale: "Le Lasilix® provoque une élimination conjointe d'eau, de sodium et de potassium, exposant à l'hypokaliémie, à l'hypovolémie et aux chutes de PA."
+    },
+    {
+        q: "38. La spironolactone (Aldactone®) se différencie fondamentalement du furosémide car elle est :",
+        options: [
+            "A. Un diurétique épargneur de potassium agissant comme antagoniste de l'aldostérone",
+            "B. Une molécule exposant au risque majeur d'hyperkaliémie",
+            "C. Un diurétique osmotique d'action cérébrale pure",
+            "D. Un stimulant direct de l'excrétion urinaire de potassium"
+        ],
+        correct: [0, 1],
+        rationale: "Antagoniste compétitif de l'aldostérone au niveau du tubule collecteur, la spironolactone élimine le sodium sans éliminer le potassium, entraînant un risque d'hyperkaliémie."
+    },
+    {
+        q: "39. Quels éléments composent la surveillance clinique infirmière quotidienne de l'efficacité d'un traitement diurétique ?",
+        options: [
+            "A. La pesée quotidienne du patient (surveillance de la courbe de poids)",
+            "B. La mesure rigoureuse de la diurèse des 24 heures",
+            "C. La recherche d'une régression des œdèmes périphériques ou des signes de surcharge",
+            "D. La numération lymphocytaire quotidienne"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'efficacité d'un traitement diurétique se juge au lit du malade sur la perte de poids, l'abondance de la diurèse et la fonte clinique des œdèmes ou râles crépitants."
+    },
+    {
+        q: "40. Face à une prescription de diurétiques chez un patient recevant déjà un IEC et un supplément potassique, quel est le risque biologique fatal à anticiper ?",
+        options: [
+            "A. L'hyperkaliémie sévère conduisant à des troubles conductifs et à l'arrêt cardiaque",
+            "B. La neutropénie fébrile foudroyante",
+            "C. L'anémie hémolytique aiguë auto-immune",
+            "D. L'hypoglycémie réfractaire"
+        ],
+        correct: [0],
+        rationale: "L'association de bloqueurs du SRAA, d'épargneurs potassiques ou d'une recharge potassique expose au risque mortel d'hyperkaliémie majeure (ondes T pointues, BAV, FV)."
+    }
+];
+
+let userAnswers = {};
+let score = 0;
+let answeredTotal = 0;
+
+function renderQuiz() {
+    const mount = document.getElementById("quiz-mount");
+    mount.innerHTML = "";
+
+    quizData.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.id = `card-${index}`;
+
+        let optionsHtml = "";
+        item.options.forEach((opt, optIndex) => {
+            optionsHtml += `
+                <li class="option-item">
+                    <label class="option-label" id="label-${index}-${optIndex}">
+                        <input type="checkbox" name="q-${index}" value="${optIndex}" onchange="trackSelection(${index})">
+                        <span>${opt}</span>
+                    </label>
+                </li>
+            `;
+        });
+
+        card.innerHTML = `
+            <div class="question-title">${item.q}</div>
+            <ul class="options-list">${optionsHtml}</ul>
+            <button class="btn-validate" id="btn-${index}" onclick="validateQuestion(${index})">Valider cette réponse</button>
+            <div class="feedback" id="feedback-${index}"></div>
+        `;
+
+        mount.appendChild(card);
+    });
+}
+
+function trackSelection(qIndex) {
+    // Fonctionnalité pour tracer la sélection si nécessaire avant validation
+}
+
+function validateQuestion(qIndex) {
+    const checkboxes = document.querySelectorAll(`input[name="q-${qIndex}"]:checked`);
+    const selected = Array.from(checkboxes).map(cb => parseInt(cb.value));
+
+    if (selected.length === 0) {
+        alert("Sélectionne au moins une option avant de valider.");
+        return;
+    }
+
+    const question = quizData[qIndex];
+    const isCorrect = 
+        selected.length === question.correct.length &&
+        selected.every(val => question.correct.includes(val));
+
+    const btn = document.getElementById(`btn-${qIndex}`);
+    btn.disabled = true;
+
+    // Mise en évidence visuelle des propositions
+    question.options.forEach((_, optIdx) => {
+        const label = document.getElementById(`label-${qIndex}-${optIdx}`);
+        const input = label.querySelector("input");
+        input.disabled = true;
+
+        if (question.correct.includes(optIdx)) {
+            label.classList.add("is-correct");
+        } else if (selected.includes(optIdx)) {
+            label.classList.add("is-wrong");
+        }
+    });
+
+    // Affichage de l'explication
+    const feedback = document.getElementById(`feedback-${qIndex}`);
+    feedback.style.display = "block";
+
+    if (isCorrect) {
+        feedback.className = "feedback correct";
+        feedback.innerHTML = `<strong>Exact !</strong> ${question.rationale}`;
+        score++;
+    } else {
+        feedback.className = "feedback incorrect";
+        feedback.innerHTML = `<strong>Erreur ou réponse incomplète.</strong> ${question.rationale}`;
+    }
+
+    answeredTotal++;
+    document.getElementById("answered-count").innerText = answeredTotal;
+    document.getElementById("score-count").innerText = score;
+}
+
+renderQuiz();
+</script>
+
+</body>
+</html>
