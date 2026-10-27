@@ -13,7 +13,6 @@
             --terracotta-fonce: #A83E26;
             --ocre-chaleureux: #E59866;
             --vert-sauge: #6B8E7B;
-            --vert-sauge-fonce: #446252;
             --ambre-doux: #FAD7A0;
             --texte-sombre: #2B1E1A;
             --texte-secondaire: #6E5D57;
@@ -38,7 +37,7 @@
             display: flex;
         }
 
-        /* --- BARRE LATÉRALE PLEINE HAUTEUR --- */
+        /* BARRE LATÉRALE PLEIN ÉCRAN */
         #sidebar {
             width: 360px;
             min-width: 340px;
@@ -51,7 +50,7 @@
             z-index: 20;
         }
 
-        /* En-tête colorée avec l'illustration */
+        /* Bannière d'en-tête soignante & IA */
         .profile-banner {
             padding: 20px;
             background: linear-gradient(135deg, #E6D2B8 0%, #D8BEA0 100%);
@@ -90,7 +89,7 @@
             margin-top: 3px;
         }
 
-        /* Arborescence défilante */
+        /* Zone de défilement des UE */
         .tree-view {
             flex: 1;
             overflow-y: auto;
@@ -103,7 +102,7 @@
             border-radius: 10px;
         }
 
-        /* Boîte UE Principale */
+        /* Boîtes des grandes UE */
         details.ue-box {
             margin-bottom: 16px;
             background: var(--carte-fond);
@@ -148,13 +147,13 @@
             font-weight: 700;
         }
 
-        /* Conteneur des sous-thèmes */
+        /* Conteneur des sous-catégories */
         .sub-folder {
             padding: 10px 14px 14px 14px;
             background: #FCF9F3;
         }
 
-        /* Boîte Sous-Thème (CM / Chapitre) */
+        /* Sous-catégories (Thèmes des cours) */
         details.theme-box {
             margin-top: 10px;
             background: #FFF;
@@ -181,7 +180,7 @@
             background: #EFE4D1;
         }
 
-        /* Liens Quiz cliquables */
+        /* Liens des Quiz */
         .quiz-list {
             list-style: none;
             padding: 8px 10px;
@@ -197,7 +196,7 @@
             color: var(--texte-sombre);
             text-decoration: none;
             background: #FAF5EB;
-            border: 1px solid #E8DC melt;
+            border: 1px solid var(--bordure-chaude);
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
@@ -217,7 +216,7 @@
             box-shadow: 0 4px 10px rgba(208, 90, 63, 0.3);
         }
 
-        /* --- ZONE PLEIN ÉCRAN POUR LES QUIZ --- */
+        /* ZONE CENTRALE PLEIN ÉCRAN */
         #content-area {
             flex: 1;
             height: 100vh;
@@ -235,7 +234,7 @@
             background: #FFF;
         }
 
-        /* Message central d'accueil (avant le choix d'un quiz) */
+        /* Message d'accueil avant sélection */
         #empty-state {
             margin: auto;
             max-width: 580px;
@@ -283,7 +282,7 @@
 
     <!-- BARRE LATÉRALE DE CONTRÔLE -->
     <nav id="sidebar">
-        <!-- Bannière d'en-tête chaleureuse -->
+        <!-- En-tête illustrée -->
         <div class="profile-banner">
             <div class="avatar-cadre">
                 <svg viewBox="0 0 120 120" width="70" height="70" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -328,106 +327,62 @@
             </div>
         </div>
 
-        <!-- LISTE DES CATÉGORIES ET THÈMES -->
+        <!-- LISTE STRUCTURÉE DES UE (1.2 -> 2.5 -> 2.8 -> 2.11) -->
         <div class="tree-view">
 
-            <!-- ============================================== -->
-            <!-- CATEGORIE 1 : UE 2.11                          -->
-            <!-- ============================================== -->
+            <!-- 1. UE 1.2 -->
+            <details class="ue-box" open>
+                <summary class="ue-title">
+                    <span>📋 <strong>UE 1.2</strong> Santé publique</span>
+                    <span class="pill-ue">S3</span>
+                </summary>
+                <div class="sub-folder" id="dossier-1-2">
+                    <p style="font-size:0.8rem; color:#7D6F6A; padding:6px;">Aucun quiz pour l'instant.</p>
+                </div>
+            </details>
+
+            <!-- 2. UE 2.5 -->
+            <details class="ue-box" open>
+                <summary class="ue-title">
+                    <span>🦠 <strong>UE 2.5</strong> Processus infectieux</span>
+                    <span class="pill-ue">S3</span>
+                </summary>
+                <div class="sub-folder" id="dossier-2-5">
+                    <p style="font-size:0.8rem; color:#7D6F6A; padding:6px;">Aucun quiz pour l'instant.</p>
+                </div>
+            </details>
+
+            <!-- 3. UE 2.8 -->
+            <details class="ue-box" open>
+                <summary class="ue-title">
+                    <span>💨 <strong>UE 2.8</strong> Processus obstructifs</span>
+                    <span class="pill-ue">S3</span>
+                </summary>
+                <div class="sub-folder" id="dossier-2-8">
+                    <p style="font-size:0.8rem; color:#7D6F6A; padding:6px;">Aucun quiz pour l'instant.</p>
+                </div>
+            </details>
+
+            <!-- 4. UE 2.11 -->
             <details class="ue-box" open>
                 <summary class="ue-title">
                     <span>💊 <strong>UE 2.11</strong> Pharmacologie</span>
                     <span class="pill-ue">S3</span>
                 </summary>
-                
-                <div class="sub-folder">
-                    <!-- SOUS-CATÉGORIE : Cardiologie -->
-                    <details class="theme-box" open>
-                        <summary class="theme-title">🫀 Cardiologie & Vasculaire</summary>
-                        <ul class="quiz-list">
-                            <li>
-                                <a class="quiz-link" onclick="chargerQuiz('2.11/cardiologie/quiz1.html', this)">
-                                    📝 Niveau 1 : Les Bêta-bloquants
-                                </a>
-                            </li>
-                            <li>
-                                <a class="quiz-link" onclick="chargerQuiz('2.11/cardiologie/quiz2.html', this)">
-                                    📝 Niveau 2 : Anticoagulants
-                                </a>
-                            </li>
-                        </ul>
-                    </details>
-
-                    <!-- SOUS-CATÉGORIE : Antituberculeux -->
-                    <details class="theme-box">
-                        <summary class="theme-title">🫁 Antituberculeux</summary>
-                        <ul class="quiz-list">
-                            <li>
-                                <a class="quiz-link" onclick="chargerQuiz('2.11/antituberculeux/quiz1.html', this)">
-                                    📝 Quadrithérapie & Toxicités
-                                </a>
-                            </li>
-                        </ul>
-                    </details>
-                </div>
-            </details>
-
-            <!-- ============================================== -->
-            <!-- CATEGORIE 2 : UE 2.5                           -->
-            <!-- ============================================== -->
-            <details class="ue-box" open>
-                <summary class="ue-title">
-                    <span>🦠 <strong>UE 2.5</strong> Processus Infectieux</span>
-                    <span class="pill-ue">S3</span>
-                </summary>
-                
-                <div class="sub-folder">
-                    <!-- SOUS-CATÉGORIE : Neurologie -->
-                    <details class="theme-box" open>
-                        <summary class="theme-title">🧠 Infections Neurologiques</summary>
-                        <ul class="quiz-list">
-                            <li>
-                                <a class="quiz-link" onclick="chargerQuiz('2.5/infection_neuro/quiz1.html', this)">
-                                    📝 TD1 : Méningites & Purpura
-                                </a>
-                            </li>
-                        </ul>
-                    </details>
-                </div>
-            </details>
-
-            <!-- ============================================== -->
-            <!-- CATEGORIE 3 : UE 2.8                           -->
-            <!-- ============================================== -->
-            <details class="ue-box">
-                <summary class="ue-title">
-                    <span>💨 <strong>UE 2.8</strong> Processus Obstructifs</span>
-                    <span class="pill-ue">S3</span>
-                </summary>
-                
-                <div class="sub-folder">
-                    <details class="theme-box">
-                        <summary class="theme-title">🫁 Occlusif Respiratoire</summary>
-                        <ul class="quiz-list">
-                            <li>
-                                <a class="quiz-link" onclick="chargerQuiz('2.8/respiratoire/quiz1.html', this)">
-                                    📝 BPCO & Asthme Aigu
-                                </a>
-                            </li>
-                        </ul>
-                    </details>
+                <div class="sub-folder" id="dossier-2-11">
+                    <p style="font-size:0.8rem; color:#7D6F6A; padding:6px;">Aucun quiz pour l'instant.</p>
                 </div>
             </details>
 
         </div>
     </nav>
 
-    <!-- ZONE CENTRALE PLEIN ÉCRAN -->
+    <!-- ZONE CENTRALE DE TRAVAIL -->
     <main id="content-area">
         <div id="empty-state">
             <div style="font-size: 3rem; margin-bottom: 12px;">🩺 🩹 🧠</div>
-            <h2>Prête pour les révisions ?</h2>
-            <p>Choisis une UE et un thème dans le menu de gauche. Ton quiz s'affichera directement en plein écran sans rechargement.</p>
+            <h2>Prête pour l'entraînement ?</h2>
+            <p>Sélectionne une UE et un thème dans le panneau latéral pour lancer ta session active. Le quiz occupera tout l'espace de révision.</p>
             <div class="badges-container">
                 <span class="pill-badge">🔥 Objectif 20/20</span>
                 <span class="pill-badge">⏱️ Entraînement Actif</span>
