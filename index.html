@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub de Révision IFSI - S3</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #f1f5f9; overflow: hidden; }
+
+        /* Menu latéral de navigation */
+        #sidebar {
+            width: 340px;
+            background: #1e293b;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #334155;
+        }
+        .header-title { padding: 20px; font-size: 1.2rem; font-weight: 700; border-bottom: 1px solid #334155; background: #0f172a; }
+        .tree-view { flex: 1; overflow-y: auto; padding: 15px; }
+
+        /* Arborescence de dossiers */
+        details { margin-bottom: 10px; }
+        summary {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: 600;
+            user-select: none;
+            background: #334155;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::before { content: "📁 "; margin-right: 8px; }
+        details[open] > summary::before { content: "📂 "; }
+
+        /* Sous-dossiers (Thèmes CM) */
+        .sub-folder { margin-left: 15px; margin-top: 8px; }
+        .sub-folder summary { background: #475569; font-size: 0.95rem; font-weight: 500; }
+
+        /* Liens vers les Quiz */
+        .quiz-list { list-style: none; margin-left: 25px; margin-top: 6px; }
+        .quiz-link {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-left: 2px solid transparent;
+        }
+        .quiz-link:hover, .quiz-link.active {
+            background: #0f172a;
+            color: #38bdf8;
+            border-left-color: #38bdf8;
+        }
+        .quiz-link::before { content: "📝 "; margin-right: 6px; }
+
+        /* Zone d'affichage du Quiz */
+        #content-area { flex: 1; display: flex; flex-direction: column; }
+        #quiz-frame { width: 100%; height: 100%; border: none; background: white; }
+        .placeholder {
+            margin: auto;
+            text-align: center;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu des dossiers -->
+    <nav id="sidebar">
+        <div class="header-title">📚 Portail Révisions S3</div>
+        <div class="tree-view">
+
+            <!-- DOSSIER UE 2.11 -->
+            <details open>
+                <summary>UE 2.11 Pharmacologie</summary>
+                
+                <div class="sub-folder">
+                    <details>
+                        <summary>Cardiologie</summary>
+                        <ul class="quiz-list">
+                            <li><a class="quiz-link" onclick="chargerQuiz('2.11/cardiologie/quiz1.html', this)">Quiz 1 : Les Bêta-bloquants</a></li>
+                            <li><a class="quiz-link" onclick="chargerQuiz('2.11/cardiologie/quiz2.html', this)">Quiz 2 : Anticoagulants & Surveillance</a></li>
+                        </ul>
+                    </details>
+                </div>
+
+                <div class="sub-folder">
+                    <details>
+                        <summary>Antituberculeux</summary>
+                        <ul class="quiz-list">
+                            <li><a class="quiz-link" onclick="chargerQuiz('2.11/antituberculeux/quiz1.html', this)">Quiz 1 : Quadrithérapie de première ligne</a></li>
+                        </ul>
+                    </details>
+                </div>
+            </details>
+
+            <!-- DOSSIER UE 2.5 -->
+            <details>
+                <summary>UE 2.5 Processus infectieux</summary>
+                <div class="sub-folder">
+                    <details>
+                        <summary>Infections neurologiques</summary>
+                        <ul class="quiz-list">
+                            <li><a class="quiz-link" onclick="chargerQuiz('2.5/infection_neuro/quiz1.html', this)">Quiz 1 : Méningites & Signes d'alerte</a></li>
+                        </ul>
+                    </details>
+                </div>
+            </details>
+
+            <!-- DOSSIER UE 2.8 -->
+            <details>
+                <summary>UE 2.8 Processus obstructifs</summary>
+                <div class="sub-folder">
+                    <details>
+                        <summary>Syndrome occlusif respiratoire</summary>
+                        <ul class="quiz-list">
+                            <li><a class="quiz-link" onclick="chargerQuiz('2.8/occlusif_respi/quiz1.html', this)">Quiz 1 : BPCO & Asthme aigu grave</a></li>
+                        </ul>
+                    </details>
+                </div>
+            </details>
+
+        </div>
+    </nav>
+
+    <!-- Écran où s'affiche le quiz sélectionné -->
+    <main id="content-area">
+        <iframe id="quiz-frame" src="about:blank"></iframe>
+    </main>
+
+    <script>
+        function chargerQuiz(cheminFichier, element) {
+            // Charge le fichier HTML du quiz dans l'iframe
+            document.getElementById('quiz-frame').src = cheminFichier;
+
+            // Met en surbrillance le lien sélectionné
+            document.querySelectorAll('.quiz-link').forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
