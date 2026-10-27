@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mon Hub IFSI - Révisions S3</title>
+    <style>
+        :root {
+            --fond-global: #F7F1E5;
+            --fond-menu: #EFE4D2;
+            --carte-fond: #FFFDF9;
+            --terracotta: #D05A3F;
+            --terracotta-fonce: #A83E26;
+            --ocre-chaleureux: #E59866;
+            --vert-sauge: #6B8E7B;
+            --vert-sauge-fonce: #446252;
+            --ambre-doux: #FAD7A0;
+            --texte-sombre: #2B1E1A;
+            --texte-secondaire: #6E5D57;
+            --bordure-chaude: #E2D1BC;
+            --ombre-carte: 0 4px 12px rgba(168, 62, 38, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            background: var(--fond-global);
+            color: var(--texte-sombre);
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* --- BARRE LATÉRALE PLEINE HAUTEUR --- */
+        #sidebar {
+            width: 360px;
+            min-width: 340px;
+            height: 100vh;
+            background: var(--fond-menu);
+            border-right: 2px solid var(--bordure-chaude);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.04);
+            z-index: 20;
+        }
+
+        /* En-tête colorée avec l'illustration */
+        .profile-banner {
+            padding: 20px;
+            background: linear-gradient(135deg, #E6D2B8 0%, #D8BEA0 100%);
+            border-bottom: 2px solid var(--bordure-chaude);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-cadre {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: #FFF;
+            border: 3px solid var(--terracotta);
+            box-shadow: 0 4px 10px rgba(208, 90, 63, 0.25);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .profile-text h1 {
+            font-size: 1.15rem;
+            color: var(--texte-sombre);
+            font-weight: 800;
+        }
+
+        .profile-text .sous-titre {
+            font-size: 0.78rem;
+            color: var(--terracotta-fonce);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-top: 3px;
+        }
+
+        /* Arborescence défilante */
+        .tree-view {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 14px;
+        }
+
+        .tree-view::-webkit-scrollbar { width: 6px; }
+        .tree-view::-webkit-scrollbar-thumb {
+            background-color: var(--bordure-chaude);
+            border-radius: 10px;
+        }
+
+        /* Boîte UE Principale */
+        details.ue-box {
+            margin-bottom: 16px;
+            background: var(--carte-fond);
+            border: 2px solid var(--bordure-chaude);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: var(--ombre-carte);
+        }
+
+        details.ue-box[open] {
+            border-color: var(--ocre-chaleureux);
+        }
+
+        summary.ue-title {
+            padding: 14px 16px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--texte-sombre);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #FAF3E8;
+            border-bottom: 1px solid transparent;
+            user-select: none;
+            list-style: none;
+        }
+
+        details.ue-box[open] > summary.ue-title {
+            border-bottom-color: var(--bordure-chaude);
+            background: #F4E8D5;
+        }
+
+        summary.ue-title::-webkit-details-marker { display: none; }
+
+        .pill-ue {
+            background: var(--terracotta);
+            color: #FFF;
+            font-size: 0.72rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        /* Conteneur des sous-thèmes */
+        .sub-folder {
+            padding: 10px 14px 14px 14px;
+            background: #FCF9F3;
+        }
+
+        /* Boîte Sous-Thème (CM / Chapitre) */
+        details.theme-box {
+            margin-top: 10px;
+            background: #FFF;
+            border: 1px solid var(--bordure-chaude);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        summary.theme-title {
+            padding: 10px 12px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--texte-sombre);
+            cursor: pointer;
+            list-style: none;
+            background: #F7EFE2;
+            display: flex;
+            align-items: center;
+            user-select: none;
+        }
+        summary.theme-title::-webkit-details-marker { display: none; }
+
+        details.theme-box[open] > summary.theme-title {
+            background: #EFE4D1;
+        }
+
+        /* Liens Quiz cliquables */
+        .quiz-list {
+            list-style: none;
+            padding: 8px 10px;
+        }
+
+        .quiz-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            margin-bottom: 6px;
+            font-size: 0.86rem;
+            color: var(--texte-sombre);
+            text-decoration: none;
+            background: #FAF5EB;
+            border: 1px solid #E8DC melt;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+
+        .quiz-link:hover {
+            background: var(--ambre-doux);
+            border-color: var(--ocre-chaleureux);
+            transform: translateX(4px);
+        }
+
+        .quiz-link.active {
+            background: var(--terracotta);
+            color: #FFF !important;
+            border-color: var(--terracotta-fonce);
+            box-shadow: 0 4px 10px rgba(208, 90, 63, 0.3);
+        }
+
+        /* --- ZONE PLEIN ÉCRAN POUR LES QUIZ --- */
+        #content-area {
+            flex: 1;
+            height: 100vh;
+            background: var(--fond-global);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #quiz-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+            background: #FFF;
+        }
+
+        /* Message central d'accueil (avant le choix d'un quiz) */
+        #empty-state {
+            margin: auto;
+            max-width: 580px;
+            padding: 40px;
+            background: var(--carte-fond);
+            border: 3px solid var(--bordure-chaude);
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(78, 52, 46, 0.08);
+        }
+
+        #empty-state h2 {
+            font-size: 1.6rem;
+            color: var(--texte-sombre);
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        #empty-state p {
+            font-size: 0.98rem;
+            color: var(--texte-secondaire);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .badges-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pill-badge {
+            background: #EFE4D2;
+            border: 1px solid var(--bordure-chaude);
+            color: var(--texte-sombre);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BARRE LATÉRALE DE CONTRÔLE -->
+    <nav id="sidebar">
+        <!-- Bannière d'en-tête chaleureuse -->
+        <div class="profile-banner">
+            <div class="avatar-cadre">
+                <svg viewBox="0 0 120 120" width="70" height="70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="60" cy="60" r="56" fill="#FFFDF9"/>
+                    <path d="M25 45L40 30M95 45L80 30M30 80L45 90M90 80L75 90" stroke="#E59866" stroke-width="2" stroke-dasharray="2 3"/>
+                    <circle cx="25" cy="45" r="3.5" fill="#D05A3F"/>
+                    <circle cx="95" cy="45" r="3.5" fill="#D05A3F"/>
+                    <circle cx="40" cy="30" r="3" fill="#6B8E7B"/>
+                    <circle cx="80" cy="30" r="3" fill="#6B8E7B"/>
+                    
+                    <path d="M20 112C20 92 36 84 60 84C84 84 100 92 100 112" fill="#D05A3F"/>
+                    <path d="M50 84L60 100L70 84" fill="#6B3324"/>
+                    <path d="M46 84L60 104L74 84" stroke="#FFF" stroke-width="2"/>
+                    
+                    <path d="M40 86C40 102 49 110 60 110C71 110 80 102 80 86" stroke="#6B8E7B" stroke-width="3.5" stroke-linecap="round"/>
+                    <circle cx="60" cy="110" r="5" fill="#2B1E1A"/>
+
+                    <rect x="52" y="66" width="16" height="22" rx="4" fill="#6B3324"/>
+                    <ellipse cx="60" cy="50" rx="22" ry="26" fill="#753C2A"/>
+                    
+                    <ellipse cx="51" cy="48" rx="2.8" ry="3.5" fill="#1C1310"/>
+                    <ellipse cx="69" cy="48" rx="2.8" ry="3.5" fill="#1C1310"/>
+                    <circle cx="52" cy="47" r="1" fill="#FFF"/>
+                    <circle cx="70" cy="47" r="1" fill="#FFF"/>
+                    
+                    <path d="M47 42C50 41 54 42 55 44" stroke="#1C1310" stroke-width="1.6" stroke-linecap="round"/>
+                    <path d="M73 42C70 41 66 42 65 44" stroke="#1C1310" stroke-width="1.6" stroke-linecap="round"/>
+                    <path d="M59 50C58 54 59 56 61 56" stroke="#522417" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M53 63C57 67 63 67 67 63" stroke="#421A0F" stroke-width="2.2" stroke-linecap="round"/>
+
+                    <circle cx="60" cy="20" r="18" fill="#1C1310"/>
+                    <path d="M36 46C36 28 44 24 60 24C76 24 84 28 84 46C84 51 81 55 79 57C75 40 70 35 60 35C50 35 45 40 41 57C39 55 36 51 36 46Z" fill="#1C1310"/>
+                    
+                    <circle cx="77" cy="44" r="2.5" fill="#6B8E7B"/>
+                    <path d="M77 44L84 38" stroke="#6B8E7B" stroke-width="1.5"/>
+                    <circle cx="84" cy="38" r="2" fill="#E59866"/>
+                </svg>
+            </div>
+            <div class="profile-text">
+                <h1>Mon Espace S3</h1>
+                <div class="sous-titre">Pôle Révisions IFSI</div>
+            </div>
+        </div>
+
+        <!-- LISTE DES CATÉGORIES ET THÈMES -->
+        <div class="tree-view">
+
+            <!-- ============================================== -->
+            <!-- CATEGORIE 1 : UE 2.11                          -->
+            <!-- ============================================== -->
+            <details class="ue-box" open>
+                <summary class="ue-title">
+                    <span>💊 <strong>UE 2.11</strong> Pharmacologie</span>
+                    <span class="pill-ue">S3</span>
+                </summary>
+                
+                <div class="sub-folder">
+                    <!-- SOUS-CATÉGORIE : Cardiologie -->
+                    <details class="theme-box" open>
+                        <summary class="theme-title">🫀 Cardiologie & Vasculaire</summary>
+                        <ul class="quiz-list">
+                            <li>
+                                <a class="quiz-link" onclick="chargerQuiz('2.11/cardiologie/quiz1.html', this)">
+                                    📝 Niveau 1 : Les Bêta-bloquants
+                                </a>
+                            </li>
+                            <li>
+                                <a class="quiz-link" onclick="chargerQuiz('2.11/cardiologie/quiz2.html', this)">
+                                    📝 Niveau 2 : Anticoagulants
+                                </a>
+                            </li>
+                        </ul>
+                    </details>
+
+                    <!-- SOUS-CATÉGORIE : Antituberculeux -->
+                    <details class="theme-box">
+                        <summary class="theme-title">🫁 Antituberculeux</summary>
+                        <ul class="quiz-list">
+                            <li>
+                                <a class="quiz-link" onclick="chargerQuiz('2.11/antituberculeux/quiz1.html', this)">
+                                    📝 Quadrithérapie & Toxicités
+                                </a>
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+            </details>
+
+            <!-- ============================================== -->
+            <!-- CATEGORIE 2 : UE 2.5                           -->
+            <!-- ============================================== -->
+            <details class="ue-box" open>
+                <summary class="ue-title">
+                    <span>🦠 <strong>UE 2.5</strong> Processus Infectieux</span>
+                    <span class="pill-ue">S3</span>
+                </summary>
+                
+                <div class="sub-folder">
+                    <!-- SOUS-CATÉGORIE : Neurologie -->
+                    <details class="theme-box" open>
+                        <summary class="theme-title">🧠 Infections Neurologiques</summary>
+                        <ul class="quiz-list">
+                            <li>
+                                <a class="quiz-link" onclick="chargerQuiz('2.5/infection_neuro/quiz1.html', this)">
+                                    📝 TD1 : Méningites & Purpura
+                                </a>
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+            </details>
+
+            <!-- ============================================== -->
+            <!-- CATEGORIE 3 : UE 2.8                           -->
+            <!-- ============================================== -->
+            <details class="ue-box">
+                <summary class="ue-title">
+                    <span>💨 <strong>UE 2.8</strong> Processus Obstructifs</span>
+                    <span class="pill-ue">S3</span>
+                </summary>
+                
+                <div class="sub-folder">
+                    <details class="theme-box">
+                        <summary class="theme-title">🫁 Occlusif Respiratoire</summary>
+                        <ul class="quiz-list">
+                            <li>
+                                <a class="quiz-link" onclick="chargerQuiz('2.8/respiratoire/quiz1.html', this)">
+                                    📝 BPCO & Asthme Aigu
+                                </a>
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+            </details>
+
+        </div>
+    </nav>
+
+    <!-- ZONE CENTRALE PLEIN ÉCRAN -->
+    <main id="content-area">
+        <div id="empty-state">
+            <div style="font-size: 3rem; margin-bottom: 12px;">🩺 🩹 🧠</div>
+            <h2>Prête pour les révisions ?</h2>
+            <p>Choisis une UE et un thème dans le menu de gauche. Ton quiz s'affichera directement en plein écran sans rechargement.</p>
+            <div class="badges-container">
+                <span class="pill-badge">🔥 Objectif 20/20</span>
+                <span class="pill-badge">⏱️ Entraînement Actif</span>
+                <span class="pill-badge">📱 Format iPad</span>
+            </div>
+        </div>
+
+        <iframe id="quiz-frame" src="about:blank"></iframe>
+    </main>
+
+    <script>
+        function chargerQuiz(fichier, element) {
+            const frame = document.getElementById('quiz-frame');
+            const emptyState = document.getElementById('empty-state');
+
+            emptyState.style.display = 'none';
+            frame.style.display = 'block';
+            frame.src = fichier;
+
+            document.querySelectorAll('.quiz-link').forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
