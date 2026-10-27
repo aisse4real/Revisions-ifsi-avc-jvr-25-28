@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UE 2.8 - Pré-requis Processus Obstructifs Cérébraux</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #2563eb;
+            --success: #15803d;
+            --success-bg: #dcfce7;
+            --danger: #b91c1c;
+            --danger-bg: #fee2e2;
+            --warning-bg: #fef3c7;
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 780px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 20px 24px;
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: #bfdbfe;
+        }
+
+        .progress-section {
+            background: #f8fafc;
+            padding: 12px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-light);
+            transition: width 0.3s ease;
+        }
+
+        .content-area {
+            padding: 24px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .category-badge {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: #e0e7ff;
+            color: #3730a3;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #ffffff;
+            user-select: none;
+        }
+
+        .checkbox-label:hover {
+            background-color: #f8fafc;
+            border-color: var(--primary-light);
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 12px;
+            margin-top: 4px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label.is-correct {
+            background-color: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .checkbox-label.is-wrong {
+            background-color: var(--danger-bg) !important;
+            border-color: var(--danger) !important;
+            color: var(--danger);
+        }
+
+        .feedback-box {
+            display: none;
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            border-left: 5px solid transparent;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-box.correct-fb {
+            background: var(--success-bg);
+            border-color: var(--success);
+            color: #14532d;
+        }
+
+        .feedback-box.incorrect-fb {
+            background: var(--danger-bg);
+            border-color: var(--danger);
+            color: #7f1d1d;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: auto;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-submit {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-light);
+        }
+
+        .next-btn {
+            display: none;
+            background: var(--text);
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #1e293b;
+        }
+
+        #final-screen {
+            display: none;
+            padding: 24px;
+        }
+
+        .score-recap {
+            text-align: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .score-recap h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .report-card {
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .card-valid {
+            background: var(--success-bg);
+            border-color: #86efac;
+        }
+
+        .card-review {
+            background: var(--danger-bg);
+            border-color: #fca5a5;
+        }
+
+        .report-card h3 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .report-card ul {
+            padding-left: 18px;
+            font-size: 0.85rem;
+        }
+
+        .report-card li {
+            margin-bottom: 4px;
+        }
+
+        .tutor-advice-box {
+            background: var(--warning-bg);
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 0.9rem;
+            color: #78350f;
+            margin-bottom: 20px;
+        }
+
+        .restart-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>UE 2.8 — Processus Obstructifs Cérébraux</h1>
+        <p>Pré-requis CM : Anatomie du SNC, vascularisation, ischémie & HTIC</p>
+    </header>
+
+    <div class="progress-section" id="progress-container">
+        <div class="progress-info">
+            <span id="q-counter">Question 1 sur 20</span>
+            <span id="score-counter">Score : 0 / 20</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="content-area" id="quiz-screen">
+        <div>
+            <span class="category-badge" id="category-badge">...</span>
+            <div class="question-text" id="question-text">...</div>
+            <div class="checkbox-group" id="options-container"></div>
+            <div class="feedback-box" id="feedback-box"></div>
+        </div>
+        <div class="action-bar">
+            <button class="btn-submit" id="submit-btn" onclick="submitAnswer()">Valider la sélection</button>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Question suivante &rarr;</button>
+        </div>
+    </div>
+
+    <div id="final-screen">
+        <div class="score-recap">
+            <h2 id="final-score-text">0 / 20</h2>
+            <p id="final-percent-text">Score d'acquisition préalable</p>
+        </div>
+
+        <div class="report-grid">
+            <div class="report-card card-valid">
+                <h3 style="color: var(--success);">Notions de départ maîtrisées</h3>
+                <ul id="valid-list"></ul>
+            </div>
+            <div class="report-card card-review">
+                <h3 style="color: var(--danger);">Points d'attention pour l'amphi</h3>
+                <ul id="review-list"></ul>
+            </div>
+        </div>
+
+        <div class="tutor-advice-box">
+            <strong>Conseil du tuteur pour le CM :</strong>
+            <p id="tutor-advice-text" style="margin-top: 4px;"></p>
+        </div>
+
+        <button class="restart-btn" onclick="restartQuiz()">Refaire le test</button>
+    </div>
+</div>
+
+<script>
+const questions = [
+    // Q1 - Correct: [1] (B)
+    {
+        cat: "Anatomie vasculaire",
+        concept: "Système de suppléance du polygone de Willis",
+        q: "Concernant les structures anatomiques participant à la vascularisation artérielle encéphalique :",
+        options: [
+            "Le sinus sagittal supérieur assure l'apport artériel du cortex frontal",
+            "Le cercle artériel de la base du crâne anastomose les circulations carotido-vertébrales",
+            "La tente du cervelet distribue le sang artériel aux lobes pariétaux",
+            "Le tronc basilaire vascularise exclusivement la partie antérieure du lobe frontal"
+        ],
+        correct: [1],
+        fb: "Le polygone de Willis anastomose à la base du crâne les carotides internes et le système vertébro-basilaire pour suppléer d'éventuelles occlusions proximales."
+    },
+    // Q2 - Correct: [0, 2] (A, C)
+    {
+        cat: "Anatomie vasculaire",
+        concept: "Territoire de l'artère cérébrale moyenne",
+        q: "Concernant l'artère cérébrale moyenne :",
+        options: [
+            "Elle constitue une branche de division terminale de l'artère carotide interne",
+            "Elle est issue directement de la confluence des artères vertébrales",
+            "Elle vascularise la majeure partie de la face latérale de l'hémisphère cérébral",
+            "Elle vascularise exclusivement la face interne du lobe occipital"
+        ],
+        correct: [0, 2],
+        fb: "L'artère cérébrale moyenne naît de la carotide interne et vascularise les aires motrices, sensitives de la face et du membre supérieur, ainsi que les aires du langage."
+    },
+    // Q3 - Correct: [3] (D)
+    {
+        cat: "Anatomie & Fonctions",
+        concept: "Décussation du faisceau pyramidal",
+        q: "Concernant la motricité volontaire et les voies cortico-spinales :",
+        options: [
+            "Les fibres motrices restent strictly homolatérales tout au long de leur trajet",
+            "Le croisement des voies motrices s'opère dans la substance blanche du cervelet",
+            "Le faisceau pyramidal croise la ligne médiane au niveau de la moelle lombaire",
+            "Le croisement prépondérant des axones moteurs s'effectue dans le bulbe rachidien"
+        ],
+        correct: [3],
+        fb: "La décussation pyramidale a lieu au niveau du bulbe rachidien, expliquant qu'une lésion corticale motrice gauche entraîne un déficit moteur droit."
+    },
+    // Q4 - Correct: [0, 1] (A, B)
+    {
+        cat: "Anatomie & Fonctions",
+        concept: "Spécialisation des aires du langage",
+        q: "Concernant les aires corticales impliquées dans le langage :",
+        options: [
+            "L'aire motrice de Broca est située au niveau du lobe frontal",
+            "L'aire sensorielle de Wernicke est située au niveau du lobe temporal",
+            "L'aire de Broca assure la compréhension visuelle et auditive du lexique",
+            "Une atteinte de l'aire de Wernicke entraîne une impossibilité d'articulation isolée"
+        ],
+        correct: [0, 1],
+        fb: "L'aire de Broca (frontale) gère l'expression et la production motrice du langage ; l'aire de Wernicke (temporale) est dédiée à la compréhension."
+    },
+    // Q5 - Correct: [2] (C)
+    {
+        cat: "Physiopathologie Ischémique",
+        concept: "Pénombre ischémique",
+        q: "Concernant la zone de pénombre ischémique lors d'une occlusion artérielle cérébrale :",
+        options: [
+            "Elle correspond au tissu nécrosé d'emblée de façon irréversible",
+            "Elle est composée de tissu indemne ne subissant aucune baisse de perfusion",
+            "Elle correspond à du tissu hypoperfusé susceptible d'être sauvé par reperfusion rapide",
+            "Elle désigne exclusivement une réaction inflammatoire secondaire post-traumatique"
+        ],
+        correct: [2],
+        fb: "La zone de pénombre est une région où le flux sanguin est réduit mais suffisant pour maintenir temporairement la viabilité cellulaire : c'est la cible de la désobstruction d'urgence."
+    },
+    // Q6 - Correct: [0, 3] (A, D)
+    {
+        cat: "Physiopathologie Ischémique",
+        concept: "Mécanismes cardio-emboliques et athéromateux",
+        q: "Concernant les mécanismes étiologiques à l'origine d'une occlusion artérielle cérébrale :",
+        options: [
+            "La fibrillation atriale peut être à l'origine d'un embole d'origine cardiaque",
+            "La maladie athéromateuse ne touche jamais les bifurcations carotidiennes",
+            "Une insuffisance veineuse distale compliquée de phlébite engendre directement un AVC artériel",
+            "La fissuration d'une plaque d'athérome peut provoquer une thrombose locale aiguë"
+        ],
+        correct: [0, 3],
+        fb: "Les embolies d'origine cardiaque (notamment sur fibrillation atriale) et la thrombose sur plaque d'athérome carotidienne sont les causes dominantes d'AVC ischémique."
+    },
+    // Q7 - Correct: [1, 2] (B, C)
+    {
+        cat: "Physiopathologie Ischémique",
+        concept: "Accident Ischémique Transitoire",
+        q: "Concernant l'accident ischémique transitoire :",
+        options: [
+            "Les signes cliniques durent obligatoirement plus de vingt-quatre heures",
+            "Il se manifeste par un déficit neurologique d'origine ischémique résolutif",
+            "Il témoigne d'un risque élevé de récidive sous forme d'infarctus cérébral constitué",
+            "L'imagerie met en évidence une zone de nécrose étendue définitive"
+        ],
+        correct: [1, 2],
+        fb: "L'AIT est un déficit neurologique focal d'origine ischémique qui régresse rapidement (souvent en moins d'une heure) sans séquelle à l'imagerie. C'est une urgence diagnostique absolue."
+    },
+    // Q8 - Correct: [0] (A)
+    {
+        cat: "Hydrodynamique Cérébrale",
+        concept: "Doctrine de Monro-Kellie",
+        q: "Concernant la doctrine de Monro-Kellie régissant l'hydrodynamique intracrânienne chez l'adulte :",
+        options: [
+            "L'inextensibilité de la boîte crânienne impose que le volume total intracrânien reste constant",
+            "L'augmentation de volume d'un hématome est spontanément absorbée par expansion osseuse",
+            "La pression intracrânienne reste inchangée quel que soit le volume de liquide céphalo-rachidien",
+            "Le secteur liquidien peut croître indéfiniment sans comprimer le parenchyme cérébral"
+        ],
+        correct: [0],
+        fb: "Chez l'adulte, la boîte crânienne est rigide et close. L'augmentation de volume d'un secteur (cerveau, sang ou LCR) doit être compensée, faute de quoi la pression intracrânienne s'élève brutalement."
+    },
+    // Q9 - Correct: [1, 2, 3] (B, C, D)
+    {
+        cat: "Hydrodynamique Cérébrale",
+        concept: "Mécanismes des hydrocéphalies obstructives",
+        q: "Concernant l'hydrocéphalie obstructive :",
+        options: [
+            "Elle est causée par une absence congénitale complète de plexus choroïdes",
+            "Elle peut résulter d'un blocage de l'aqueduc du mésencéphale",
+            "Elle s'accompagne d'une dilatation des cavités ventriculaires situées en amont de l'obstacle",
+            "Une masse tumorale compressive peut être à l'origine de l'obstacle mécanique"
+        ],
+        correct: [1, 2, 3],
+        fb: "L'hydrocéphalie obstructive (non communicante) découle de tout obstacle sur les voies de circulation du LCR (aqueduc de Sylvius, foramens ventriculaires), entraînant une distension ventriculaire en amont."
+    },
+    // Q10 - Correct: [0, 2] (A, C)
+    {
+        cat: "Physiopathologie HTIC",
+        concept: "Pression de Perfusion Cérébrale",
+        q: "Concernant la Pression de Perfusion Cérébrale :",
+        options: [
+            "Elle est égale à la Pression Artérielle Moyenne diminuée de la Pression Intracrânienne",
+            "Elle augmente systématiquement lorsque la pression intracrânienne s'élève",
+            "Son effondrement expose le tissu cérébral à une ischémie globale secondaire",
+            "Elle se calcule par la multiplication du débit cardiaque par la pression veineuse centrale"
+        ],
+        correct: [0, 2],
+        fb: "PPC = PAM − PIC. Dès que la PIC monte au-delà des capacités de compensation hémodynamique, la perfusion cérébrale s'effondre, générant une ischémie."
+    },
+    // Q11 - Correct: [3] (D)
+    {
+        cat: "Physiopathologie HTIC",
+        concept: "Symptomatologie de l'hypertension intracrânienne",
+        q: "Concernant les manifestations cliniques d'un syndrome d'hypertension intracrânienne :",
+        options: [
+            "La présence de diarrhées profuses constitue un signe clinique d'appel",
+            "Les vomissements sont tardifs et prédominent en fin de soirée après les repas",
+            "Les céphalées sont systématiquement soulagées par la position allongée stricte",
+            "Des vomissements faciles en jet soulageant transitoirement les céphalées peuvent s'observer"
+        ],
+        correct: [3],
+        fb: "L'HTIC donne des céphalées prédominant le matin et accentuées par la position allongée, ainsi que des vomissements en jet pouvant apporter un répit passager."
+    },
+    // Q12 - Correct: [0, 1] (A, B)
+    {
+        cat: "Physiopathologie HTIC",
+        concept: "Signes ophtalmologiques et fonctionnels d'HTIC",
+        q: "Concernant les atteintes sensorielles associées au syndrome d'HTIC :",
+        options: [
+            "L'examen du fond d'œil peut révéler un œdème papillaire bilatéral",
+            "Le patient peut signaler des éclipses visuelles ou une diplopie",
+            "Une hypoacousie bilatérale brutale constitue le symptôme initial habituel",
+            "Le fond d'œil montre constamment un rétrécissement atrophique du nerf optique d'emblée"
+        ],
+        correct: [0, 1],
+        fb: "Le retentissement de l'HTIC sur les gaines du nerf optique provoque un œdème papillaire au fond d'œil, des éclipses visuelles et des paralysies oculomotrices (diplopie, notamment atteinte du VI)."
+    },
+    // Q13 - Correct: [2] (C)
+    {
+        cat: "Physiopathologie HTIC",
+        concept: "Engagement cérébral",
+        q: "Concernant l'engagement cérébral :",
+        options: [
+            "Il correspond à une amélioration transitoire de la compliance cérébrale",
+            "Il n'engage le pronostic vital que s'il est associé à une fracture osseuse",
+            "Il correspond au déplacement de structures cérébrales à travers un orifice inextensible",
+            "Il s'agit d'une complication exclusivement observée chez l'enfant de moins de deux ans"
+        ],
+        correct: [2],
+        fb: "L'engagement est la hernie mécanique du tissu cérébral sous la faux du cerveau, à travers la fente de la tente du cervelet ou dans le foramen magnum, risquant d'écraser le tronc cérébral."
+    },
+    // Q14 - Correct: [0, 3] (A, D)
+    {
+        cat: "Physiopathologie HTIC",
+        concept: "Réflexe de Cushing",
+        q: "Concernant la triade de Cushing témoignant d'une souffrance aiguë du tronc cérébral :",
+        options: [
+            "Elle comporte une élévation de la pression artérielle",
+            "Elle associe une tachycardie ventriculaire rapide",
+            "Elle se manifeste par une hypotension artérielle réfractaire d'origine vagale",
+            "Elle associe une bradycardie et une irrégularité du rythme respiratoire"
+        ],
+        correct: [0, 3],
+        fb: "La triade de Cushing associe une hypertension artérielle réactionnelle (pour maintenir la PPC), une bradycardie et des irrégularités respiratoires, signalant une compression imminente du tronc."
+    },
+    // Q15 - Correct: [1] (B)
+    {
+        cat: "Sémiologie & Urgences",
+        concept: "Horodatage du déficit neurologique",
+        q: "Concernant l'évaluation initiale devant un déficit neurologique focal d'apparition brutale :",
+        options: [
+            "Le bilan étiologique doit être différé de quarante-huit heures pour observer l'évolution",
+            "L'heure précise de début ou du dernier moment où le patient a été vu asymptomatique est requise",
+            "L'évaluation de la glycémie capillaire est inutile en phase initiale",
+            "Le traitement antihypertenseur d'urgence doit abaisser immédiatement la PAM en dessous de 70 mmHg"
+        ],
+        correct: [1],
+        fb: "L'heure précise d'apparition conditionne l'accès aux thérapeutiques de reperfusion. La glycémie capillaire doit être systématique pour éliminer une hypoglycémie simulant un AVC."
+    },
+    // Q16 - Correct: [0, 2] (A, C)
+    {
+        cat: "Sémiologie & Urgences",
+        concept: "Score de coma de Glasgow",
+        q: "Concernant l'évaluation de la conscience par l'échelle de Glasgow :",
+        options: [
+            "Le score minimal possible est de trois",
+            "Un score de quinze traduit un état de coma aréactif",
+            "Il évalue trois composantes : ouverture des yeux, réponse verbale et réponse motrice",
+            "La réponse motrice est cotée sur un maximum de dix points"
+        ],
+        correct: [0, 2],
+        fb: "Le score de Glasgow oscille de 3 (coma profond) à 15 (état vigile normal). Il explore les yeux (/4), la voix (/5) et la motricité (/6). Un score ≤ 8 définit un coma."
+    },
+    // Q17 - Correct: [3] (D)
+    {
+        cat: "Sémiologie & Urgences",
+        concept: "Surveillance pupillaire et engagement temporal",
+        q: "Concernant la réactivité et la symétrie pupillaire chez le patient cérébrolésé :",
+        options: [
+            "Une anisocorie correspond à une dilatation rigoureusement symétrique des deux pupilles",
+            "L'apparition d'un myosis punctiforme bilatéral réactif signe l'engagement temporal",
+            "La motricité pupillaire est exclusivement sous le contrôle du nerf trijumeau",
+            "L'apparition d'une mydriase unilatérale aréactive évoque une compression du nerf oculomoteur"
+        ],
+        correct: [3],
+        fb: "L'engagement temporal comprime le nerf oculomoteur (III) du même côté, entraînant une mydriase unilatérale aréactive : c'est une alerte chirurgicale majeure."
+    },
+    // Q18 - Correct: [0, 1] (A, B)
+    {
+        cat: "Sémiologie & Urgences",
+        concept: "Imagerie cérébrale diagnostique",
+        q: "Concernant la stratégie d'imagerie cérébrale en urgence devant un déficit neurologique focal :",
+        options: [
+            "L'imagerie cérébrale doit éliminer une lésion hémorragique",
+            "Elle permet d'orienter le choix entre recanalisation et abstention de traitement fibrinolytique",
+            "La ponction lombaire est le premier examen à réaliser avant tout scanner crânien",
+            "L'examen clinique permet à lui seul d'exclure formellement une hémorragie intracrânienne"
+        ],
+        correct: [0, 1],
+        fb: "Aucun examen clinique ne distingue avec certitude un AVC ischémique d'un AVC hémorragique : l'imagerie sans injection (scanner ou IRM) est le préambule obligatoire avant tout antithrombotique."
+    },
+    // Q19 - Correct: [2, 3] (C, D)
+    {
+        cat: "Thérapeutique d'Urgence",
+        concept: "Techniques de reperfusion de l'AVC ischémique",
+        q: "Concernant les thérapeutiques de recanalisation artérielle de l'AVC ischémique aigu :",
+        options: [
+            "La thrombolyse par voie intraveineuse peut être administrée sans limite de délai horaire",
+            "La thrombectomie mécanique est indiquée uniquement en cas d'atteinte hémorragique primitive",
+            "La thrombolyse médicamenteuse vise la dissolution pharmacologique du caillot fibrino-cruorique",
+            "La thrombectomie mécanique permet l'extraction endovasculaire du thrombus obstructif"
+        ],
+        correct: [2, 3],
+        fb: "La thrombolyse IV (dans les 4h30) dissout le thrombus par fibrinolyse, tandis que la thrombectomie mécanique (dans les 6h en général) l'extrait par voie endovasculaire."
+    },
+    // Q20 - Correct: [0, 1, 2] (A, B, C)
+    {
+        cat: "Surveillance IDE & Sécurité",
+        concept: "Lutte contre les ACSOS",
+        q: "Parmi les facteurs d'agression cérébrale secondaire d'origine systémique à dépister et corriger :",
+        options: [
+            "L'hypoxémie",
+            "L'hyperthermie",
+            "L'hypotension artérielle",
+            "L'élévation de la tête de lit à 30 degrés"
+        ],
+        correct: [0, 1, 2],
+        fb: "Les ACSOS regroupent l'hypoxémie, l'hypotension, l'hyperthermie, les désordres glycémiques et les anomalies du CO2. La position demi-assise à 30° est une mesure protectrice qui favorise le retour veineux jugulaire."
+    }
+];
+
+let currentIndex = 0;
+let userScore = 0;
+const mastered = [];
+const toReview = [];
+
+function loadQuestion() {
+    const q = questions[currentIndex];
+    document.getElementById('q-counter').textContent = `Question ${currentIndex + 1} sur ${questions.length}`;
+    document.getElementById('score-counter').textContent = `Score : ${userScore} / ${questions.length}`;
+    document.getElementById('progress-fill').style.width = `${(currentIndex / questions.length) * 100}%`;
+
+    document.getElementById('category-badge').textContent = q.cat;
+    document.getElementById('question-text').textContent = q.q;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    q.options.forEach((optText, idx) => {
+        const label = document.createElement('label');
+        label.className = 'checkbox-label';
+        label.id = `opt-label-${idx}`;
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.value = idx;
+        chk.id = `chk-${idx}`;
+
+        label.appendChild(chk);
+        label.appendChild(document.createTextNode(optText));
+        optContainer.appendChild(label);
+    });
+
+    const fbBox = document.getElementById('feedback-box');
+    fbBox.className = 'feedback-box';
+    fbBox.innerHTML = '';
+    
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('next-btn').style.display = 'none';
+}
+
+function submitAnswer() {
+    const q = questions[currentIndex];
+    const selected = [];
+
+    q.options.forEach((_, idx) => {
+        const chk = document.getElementById(`chk-${idx}`);
+        if (chk.checked) selected.push(idx);
+        chk.disabled = true;
+    });
+
+    if (selected.length === 0) {
+        alert("Sélectionne au moins une option avant de valider.");
+        q.options.forEach((_, idx) => {
+            document.getElementById(`chk-${idx}`).disabled = false;
+        });
+        return;
+    }
+
+    document.getElementById('submit-btn').style.display = 'none';
+
+    const isExact = (selected.length === q.correct.length) && selected.every(val => q.correct.includes(val));
+
+    q.options.forEach((_, idx) => {
+        const label = document.getElementById(`opt-label-${idx}`);
+        const isRightOption = q.correct.includes(idx);
+        const wasChecked = selected.includes(idx);
+
+        if (isRightOption) {
+            label.classList.add('is-correct');
+        } else if (wasChecked && !isRightOption) {
+            label.classList.add('is-wrong');
+        }
+    });
+
+    const fbBox = document.getElementById('feedback-box');
+    fbBox.classList.add('show');
+
+    if (isExact) {
+        userScore++;
+        fbBox.classList.add('correct-fb');
+        fbBox.innerHTML = `<strong>Exact !</strong> ${q.fb}`;
+        mastered.push(`[${q.cat}] ${q.concept}`);
+    } else {
+        fbBox.classList.add('incorrect-fb');
+        fbBox.innerHTML = `<strong>Inexact.</strong> ${q.fb}`;
+        toReview.push(`[${q.cat}] ${q.concept}`);
+    }
+
+    document.getElementById('score-counter').textContent = `Score : ${userScore} / ${questions.length}`;
+
+    const nextBtn = document.getElementById('next-btn');
+    if (currentIndex === questions.length - 1) {
+        nextBtn.textContent = "Voir mon bilan pré-cours";
+    } else {
+        nextBtn.textContent = "Question suivante →";
+    }
+    nextBtn.style.display = 'inline-block';
+}
+
+function nextQuestion() {
+    currentIndex++;
+    if (currentIndex < questions.length) {
+        loadQuestion();
+    } else {
+        showFinalScreen();
+    }
+}
+
+function showFinalScreen() {
+    document.getElementById('progress-container').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('final-screen').style.display = 'block';
+
+    const pct = Math.round((userScore / questions.length) * 100);
+    document.getElementById('final-score-text').textContent = `${userScore} / ${questions.length}`;
+    document.getElementById('final-percent-text').textContent = `Taux de pré-requis acquis : ${pct}%`;
+
+    const valUl = document.getElementById('valid-list');
+    valUl.innerHTML = '';
+    mastered.forEach(c => {
+        const li = document.createElement('li');
+        li.textContent = c;
+        valUl.appendChild(li);
+    });
+
+    const revUl = document.getElementById('review-list');
+    revUl.innerHTML = '';
+    if (toReview.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = "Tous les pré-requis anatomiques et physiopathologiques sont validés !";
+        revUl.appendChild(li);
+    } else {
+        toReview.forEach(c => {
+            const li = document.createElement('li');
+            li.textContent = c;
+            revUl.appendChild(li);
+        });
+    }
+
+    const advice = document.getElementById('tutor-advice-text');
+    if (userScore >= 16) {
+        advice.textContent = "Excellentes bases. Focalise ton attention sur les mécanismes cellulaires de l'ischémie, la prise en charge de l'HTIC aiguë et les critères d'alerte vitale (ACSOS).";
+    } else if (userScore >= 10) {
+        advice.textContent = "Bases intermédiaires. Écoute particulièrement les explications sur la doctrine de Monro-Kellie, la formule de la PPC et les territoires de l'artère cérébrale moyenne.";
+    } else {
+        advice.textContent = "Pré-requis fragiles. Concentre-toi sur le schéma de vascularisation artérielle de la base du crâne et la distinction entre obstacle vasculaire (AVC) et obstacle liquidien (hydrocéphalie).";
+    }
+}
+
+function restartQuiz() {
+    currentIndex = 0;
+    userScore = 0;
+    mastered.length = 0;
+    toReview.length = 0;
+
+    document.getElementById('progress-container').style.display = 'flex';
+    document.getElementById('quiz-screen').style.display = 'flex';
+    document.getElementById('final-screen').style.display = 'none';
+
+    loadQuestion();
+}
+
+window.onload = loadQuestion;
+</script>
+
+</body>
+</html>
