@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QCM Prérequis : Infections ORL & Respiratoires (UE 2.5 S3)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom scrollbar for drawer and question grid */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-cyan-100 selection:text-cyan-900">
+
+  <!-- Entête Principale -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-700 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+          </svg>
+        </div>
+        <div>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-cyan-100 text-cyan-800 tracking-wide uppercase">UE 2.5 S3 • IFSI</span>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Infections ORL & Respiratoires</h1>
+        </div>
+      </div>
+
+      <!-- Compteurs rapides & Grille Modal Trigger -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <div class="text-right hidden sm:block">
+          <div class="text-xs text-slate-500 font-medium">Score actuel</div>
+          <div class="text-sm font-bold text-slate-800 mono"><span id="header-score" class="text-cyan-700">0</span> / <span id="header-validated">0</span> validées</div>
+        </div>
+        <button id="btn-toggle-grid" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors border border-slate-300">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span>Grille (40)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de Progression Fine -->
+    <div class="w-full bg-slate-200 h-1.5 overflow-hidden">
+      <div id="progress-bar-fill" class="bg-gradient-to-r from-cyan-600 to-blue-600 h-full transition-all duration-300" style="width: 2.5%;"></div>
+    </div>
+  </header>
+
+  <!-- Modal / Tiroir Grille des 40 Questions -->
+  <div id="grid-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden border border-slate-200">
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div>
+          <h2 class="text-sm font-bold text-slate-800">Navigation rapide (40 questions)</h2>
+          <p class="text-xs text-slate-500">Repérez vos réponses validées, justes ou erronées</p>
+        </div>
+        <button id="btn-close-grid" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-4 overflow-y-auto">
+        <div id="questions-grid-container" class="grid grid-cols-5 sm:grid-cols-8 gap-2">
+          <!-- Dynamically populated -->
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-3 text-xs text-slate-600 justify-center">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-200 inline-block"></span> Non faite</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500 inline-block"></span> Correcte</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500 inline-block"></span> Erronée</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded border-2 border-cyan-600 inline-block"></span> En cours</span>
+        </div>
+      </div>
+      <div class="p-3 bg-slate-50 border-t border-slate-100 text-center">
+        <button id="btn-modal-dismiss" class="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl transition-colors">Fermer la vue grille</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteneur Principal -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
+    
+    <!-- Écran Résultats Finaux (Caché au départ) -->
+    <div id="results-screen" class="hidden bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-200 text-center animate-fade-in">
+      <div id="result-badge-icon" class="w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-6"></div>
+      <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2"></h2>
+      <p id="result-subtitle" class="text-slate-600 text-sm sm:text-base max-w-lg mx-auto mb-6"></p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto mb-8">
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <div class="text-xs uppercase font-semibold text-slate-400">Score Global</div>
+          <div class="text-3xl font-extrabold text-slate-900 mt-1 mono"><span id="final-score-val">0</span> / 40</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <div class="text-xs uppercase font-semibold text-slate-400">Taux Réussite</div>
+          <div id="final-pct-val" class="text-3xl font-extrabold text-cyan-700 mt-1 mono">0%</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <div class="text-xs uppercase font-semibold text-slate-400">Mention UE 2.5</div>
+          <div id="final-status-badge" class="text-sm font-bold mt-2.5 px-2 py-1 rounded-md inline-block"></div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+        <button id="btn-restart-all" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-cyan-700 hover:bg-cyan-800 text-white font-semibold text-sm shadow-md transition-all">Recommencer l'ensemble (40 Q)</button>
+        <button id="btn-review-errors" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm shadow-md transition-all hidden">Travailler mes erreurs (<span id="count-errors-badge">0</span>)</button>
+        <button id="btn-browse-all" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all">Revoir le corrigé complet</button>
+      </div>
+    </div>
+
+    <!-- Carte Question Active -->
+    <div id="quiz-card" class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl shadow-slate-200/50 border border-slate-200/80 transition-all">
+      
+      <!-- Métadonnées Question -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-cyan-100 text-cyan-800 mono tracking-tight">Question <span id="q-index">1</span> / 40</span>
+          <span id="q-category" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 text-slate-600">Thème</span>
+        </div>
+        <div class="text-xs text-amber-700 bg-amber-50 border border-amber-200/60 px-2.5 py-1 rounded-lg flex items-center gap-1 font-medium">
+          <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+          </svg>
+          <span>1, 2 ou 3 réponses justes</span>
+        </div>
+      </div>
+
+      <!-- Énoncé de la question -->
+      <div id="q-text" class="text-base sm:text-lg font-semibold text-slate-900 leading-snug mb-6">
+        <!-- Question générée -->
+      </div>
+
+      <!-- Liste des propositions A, B, C, D -->
+      <div id="options-container" class="space-y-3 mb-6">
+        <!-- Options injectées -->
+      </div>
+
+      <!-- Zone de Feedback Clinique & Explication après validation -->
+      <div id="feedback-panel" class="hidden mb-6 p-4 sm:p-5 rounded-2xl border transition-all">
+        <div class="flex items-center gap-2 mb-2">
+          <div id="feedback-icon" class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"></div>
+          <h3 id="feedback-verdict" class="text-sm font-bold tracking-tight"></h3>
+        </div>
+        <div id="feedback-rationale" class="text-xs sm:text-sm text-slate-700 leading-relaxed pl-8 space-y-1.5">
+          <!-- Explications par item -->
+        </div>
+      </div>
+
+      <!-- Barre d'actions & Navigation -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+        <button id="btn-prev" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium text-xs sm:text-sm flex items-center gap-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Précédent
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button id="btn-validate" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm shadow-md shadow-blue-500/20 transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Valider ma réponse
+          </button>
+          
+          <button id="btn-next" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-medium text-xs sm:text-sm flex items-center gap-1.5 transition-colors">
+            Suivant
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Pied de page informatif -->
+  <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400">
+    <p>Outil d'ancrage actif IFSI • Semestre 3 (UE 2.5 - Processus inflammatoires et infectieux)</p>
+  </footer>
+
+  <!-- Script de Données et Logique Clinique Interactive -->
+  <script>
+    // 40 QUESTIONS COMPLÈTES : Prérequis et Fondamentaux ORL & Respiratoire
+    // Contrainte respectée : 1, 2 ou 3 bonnes réponses par question, distribution équilibrée et alternée des lettres A, B, C, D.
+    const quizData = [
+      {
+        id: 1,
+        theme: "Anatomie & Voies Aériennes",
+        question: "Concernant la limite anatomique séparant les voies aériennes supérieures (VAS) des voies aériennes inférieures (VAI), quelles propositions sont exactes ?",
+        options: [
+          { label: "A", text: "Le larynx, et plus précisément la fente glottique (cordes vocales), marque la séparation anatomique entre VAS et VAI." },
+          { label: "B", text: "La trachée fait partie intégrante des voies aériennes supérieures." },
+          { label: "C", text: "Les fosses nasales, le pharynx et les sinus paranasaux appartiennent tous aux voies aériennes supérieures." },
+          { label: "D", text: "L'épiglotte est située au-dessus de la glotte et bascule lors de la déglutition pour protéger l'arbre bronchique." }
+        ],
+        correct: ["A", "C", "D"],
+        rationale: "A, C et D sont exactes. La trachée, les bronches et les alvéoles appartiennent aux voies aériennes inférieures (B est faux)."
+      },
+      {
+        id: 2,
+        theme: "Infections ORL • Angines",
+        question: "À propos des angines aiguës chez l'adulte et l'enfant de plus de 3 ans :",
+        options: [
+          { label: "A", text: "L'étiologie virale est largement prédominante dans 60 à 80 % des cas." },
+          { label: "B", text: "La principale bactérie à rechercher par Test de Diagnostic Rapide (TDR) est le Streptocoque du Groupe A (SGA)." },
+          { label: "C", text: "Une angine érythémato-pultacée (avec enduit blanchâtre) est la preuve absolue d'une infection bactérienne." },
+          { label: "D", text: "L'antibiothérapie probabiliste d'une angine à SGA positive vise principalement à prévenir le Rhumatisme Articulaire Aigu (RAA)." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exactes. C est fausse : l'aspect clinique (érythémateux ou érythémato-pultacé) ne permet JAMAIS de distinguer une étiologie virale (ex: MNI) d'une étiologie bactérienne. Seul le TDR permet de trancher."
+      },
+      {
+        id: 3,
+        theme: "Diagnostic Pratique • TDR Angine",
+        question: "Concernant la réalisation et l'interprétation du Test de Diagnostic Rapide (TDR) de l'angine par l'infirmier(ère) :",
+        options: [
+          { label: "A", text: "Il s'effectue par un écouvillonnage vigoureux des deux amygdales et de la paroi postérieure du pharynx sans toucher la langue ni les joues." },
+          { label: "B", text: "Un TDR positif chez l'adulte justifie la prescription ou délivrance d'Amoxicilline pendant 6 jours en première intention (sauf allergie)." },
+          { label: "C", text: "Un TDR négatif indique qu'il faut immédiatement prescrire une fluoroquinolone par précaution." },
+          { label: "D", text: "Chez l'adulte sans facteur de risque, un score de Mac Isaac inférieur à 2 dispense même de la réalisation du TDR (angine présumée virale)." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont vraies. C est fausse et constitue une faute d'antibiogouvernance : un TDR négatif confirme l'origine virale et contre-indique toute antibiothérapie."
+      },
+      {
+        id: 4,
+        theme: "Otites Moyennes Aiguës (OMA)",
+        question: "Quels signes cliniques et éléments de prise en charge caractérisent l'Otite Moyenne Aiguë (OMA) purulente du nourrisson/jeune enfant ?",
+        options: [
+          { label: "A", text: "L'association constante de vertiges giratoires invalidants et de sifflements trachéaux." },
+          { label: "B", text: "Une otalgie vive (parfois manifestée par des pleurs inexpliqués et un frottement de l'oreille chez le nourrisson) et de la fièvre." },
+          { label: "C", text: "À l'otoscopie, un tympan congestif sans bombement suffit à poser le diagnostic formel d'OMA purulente." },
+          { label: "D", text: "L'Amoxicilline est l'antibiotique de premier choix si une antibiothérapie est requise (notamment chez l'enfant < 2 ans)." }
+        ],
+        correct: ["B", "D"],
+        rationale: "B et D sont exactes. A est faux (ce sont des signes labyrinthiques ou respiratoires bas). C est faux : le bombement tympanique ou la présence d'otorrhée purulente est indispensable pour affirmer l'OMA purulente (un tympan rouge isolé peut être lié à des pleurs ou une virose simple)."
+      },
+      {
+        id: 5,
+        theme: "Sinusites Aiguës",
+        question: "Concernant les sinusites aiguës de l'adulte :",
+        options: [
+          { label: "A", text: "La sinusite maxillaire est la localisation la plus fréquente." },
+          { label: "B", text: "Toute rhinopharyngite banale avec écoulement nasal transparent doit être traitée par antibiothérapie préventive." },
+          { label: "C", text: "Une sinusite sphénoïdale ou ethmoïdale présente un risque accru de complications neurologiques et ophtalmologiques sévères." },
+          { label: "D", text: "La douleur unilatérale augmentée tête penchée en avant et la persistance des sécrétions purulentes au-delà de quelques jours orientent vers une surinfection bactérienne." }
+        ],
+        correct: ["A", "C", "D"],
+        rationale: "A, C et D sont exactes. B est faux (la rhinopharyngite est virale et guérit spontanément en 7 à 10 jours sous traitement symptomatique)."
+      },
+      {
+        id: 6,
+        theme: "Laryngite Aiguë du Nourrisson",
+        question: "Devant une suspicion de laryngite aiguë sous-glottique chez un enfant de 18 mois, quels signes cliniques et réflexes IDE sont prioritaires ?",
+        options: [
+          { label: "A", text: "La présence d'une toux rauque ou aboyante, d'une voix éraillée et d'un stridor inspiratoire." },
+          { label: "B", text: "L'utilisation immédiate d'un abaisse-langue rigide au fond de la gorge pour visualiser l'épiglotte." },
+          { label: "C", text: "L'administration rapide de corticoïdes par voie orale (ex: bétaméthasone ou dexaméthasone) pour réduire l'œdème sous-glottique." },
+          { label: "D", text: "La surveillance attentive des signes de tirage (sous-costal, intercostal, sus-sternal) et de la saturation en O2." }
+        ],
+        correct: ["A", "C", "D"],
+        rationale: "A, C et D sont justes. B est formellement contre-indiqué : l'examen instrumental pharyngé chez un enfant dyspnéique avec suspicion d'épiglottite/laryngite peut déclencher un laryngospasme réflexe mortel ou un arrêt respiratoire."
+      },
+      {
+        id: 7,
+        theme: "Bronchiolite du Nourrisson",
+        question: "Concernant la bronchiolite aiguë du nourrisson :",
+        options: [
+          { label: "A", text: "Le Virus Respiratoire Syncytial (VRS) en est le principal agent étiologique." },
+          { label: "B", text: "Les antibiotiques et les bronchodilatateurs (salbutamol) sont prescrits systématiquement dès le premier jour." },
+          { label: "C", text: "La désobstruction rhinopharyngée (DRP) au sérum physiologique avant les repas constitue le pilier fondamental de la prise en charge." },
+          { label: "D", text: "Une prise alimentaire inférieure à 50 % des rations habituelles sur 3 repas consécutifs est un critère formel d'hospitalisation." }
+        ],
+        correct: ["A", "C", "D"],
+        rationale: "A, C et D sont exactes. B est faux selon les recommandations HAS : ni bronchodilatateurs, ni corticoïdes systémiques, ni antibiotiques de routine dans la bronchiolite typique non compliquée."
+      },
+      {
+        id: 8,
+        theme: "Physiopathologie • Pneumopathie Aiguë",
+        question: "Sur le plan physiopathologique, quelle est la définition exacte d'une Pneumopathie Aiguë Communautaire (PAC) ?",
+        options: [
+          { label: "A", text: "Une inflammation superficielle limitée exclusivement à la muqueuse des grosses bronches souches." },
+          { label: "B", text: "Une infection du parenchyme pulmonaire (alvéoles et tissu interstitiel) contractée en milieu ambulatoire ou moins de 48 heures après l'admission hospitalière." },
+          { label: "C", text: "Une présence constante de bacilles de Koch dans la cavité pleurale." },
+          { label: "D", text: "Un comblement des alvéoles par un exsudat inflammatoire riche en polynucléaires et fibrine, altérant l'hématose." }
+        ],
+        correct: ["B", "D"],
+        rationale: "B et D sont exactes. A correspond à la bronchite aiguë. C concerne spécifiquement la pleurésie tuberculeuse."
+      },
+      {
+        id: 9,
+        theme: "Pneumopathie à Pneumocoque",
+        question: "Quels éléments sont caractéristiques de la pneumopathie franche lobaire aiguë (PFLA) à Streptococcus pneumoniae (Pneumocoque) ?",
+        options: [
+          { label: "A", text: "Début brutal marqué par un frisson solennel violent, une fièvre élevée (> 39 °C) et un point de côté thoracique franc." },
+          { label: "B", text: "Possibilité d'expectorations rouillées caractéristiques après 24 à 48 heures d'évolution." },
+          { label: "C", text: "À la radiographie pulmonaire : opacité alvéolaire systématisée triangulaire à base pleurale avec bronchogramme aérique." },
+          { label: "D", text: "L'Amoxicilline par voie orale ou injectable est l'antibiothérapie de référence en première intention." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Toutes les 4 propositions sont exactes (cas rare mais classique au partiel pour le pneumocoque, pathogène roi des PAC)."
+      },
+      {
+        id: 10,
+        theme: "Score de Gravité CRB-65",
+        question: "Le score clinique d'évaluation de la gravité d'une pneumopathie communautaire en soins primaires (CRB-65) prend en compte :",
+        options: [
+          { label: "A", text: "C = Confusion mentale d'apparition récente." },
+          { label: "B", text: "R = Fréquence Respiratoire supérieure ou égale à 30 respirations par minute." },
+          { label: "C", text: "B = Pression Artérielle systolique < 90 mmHg ou diastolique ≤ 60 mmHg (Blood Pressure)." },
+          { label: "D", text: "65 = Âge supérieur ou égal à 65 ans." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions définissent rigoureusement le score CRB-65 (1 point par critère : score ≥ 1 impose une évaluation ou hospitalisation)."
+      },
+      {
+        id: 11,
+        theme: "Pneumopathie Atypique",
+        question: "À propos des pneumopathies dites « atypiques » (Mycoplasma pneumoniae, Chlamydia pneumoniae, Legionella) :",
+        options: [
+          { label: "A", text: "Elles débutent souvent de façon plus insidieuse avec syndrome pseudogrippal, toux sèche quinteuse et signes extra-respiratoires." },
+          { label: "B", text: "Les bactéries atypiques sont naturellement résistantes à l'Amoxicilline car elles n'ont pas de paroi bactérienne classique ciblée par les bêta-lactamines." },
+          { label: "C", text: "Le traitement de premier choix repose sur les Macrolides (ex: clarithromycine, azithromycine) ou certaines fluoroquinolones." },
+          { label: "D", text: "Elles se compliquent systématiquement de pneumothorax sous tension dans les 2 heures." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont justes. D est faux : l'évolution est généralement subaiguë et le pneumothorax n'est absolument pas une complication classique."
+      },
+      {
+        id: 12,
+        theme: "Légionellose",
+        question: "Concernant la légionellose (Legionella pneumophila) :",
+        options: [
+          { label: "A", text: "La contamination se fait par inhalation de microgouttelettes d'eau contaminée provenant de tours aéroréfrigérantes, douches ou réseaux d'eau chaude." },
+          { label: "B", text: "Il existe une transmission interhumaine directe très contagieuse nécessitant un isolement AIR immédiat." },
+          { label: "C", text: "Le diagnostic rapide repose sur la recherche de l'antigène soluble urinaire de Legionella sérogroupe 1." },
+          { label: "D", text: "Le tableau associe fréquemment une pneumopathie sévère avec des troubles digestifs (diarrhée) et des troubles neurologiques (confusion)." }
+        ],
+        correct: ["A", "C", "D"],
+        rationale: "A, C et D sont exactes. B est faux : IL N'Y A PAS de transmission interhumaine de la légionellose, donc aucun isolement particulier requis entre patients."
+      },
+      {
+        id: 13,
+        theme: "Coqueluche (Bordetella pertussis)",
+        question: "Concernant la coqueluche :",
+        options: [
+          { label: "A", text: "Elle est causée par une bactérie (Bordetella pertussis) et se manifeste par des quintes de toux suffocantes avec chant du coq inspiratoire." },
+          { label: "B", text: "Chez le nourrisson de moins de 3 mois non vacciné, elle comporte un risque mortel de toux avec apnées syncopales (« coqueluche maligne »)." },
+          { label: "C", text: "Elle justifie la mise en place de précautions complémentaires de type « GOUTTELETTES »." },
+          { label: "D", text: "Le traitement antibiotique précoce par Macrolides vise avant tout à stériliser les sécrétions pour casser la chaîne de contagion." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Toutes les propositions A, B, C et D sont exactes."
+      },
+      {
+        id: 14,
+        theme: "Grippe Saisonnière (Influenza)",
+        question: "Quelles caractéristiques cliniques et virologiques définissent la grippe saisonnière ?",
+        options: [
+          { label: "A", text: "Début brutal ('V' grippal) associant fièvre élevée, courbatures musculaires diffuses, céphalées et toux sèche." },
+          { label: "B", text: "Elle est causée par un virus à ARN à fort potentiel de mutations antigéniques (Myxovirus influenzae A ou B)." },
+          { label: "C", text: "La surinfection bactérienne (notamment à staphylocoque ou pneumocoque) est une complication classique et redoutée." },
+          { label: "D", text: "L'antiviral oseltamivir (Tamiflu) doit être prescrit systématiquement chez tous les adultes jeunes sans facteur de risque." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est faux : les inhibiteurs de la neuraminidase sont réservés aux formes graves ou aux personnes à haut risque de complications (sujets âgés, immunodéprimés) dans les 48h du début."
+      },
+      {
+        id: 15,
+        theme: "COVID-19 & Atteinte Pulmonaire",
+        question: "Concernant la COVID-19 (SARS-CoV-2) dans ses formes respiratoires sévères :",
+        options: [
+          { label: "A", text: "L'aggravation hypoxémique survient typiquement entre le 7e et le 10e jour après les premiers symptômes (orage cytokinique)." },
+          { label: "B", text: "La perte brutale de l'odorat (anosmie) et du goût (agueusie) sans obstruction nasale est un signe sémiologique évocateur." },
+          { label: "C", text: "La dexaméthasone (corticoïde) a démontré son efficacité chez les patients nécessitant une oxygénothérapie." },
+          { label: "D", text: "Le virus détruit uniquement les hématies et n'attaque jamais l'endothélium vasculaire pulmonaire." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est faux : le SARS-CoV-2 induit une endothélite et un risque majeur de microthromboses et d'embolies pulmonaires."
+      },
+      {
+        id: 16,
+        theme: "Tuberculose • Microbiologie & Transmission",
+        question: "Concernant l'agent pathogène et la transmission de la tuberculose pulmonaire :",
+        options: [
+          { label: "A", text: "L'agent responsable est Mycobacterium tuberculosis (bacille acido-alcoolo-résistant ou Bacille de Koch)." },
+          { label: "B", text: "C'est une bactérie anaérobie stricte qui prolifère préférentiellement dans les zones pulmonaires mal oxygénées." },
+          { label: "C", text: "La transmission s'effectue par voie AÉRIENNE (noyaux de gouttelettes de Wells < 5 µm restant en suspension dans l'air ambiant)." },
+          { label: "D", text: "La tuberculose extrapulmonaire isolée (osseuse, ganglionnaire sans atteinte pulmonaire) est hautement contagieuse par l'air." }
+        ],
+        correct: ["A", "C"],
+        rationale: "A et C sont exactes. B est faux (le BK est un aérobie strict, expliquant sa localisation préférentielle aux sommets pulmonaires riches en oxygène). D est faux : seule la tuberculose respiratoire (pulmonaire/laryngée) est contagieuse par voie aérienne."
+      },
+      {
+        id: 17,
+        theme: "Tuberculose • Clinique & Évolution",
+        question: "Quels signes cliniques et concepts distinguent l'Infection Tuberculeuse Latente (ITL) de la Tuberculose Maladie (TM) ?",
+        options: [
+          { label: "A", text: "Dans l'ITL, le patient est asymptomatique, a une radiographie pulmonaire normale et n'est pas contagieux." },
+          { label: "B", text: "La tuberculose maladie associe altération de l'état général (asthénie, anorexie, amaigrissement), sueurs nocturnes et toux chronique > 3 semaines." },
+          { label: "C", text: "L'hémoptysie (crachat de sang d'origine sous-glottique) est un signe d'alarme de tuberculose maladie cavitaire." },
+          { label: "D", text: "100 % des personnes infectées par le BK développent une tuberculose maladie dans le mois suivant le contage." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est faux : seuls 5 à 10 % des sujets immunocompétents infectés développent une maladie au cours de leur vie (le système immunitaire contrôle le bacille dans 90-95 % des cas sous forme d'ITL)."
+      },
+      {
+        id: 18,
+        theme: "Tuberculose • Diagnostic Bactériologique",
+        question: "Pour confirmer bactériologiquement une tuberculose pulmonaire active :",
+        options: [
+          { label: "A", text: "Le prélèvement de référence est l'expectoration matinale (crachat induit) ou le tubage gastrique matinal à jeun répété 3 jours de suite." },
+          { label: "B", text: "L'examen direct microscopique avec coloration de Ziehl-Neelsen ou à l'auramine permet de visualiser rapidement des BAAR." },
+          { label: "C", text: "La culture sur milieu spécifique (Lowenstein-Jensen) ou en milieu liquide est lente et demande plusieurs semaines." },
+          { label: "D", text: "Une simple bandelette urinaire positive aux leucocytes confirme le diagnostic de tuberculose pulmonaire." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est aberrant : la BU n'a aucun rapport avec le diagnostic de tuberculose pulmonaire."
+      },
+      {
+        id: 19,
+        theme: "Tuberculose • Thérapeutique & Mnémotechnique",
+        question: "Le traitement de la tuberculose maladie sensible repose sur une quadrithérapie initiale de 2 mois comportant :",
+        options: [
+          { label: "A", text: "Rifampicine (RMP)." },
+          { label: "B", text: "Isoniazide (INH)." },
+          { label: "C", text: "Pyrazinamide (PZA)." },
+          { label: "D", text: "Éthambutol (EMB)." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 molécules forment la quadrithérapie classique (mnémotechnique RIPE ou ERIP) pendant 2 mois, suivie de la bithérapie Isoniazide + Rifampicine pendant 4 mois."
+      },
+      {
+        id: 20,
+        theme: "Pharmacologie • Rifampicine",
+        question: "Concernant les surveillances et effets indésirables spécifiques de la RIFAMPICINE :",
+        options: [
+          { label: "A", text: "Elle colore les liquides biologiques (urines, larmes, sueur, salive) en rouge-orangé, ce dont il faut obligatoirement avertir le patient." },
+          { label: "B", text: "C'est un puissant inducteur enzymatique hépatique qui diminue l'efficacité de nombreux médicaments (anticoagulants oraux, contraceptifs oraux, antirétroviraux)." },
+          { label: "C", text: "Elle expose au risque de surdité définitive par atteinte cochléo-vestibulaire aiguë bilatérale." },
+          { label: "D", text: "La surveillance du bilan hépatique (ASAT, ALAT) et des plaquettes sanguines est obligatoire." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exactes. C concerne les aminosides (ex: amikacine) et non la rifampicine."
+      },
+      {
+        id: 21,
+        theme: "Pharmacologie • Isoniazide & Éthambutol",
+        question: "Concernant la toxicité des antituberculeux Isoniazide et Éthambutol :",
+        options: [
+          { label: "A", text: "L'Éthambutol nécessite un bilan ophtalmologique initial et une surveillance de l'acuité visuelle et de la vision des couleurs (risque de névrite optique rétrobulbaire)." },
+          { label: "B", text: "L'Isoniazide peut entraîner des neuropathies périphériques prévenues par l'adjonction de Vitamine B6 (pyridoxine)." },
+          { label: "C", text: "L'Éthambutol transforme systématiquement les téguments en bleu ardoisé." },
+          { label: "D", text: "L'Isoniazide est potentiellement hépatotoxique et impose une surveillance régulière des transaminases." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exactes. C est fantaisiste (la coloration bleuâtre est associée à l'amiodarone à long terme, pas à l'éthambutol)."
+      },
+      {
+        id: 22,
+        theme: "Précautions Complémentaires • AIR vs Gouttelettes",
+        question: "Concernant les précautions complémentaires d'hygiène, quelles affirmations sont exactes ?",
+        options: [
+          { label: "A", text: "Le masque FFP2 filtre les aérosols de très petite taille (< 5 µm) et est requis pour le personnel entrant dans une chambre avec précautions 'AIR'." },
+          { label: "B", text: "Le masque chirurgical porté par le soignant suffit pour entrer dans la chambre d'un patient porteur d'une tuberculose pulmonaire bacillifère active." },
+          { label: "C", text: "La grippe et la coqueluche se transmettent principalement par gouttelettes (> 5 µm projetées à courte distance) et relèvent des précautions 'GOUTTELETTES'." },
+          { label: "D", text: "Dans les précautions 'AIR', la porte de la chambre individuelle doit impérativement rester maintenue fermée." }
+        ],
+        correct: ["A", "C", "D"],
+        rationale: "A, C et D sont exactes. B est FAUX et dangereux : le personnel soignant doit obligatoirement porter un masque de protection respiratoire FFP2 face à la tuberculose."
+      },
+      {
+        id: 23,
+        theme: "Mesures Barrières • Chambre & Déplacement",
+        question: "Lors de la prise en charge d'un patient hospitalisé sous précautions complémentaires 'AIR' (ex: suspicion de tuberculose bacillifère) :",
+        options: [
+          { label: "A", text: "Le patient doit être placé en chambre individuelle, idéalement à pression négative." },
+          { label: "B", text: "Si le patient doit impérativement quitter sa chambre pour un examen d'imagerie, il doit porter un masque chirurgical." },
+          { label: "C", text: "Le soignant met son masque FFP2 à l'intérieur de la chambre après avoir discuté avec le patient." },
+          { label: "D", text: "L'hygiène des mains par friction hydro-alcoolique reste obligatoire avant et après le retrait des équipements." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exactes. C est faux : le masque FFP2 s'enfile et s'ajuste (fit-check d'étanchéité) AVANT d'entrer dans la chambre du patient."
+      },
+      {
+        id: 24,
+        theme: "Prélèvements • ECBC de Qualité",
+        question: "Quels sont les critères indispensables validant la qualité cytologique d'un Examen Cytobactériologique des Crachats (ECBC) selon Murray ?",
+        options: [
+          { label: "A", text: "Présence de plus de 100 cellules épithéliales par champ au grossissement x100." },
+          { label: "B", text: "Présence de moins de 10 cellules épithéliales buccales par champ (preuve de l'absence de contamination par la salive)." },
+          { label: "C", text: "Présence de plus de 25 polynucléaires neutrophiles (PNN) par champ (preuve d'une sécrétion bronchopulmonaire purulente profonde)." },
+          { label: "D", text: "Le prélèvement doit être réalisé avant toute nouvelle antibiothérapie chaque fois que possible." }
+        ],
+        correct: ["B", "C", "D"],
+        rationale: "B, C et D sont les critères stricts. A est faux (un nombre élevé de cellules épithéliales prouve qu'il ne s'agit que de salive non analysable)."
+      },
+      {
+        id: 25,
+        theme: "Sémiologie Respiratoire d'Alerte",
+        question: "Quels signes cliniques traduisent une détresse respiratoire aiguë menaçant le pronostic vital chez un patient fébrile ?",
+        options: [
+          { label: "A", text: "Fréquence respiratoire supérieure à 30 cycles/minute (polypnée superficielle)." },
+          { label: "B", text: "Mise en jeu des muscles respiratoires accessoires (tirage sus-claviculaire, intercostal) et balancement thoraco-abdominal." },
+          { label: "C", text: "Cyanose des lèvres et des extrémités, sueurs profuses, angoisse ou confusion mentale." },
+          { label: "D", text: "Saturation pulsée en oxygène (SpO2) inférieure à 90 % en air ambiant." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Toutes les 4 propositions sont des signes majeurs de lutte ou de défaillance respiratoire aiguë imposant une prise en charge urgente."
+      },
+      {
+        id: 26,
+        theme: "Oxygénothérapie en Urgence",
+        question: "Concernant l'administration d'oxygène chez un patient présentant une pneumopathie hypoxémiante aiguë :",
+        options: [
+          { label: "A", text: "L'oxygénothérapie est une thérapeutique médicamenteuse qui doit faire l'objet d'une prescription médicale (débit ou SpO2 cible), sauf urgence vitale immédiate." },
+          { label: "B", text: "Les lunettes à oxygène permettent généralement d'administrer des débits de 1 à 6 L/min." },
+          { label: "C", text: "Le masque à haute concentration avec réserve permet d'atteindre des FiO2 proches de 80 à 90 % chez un patient en détresse sévère." },
+          { label: "D", text: "Chez un patient connu BPCO emphysémateux, l'objectif de SpO2 cible recommandé se situe généralement entre 88 et 92 % pour éviter l'hypercapnie induite." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions sont exactes et correspondent aux règles de l'art soignant en oxygénothérapie."
+      },
+      {
+        id: 27,
+        theme: "Auscultation Pulmonaire & Bruits",
+        question: "Concernant les bruits adventices à l'auscultation pulmonaire lors d'une infection respiratoire :",
+        options: [
+          { label: "A", text: "Les râles crépitants sont des bruits secs, fins, éclatant en fin d'inspiration (comparés au froissement d'une mèche de cheveux), typiques d'une condensation alvéolaire (pneumonie)." },
+          { label: "B", text: "Les râles sibilants sont des sifflements musicaux expiratoires traduisant un rétrécissement bronchique (spasme ou œdème)." },
+          { label: "C", text: "Le souffle tubaire est un bruit rude inspiratoire et expiratoire perçu en regard d'une condensation parenchymateuse dense." },
+          { label: "D", text: "Les crépitants disparaissent systématiquement lors d'une apnée prolongée de 2 secondes." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est faux : les râles crépitants sont générés lors de l'ouverture explosive des alvéoles décollées par le flux d'air inspiratoire et n'ont pas de rapport avec l'apnée."
+      },
+      {
+        id: 28,
+        theme: "Gaz du Sang • Interprétation de Base",
+        question: "Quelles sont les valeurs normales chez l'adulte d'une gazométrie artérielle en air ambiant au repos ?",
+        options: [
+          { label: "A", text: "pH compris entre 7,35 et 7,45." },
+          { label: "B", text: "PaO2 comprise entre 80 et 100 mmHg." },
+          { label: "C", text: "PaCO2 comprise entre 35 et 45 mmHg." },
+          { label: "D", text: "Bicarbonates (HCO3-) compris entre 22 et 26 mmol/L." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions représentent les constantes physiologiques fondamentales de l'équilibre acido-basique et de l'hématose."
+      },
+      {
+        id: 29,
+        theme: "Pleurésie Purulente (Empyème)",
+        question: "Une pneumopathie communautaire peut se compliquer d'un épanchement pleural purulent. Quelles affirmations sont vraies ?",
+        options: [
+          { label: "A", text: "À l'auscultation et percussion, on retrouve une matité déclive et une diminution ou abolition des murmures vésiculaires à la base." },
+          { label: "B", text: "La ponction pleurale exploratrice permet d'analyser l'aspect macroscopique (liquide trouble/purulent), la biochimie et la bactériologie." },
+          { label: "C", text: "Une pleurésie purulente volumineuse peut nécessiter un drainage pleural thoracique sous aspiration douce." },
+          { label: "D", text: "Le traitement repose sur l'injection d'eau distillée dans l'artère sous-clavière." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est une aberration thérapeutique mortelle."
+      },
+      {
+        id: 30,
+        theme: "Abcès du Poumon",
+        question: "Concernant l'abcès pulmonaire :",
+        options: [
+          { label: "A", text: "Il est défini comme une lésion suppurée creusée dans le parenchyme pulmonaire à la suite d'une nécrose infectieuse." },
+          { label: "B", text: "Il survient volontiers après une inhalation de liquide gastrique ou chez des patients présentant un mauvais état buccodentaire (germes anaérobies)." },
+          { label: "C", text: "La radiographie pulmonaire montre typiquement une image avec un niveau hydro-aérique (cavité avec liquide en bas et air au-dessus)." },
+          { label: "D", text: "La vomique est le rejet brutal par la bouche d'une quantité massive de pus fétide lors de l'ouverture de l'abcès dans une bronche." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions sont des définitions sémiologiques classiques et exactes de l'abcès pulmonaire."
+      },
+      {
+        id: 31,
+        theme: "Surveillance de l'Oxygénation",
+        question: "Quels facteurs physiologiques ou techniques peuvent fausser par défaut la mesure de la SpO2 par oxymètre de pouls ?",
+        options: [
+          { label: "A", text: "Une vasoconstriction périphérique intense ou un état de choc avec hypothermie des extrémités." },
+          { label: "B", text: "La présence de vernis à ongles foncé ou de faux ongles en résine." },
+          { label: "C", text: "Des tremblements musculaires importants ou une agitation motrice du patient." },
+          { label: "D", text: "Une intoxication au monoxyde de carbone (l'oxymètre standard ne distingue pas l'oxyhémoglobine de la carboxyhémoglobine et affiche une SpO2 faussement rassurante)." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Toutes ces propositions sont des pièges classiques en soins infirmiers altérant la fiabilité de la saturométrie."
+      },
+      {
+        id: 32,
+        theme: "Antibiothérapie des Infections Respiratoires",
+        question: "Concernant l'antibiothérapie des infections respiratoires courantes :",
+        options: [
+          { label: "A", text: "Une bronchite aiguë chez un adulte sain et non fumeur ne justifie pas d'antibiothérapie (infection virale résolutive)." },
+          { label: "B", text: "L'Amoxicilline est la molécule reine contre Streptococcus pneumoniae en l'absence d'allergie aux pénicillines." },
+          { label: "C", text: "En cas d'allergie avérée aux pénicillines avec choc anaphylactique antérieur, on remplace l'amoxicilline par une macrolide ou une fluoroquinolone respiratoire adaptée." },
+          { label: "D", text: "Les antibiotiques diminuent instantanément la fièvre en moins de 30 secondes après la prise orale." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est faux : le délai d'efficacité clinique d'une antibiothérapie s'évalue entre 48 et 72 heures."
+      },
+      {
+        id: 33,
+        theme: "Vaccinologie Respiratoire",
+        question: "Concernant la prévention vaccinale des pathologies respiratoires infectieuses :",
+        options: [
+          { label: "A", text: "La vaccination contre la coqueluche est obligatoire chez les nourrissons et recommandée chez les futurs parents/entourage (stratégie du 'cocooning')." },
+          { label: "B", text: "Le vaccin anti-pneumococcique conjugué est obligatoire chez tous les nourrissons nés depuis le 1er janvier 2018." },
+          { label: "C", text: "Le vaccin contre la grippe saisonnière doit être réadministré chaque année en raison de la dérive antigénique des souches virales." },
+          { label: "D", text: "Le vaccin BCG protège principalement les jeunes enfants contre les formes graves de la tuberculose (méningite tuberculeuse et miliaire)." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions sont rigoureusement exactes selon le calendrier vaccinal officiel."
+      },
+      {
+        id: 34,
+        theme: "Expectorations & Sémiologie",
+        question: "À propos de l'aspect sémiologique des expectorations bronchiques :",
+        options: [
+          { label: "A", text: "Une expectoration rouillée couleur jus de pruneau évoque classiquement une pneumonie franche lobaire à pneumocoque." },
+          { label: "B", text: "Des crachats perlés de Laënnec sont caractéristiques de la fin de crise d'asthme bronchique." },
+          { label: "C", text: "Une expectoration mousseuse rosée abondante (« blanc d'œuf battu ») évoque un œdème aigu du poumon (OAP) cardiogénique plutôt qu'une infection simple." },
+          { label: "D", text: "L'hémoptysie est le rejet de sang noir digéré provenant de l'estomac par effort de vomissement." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D définit l'hématémèse digestive et non l'hémoptysie (qui est l'expectoration de sang rouge vif aéré lors d'efforts de toux)."
+      },
+      {
+        id: 35,
+        theme: "Pneumopathie d'Inhalation",
+        question: "Quels sont les facteurs de risque et caractéristiques d'une pneumopathie d'inhalation (fausses routes) ?",
+        options: [
+          { label: "A", text: "Troubles de la déglutition consécutifs à un AVC ou une démence à un stade avancé." },
+          { label: "B", text: "Coma ou troubles de la vigilance (score de Glasgow < 8 sans protection des voies aériennes)." },
+          { label: "C", text: "Elle siège préférentiellement dans le segment de Fowler (sommet du lobe inférieur droit) ou le lobe inférieur droit en raison de la verticalité de la bronche souche droite." },
+          { label: "D", text: "Elle implique fréquemment des bactéries anaérobies de la cavité buccale." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions sont exactes. L'anatomie de la bronche principale droite (plus verticale, plus large et plus courte) favorise l'inhalation de ce côté."
+      },
+      {
+        id: 36,
+        theme: "Aspergillose & Mycologie Respiratoire",
+        question: "Concernant les infections mycosiques respiratoires, en particulier l'aspergillose :",
+        options: [
+          { label: "A", text: "Aspergillus fumigatus est un champignon filamenteux opportuniste présent dans l'environnement (moisissures, poussières de travaux)." },
+          { label: "B", text: "L'aspergillome se développe volontiers dans une cavité pulmonaire préexistante (ex: ancienne caverne tuberculeuse cicatricielle)." },
+          { label: "C", text: "L'aspergillose invasive survient préférentiellement chez les patients sévèrement immunodéprimés (neutropénies profondes et prolongées)." },
+          { label: "D", text: "L'amoxicilline est le traitement antifongique de référence contre Aspergillus." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est faux : l'amoxicilline est un antibactérien inefficace sur les champignons (on utilise des antifongiques comme le voriconazole ou l'amphotéricine B)."
+      },
+      {
+        id: 37,
+        theme: "Pneumocystose (Pneumocystis jirovecii)",
+        question: "Concernant la pneumocystose pulmonaire chez un patient infecté par le VIH :",
+        options: [
+          { label: "A", text: "Elle survient quasi exclusivement lorsque le taux de lymphocytes T CD4 chute en dessous de 200/mm³." },
+          { label: "B", text: "Elle réalise une pneumopathie interstitielle diffuse hypoxémiante avec dyspnée d'effort d'aggravation progressive et toux sèche." },
+          { label: "C", text: "Le traitement curatif et la prophylaxie de référence reposent sur le Cotrimoxazole (Bactrim)." },
+          { label: "D", text: "Elle se transmet par voie digestive par ingestion d'eau croupie." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exactes. D est faux : Pneumocystis jirovecii est un champignon atypique à transmission aérienne interhumaine."
+      },
+      {
+        id: 38,
+        theme: "Surveillance Infirmière • Détresse & Scope",
+        question: "Lors de la surveillance rapprochée d'un patient hospitalisé pour pneumonie avec défaillance respiratoire, quels paramètres doivent être colligés ?",
+        options: [
+          { label: "A", text: "Fréquence respiratoire mesurée sur une minute complète (et non estimée au hasard)." },
+          { label: "B", text: "Saturation pulsée en oxygène (SpO2) et débit d'oxygène administré." },
+          { label: "C", text: "État de conscience (recherche d'agitation ou d'encéphalopathie liée à l'hypercapnie/hypoxie)." },
+          { label: "D", text: "Couleur cutanée et présence éventuelle de sueurs au front ou de marbrures aux membres." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 éléments sont capitaux dans la fiche de surveillance respiratoire du rôle propre et délégué infirmier."
+      },
+      {
+        id: 39,
+        theme: "Épiglottite Aiguë",
+        question: "L'épiglottite aiguë est une urgence ORL pédiatrique absolue. Quelles caractéristiques lui sont propres ?",
+        options: [
+          { label: "A", text: "Elle était classiquement causée par Haemophilus influenzae de type b (fortement réduite depuis la vaccination systématique)." },
+          { label: "B", text: "L'enfant adopte une position assise penchée en avant, tête défléchie, bouche ouverte avec hypersialorrhée (ne peut plus déglutir sa salive)." },
+          { label: "C", text: "Il faut allonger immédiatement l'enfant sur le dos pour un examen complet de la gorge avec abaisse-langue métallique." },
+          { label: "D", text: "Le risque majeur est l'asphyxie aiguë par obstruction mécanique totale du carrefour laryngé." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exactes. C est une faute majeure : il ne faut JAMAIS allonger l'enfant ni examiner la gorge au risque de provoquer un arrêt respiratoire réflexe immédiat."
+      },
+      {
+        id: 40,
+        theme: "Isolement & Hygiène Hospitalière",
+        question: "Quelle association entre agent infectieux respiratoire et type de précautions complémentaires est correcte ?",
+        options: [
+          { label: "A", text: "Mycobacterium tuberculosis (Tuberculose bacillifère) ➔ Précautions complémentaires AIR (masque FFP2 pour le soignant avant d'entrer)." },
+          { label: "B", text: "Virus de la Grippe saisonnière ➔ Précautions complémentaires GOUTTELETTES (masque chirurgical pour le soignant à moins d'un mètre)." },
+          { label: "C", text: "Legionella pneumophila (Légionellose) ➔ Précautions complémentaires AIR strictes avec chambre à pression négative." },
+          { label: "D", text: "Bordetella pertussis (Coqueluche) ➔ Précautions complémentaires GOUTTELETTES." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exactes. C est faux : Legionella pneumophila ne se transmettant PAS d'homme à homme, elle ne nécessite AUCUNE précaution complémentaire (seules les précautions standard s'appliquent)."
+      }
+    ];
+
+    // État de l'application
+    let currentQuestionIndex = 0;
+    let userSelections = Array(quizData.length).fill(null).map(() => []);
+    let validationStates = Array(quizData.length).fill(null); // null: non validé, true: tout bon, false: faux/incomplet
+    let reviewMode = false;
+    let filteredIndices = [...Array(quizData.length).keys()];
+
+    // Éléments du DOM
+    const qIndexEl = document.getElementById("q-index");
+    const qCategoryEl = document.getElementById("q-category");
+    const qTextEl = document.getElementById("q-text");
+    const optionsContainer = document.getElementById("options-container");
+    const feedbackPanel = document.getElementById("feedback-panel");
+    const feedbackIcon = document.getElementById("feedback-icon");
+    const feedbackVerdict = document.getElementById("feedback-verdict");
+    const feedbackRationale = document.getElementById("feedback-rationale");
+    const btnValidate = document.getElementById("btn-validate");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const headerScoreEl = document.getElementById("header-score");
+    const headerValidatedEl = document.getElementById("header-validated");
+
+    const quizCard = document.getElementById("quiz-card");
+    const resultsScreen = document.getElementById("results-screen");
+    const gridModal = document.getElementById("grid-modal");
+    const btnToggleGrid = document.getElementById("btn-toggle-grid");
+    const btnCloseGrid = document.getElementById("btn-close-grid");
+    const btnModalDismiss = document.getElementById("btn-modal-dismiss");
+    const questionsGridContainer = document.getElementById("questions-grid-container");
+
+    const finalScoreVal = document.getElementById("final-score-val");
+    const finalPctVal = document.getElementById("final-pct-val");
+    const finalStatusBadge = document.getElementById("final-status-badge");
+    const resultBadgeIcon = document.getElementById("result-badge-icon");
+    const resultTitle = document.getElementById("result-title");
+    const resultSubtitle = document.getElementById("result-subtitle");
+    const btnRestartAll = document.getElementById("btn-restart-all");
+    const btnReviewErrors = document.getElementById("btn-review-errors");
+    const btnBrowseAll = document.getElementById("btn-browse-all");
+    const countErrorsBadge = document.getElementById("count-errors-badge");
+
+    // Initialisation
+    function initApp() {
+      renderQuestionGrid();
+      loadQuestion(0);
+      setupEventListeners();
+    }
+
+    // Affichage d'une question
+    function loadQuestion(indexInFiltered) {
+      if (indexInFiltered < 0 || indexInFiltered >= filteredIndices.length) return;
+      currentQuestionIndex = indexInFiltered;
+      const actualIndex = filteredIndices[currentQuestionIndex];
+      const q = quizData[actualIndex];
+
+      // Mise à jour de l'affichage métadonnées
+      qIndexEl.textContent = actualIndex + 1;
+      qCategoryEl.textContent = q.theme;
+      qTextEl.textContent = q.question;
+
+      // Barre de progression
+      const progressPercent = ((actualIndex + 1) / quizData.length) * 100;
+      progressBarFill.style.width = `${progressPercent}%`;
+
+      // Construction des propositions
+      optionsContainer.innerHTML = "";
+      const isAlreadyValidated = validationStates[actualIndex] !== null;
+
+      q.options.forEach(opt => {
+        const isChecked = userSelections[actualIndex].includes(opt.label);
+        const optButton = document.createElement("button");
+        optButton.type = "button";
+        optButton.className = `w-full text-left p-3.5 sm:p-4 rounded-2xl border transition-all flex items-start gap-3.5 select-none ${
+          isChecked 
+            ? "border-cyan-600 bg-cyan-50/70 text-cyan-950 font-medium shadow-xs" 
+            : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 bg-white text-slate-800"
+        } ${isAlreadyValidated ? "cursor-default" : "cursor-pointer active:scale-[0.99]"}`;
+
+        // Si déjà validé, on ajoute les codes couleurs sur les options
+        if (isAlreadyValidated) {
+          const isCorrectAnswer = q.correct.includes(opt.label);
+          if (isCorrectAnswer) {
+            optButton.classList.add("ring-2", "ring-emerald-500", "bg-emerald-50/80", "border-emerald-300");
+          } else if (isChecked && !isCorrectAnswer) {
+            optButton.classList.add("ring-2", "ring-rose-500", "bg-rose-50/80", "border-rose-300");
+          }
+        }
+
+        // Checkbox décorative
+        const checkboxEl = document.createElement("div");
+        checkboxEl.className = `mt-0.5 w-5 h-5 rounded-md flex-shrink-0 flex items-center justify-center border font-bold text-xs transition-colors ${
+          isChecked 
+            ? "bg-cyan-600 border-cyan-600 text-white" 
+            : "border-slate-300 bg-slate-50 text-slate-500"
+        }`;
+        checkboxEl.textContent = opt.label;
+
+        // Texte
+        const textWrapper = document.createElement("div");
+        textWrapper.className = "flex-1 text-xs sm:text-sm leading-relaxed";
+        textWrapper.textContent = opt.text;
+
+        optButton.appendChild(checkboxEl);
+        optButton.appendChild(textWrapper);
+
+        if (!isAlreadyValidated) {
+          optButton.addEventListener("click", () => toggleOption(actualIndex, opt.label));
+        }
+
+        optionsContainer.appendChild(optButton);
+      });
+
+      // Gestion du Feedback
+      if (isAlreadyValidated) {
+        showFeedback(actualIndex);
+        btnValidate.classList.add("hidden");
+      } else {
+        feedbackPanel.classList.add("hidden");
+        btnValidate.classList.remove("hidden");
+      }
+
+      // Mise à jour de la navigation
+      btnPrev.disabled = currentQuestionIndex === 0;
+      if (currentQuestionIndex === filteredIndices.length - 1) {
+        btnNext.innerHTML = `Terminer <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+      } else {
+        btnNext.innerHTML = `Suivant <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>`;
+      }
+
+      updateHeaderStats();
+      renderQuestionGrid();
+    }
+
+    // Sélection / Déselection d'une option
+    function toggleOption(actualIndex, letter) {
+      if (validationStates[actualIndex] !== null) return;
+      const selections = userSelections[actualIndex];
+      const index = selections.indexOf(letter);
+      if (index > -1) {
+        selections.splice(index, 1);
+      } else {
+        selections.push(letter);
+        selections.sort();
+      }
+      loadQuestion(currentQuestionIndex);
+    }
+
+    // Valider la question en cours
+    function validateCurrentQuestion() {
+      const actualIndex = filteredIndices[currentQuestionIndex];
+      const selected = userSelections[actualIndex];
+
+      if (selected.length === 0) {
+        // Message non-bloquant
+        const toast = document.createElement("div");
+        toast.className = "fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-lg z-50 animate-bounce";
+        toast.textContent = "Veuillez cocher au moins une proposition avant de valider.";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2200);
+        return;
+      }
+
+      const q = quizData[actualIndex];
+      const isExactlyCorrect = 
+        selected.length === q.correct.length && 
+        selected.every(letter => q.correct.includes(letter));
+
+      validationStates[actualIndex] = isExactlyCorrect;
+      loadQuestion(currentQuestionIndex);
+    }
+
+    // Affichage de l'explication clinique
+    function showFeedback(actualIndex) {
+      const q = quizData[actualIndex];
+      const isCorrect = validationStates[actualIndex];
+      const userAns = userSelections[actualIndex].join(", ");
+      const correctAns = q.correct.join(", ");
+
+      feedbackPanel.classList.remove("hidden", "bg-emerald-50", "border-emerald-200", "bg-rose-50", "border-rose-200");
+
+      if (isCorrect) {
+        feedbackPanel.classList.add("bg-emerald-50/80", "border-emerald-200");
+        feedbackIcon.className = "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-emerald-600";
+        feedbackIcon.innerHTML = "✓";
+        feedbackVerdict.className = "text-sm font-bold text-emerald-900";
+        feedbackVerdict.textContent = `Excellent ! Réponse exacte [ ${correctAns} ]`;
+      } else {
+        feedbackPanel.classList.add("bg-rose-50/80", "border-rose-200");
+        feedbackIcon.className = "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-rose-600";
+        feedbackIcon.innerHTML = "✕";
+        feedbackVerdict.className = "text-sm font-bold text-rose-900";
+        feedbackVerdict.textContent = `Erreur / Incomplet (Vos coches : [ ${userAns || "Aucune"} ] • Attendu : [ ${correctAns} ])`;
+      }
+
+      feedbackRationale.innerHTML = `
+        <div class="font-medium text-slate-800 mb-1">Raisonnement clinique & Justification IFSI :</div>
+        <p class="text-slate-600">${q.rationale}</p>
+      `;
+    }
+
+    // Mise à jour des compteurs du Header
+    function updateHeaderStats() {
+      const validatedCount = validationStates.filter(s => s !== null).length;
+      const correctCount = validationStates.filter(s => s === true).length;
+      headerValidatedEl.textContent = validatedCount;
+      headerScoreEl.textContent = correctCount;
+    }
+
+    // Grille de navigation des 40 questions
+    function renderQuestionGrid() {
+      questionsGridContainer.innerHTML = "";
+      quizData.forEach((_, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        const actualCurIdx = filteredIndices[currentQuestionIndex];
+        const isCurrent = idx === actualCurIdx;
+        const state = validationStates[idx];
+
+        let baseClasses = "h-9 rounded-xl font-mono text-xs font-bold transition-all flex items-center justify-center ";
+        if (state === true) {
+          baseClasses += "bg-emerald-500 text-white shadow-xs ";
+        } else if (state === false) {
+          baseClasses += "bg-rose-500 text-white shadow-xs ";
+        } else {
+          baseClasses += "bg-slate-100 hover:bg-slate-200 text-slate-700 ";
+        }
+
+        if (isCurrent) {
+          baseClasses += "ring-2 ring-cyan-600 ring-offset-2 scale-105 ";
+        }
+
+        btn.className = baseClasses;
+        btn.textContent = idx + 1;
+
+        btn.addEventListener("click", () => {
+          // Si on est en mode review, réinitialiser la vue filtrée pour atteindre cette question
+          if (reviewMode) {
+            filteredIndices = [...Array(quizData.length).keys()];
+            reviewMode = false;
+          }
+          gridModal.classList.add("hidden");
+          quizCard.classList.remove("hidden");
+          resultsScreen.classList.add("hidden");
+          const targetIndex = filteredIndices.indexOf(idx);
+          if (targetIndex !== -1) {
+            loadQuestion(targetIndex);
+          }
+        });
+
+        questionsGridContainer.appendChild(btn);
+      });
+    }
+
+    // Écran de fin de test
+    function showFinalResults() {
+      quizCard.classList.add("hidden");
+      resultsScreen.classList.remove("hidden");
+
+      const correctCount = validationStates.filter(s => s === true).length;
+      const totalCount = quizData.length;
+      const pct = Math.round((correctCount / totalCount) * 100);
+
+      finalScoreVal.textContent = correctCount;
+      finalPctVal.textContent = `${pct}%`;
+
+      // Analyse du résultat
+      finalStatusBadge.className = "text-xs uppercase font-extrabold px-3 py-1.5 rounded-lg tracking-wider ";
+      if (pct >= 80) {
+        resultBadgeIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-4 bg-emerald-500 shadow-emerald-500/30";
+        resultBadgeIcon.innerHTML = "🏆";
+        resultTitle.textContent = "Excellente Maîtrise Clinique !";
+        resultSubtitle.textContent = "Vos prérequis sur les infections ORL et respiratoires sont très solides. Vous êtes prêt(e) à attaquer le cours et les cas cliniques complexes.";
+        finalStatusBadge.classList.add("bg-emerald-100", "text-emerald-800");
+        finalStatusBadge.textContent = "Acquis avec Mention";
+      } else if (pct >= 60) {
+        resultBadgeIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-4 bg-cyan-600 shadow-cyan-600/30";
+        resultBadgeIcon.innerHTML = "🎯";
+        resultTitle.textContent = "Base Validée, Points Clés à Consolider";
+        resultSubtitle.textContent = "La majorité des mécanismes et règles d'hygiène sont compris. Travaillez vos erreurs sur la pharmacologie et les critères de gravité.";
+        finalStatusBadge.classList.add("bg-cyan-100", "text-cyan-800");
+        finalStatusBadge.textContent = "En Cours d'Acquisition";
+      } else {
+        resultBadgeIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-4 bg-rose-500 shadow-rose-500/30";
+        resultBadgeIcon.innerHTML = "⚠️";
+        resultTitle.textContent = "Prérequis Insuffisants pour l'Évaluation";
+        resultSubtitle.textContent = "Plusieurs notions éliminatoires (isolement AIR vs gouttelettes, TDR, critères de Murray, toxicités antituberculeuses) doivent être reprises sans tarder.";
+        finalStatusBadge.classList.add("bg-rose-100", "text-rose-800");
+        finalStatusBadge.textContent = "Non Validé (À Reprendre)";
+      }
+
+      // Nombre d'erreurs pour bouton spécifique
+      const errorIndices = [];
+      validationStates.forEach((state, i) => {
+        if (state === false || state === null) errorIndices.push(i);
+      });
+
+      if (errorIndices.length > 0) {
+        btnReviewErrors.classList.remove("hidden");
+        countErrorsBadge.textContent = errorIndices.length;
+      } else {
+        btnReviewErrors.classList.add("hidden");
+      }
+    }
+
+    // Gestionnaires d'événements
+    function setupEventListeners() {
+      // Bouton Valider
+      btnValidate.addEventListener("click", validateCurrentQuestion);
+
+      // Bouton Précédent
+      btnPrev.addEventListener("click", () => {
+        if (currentQuestionIndex > 0) {
+          loadQuestion(currentQuestionIndex - 1);
+        }
+      });
+
+      // Bouton Suivant / Terminer
+      btnNext.addEventListener("click", () => {
+        if (currentQuestionIndex < filteredIndices.length - 1) {
+          loadQuestion(currentQuestionIndex + 1);
+        } else {
+          // Si on est à la dernière question, afficher les résultats
+          showFinalResults();
+        }
+      });
+
+      // Tiroir Grille
+      btnToggleGrid.addEventListener("click", () => {
+        renderQuestionGrid();
+        gridModal.classList.remove("hidden");
+      });
+      btnCloseGrid.addEventListener("click", () => gridModal.classList.add("hidden"));
+      btnModalDismiss.addEventListener("click", () => gridModal.classList.add("hidden"));
+
+      // Relancer tout le test
+      btnRestartAll.addEventListener("click", () => {
+        if (confirm("Réinitialiser l'ensemble du test et effacer toutes vos réponses ?")) {
+          userSelections = Array(quizData.length).fill(null).map(() => []);
+          validationStates = Array(quizData.length).fill(null);
+          filteredIndices = [...Array(quizData.length).keys()];
+          reviewMode = false;
+          resultsScreen.classList.add("hidden");
+          quizCard.classList.remove("hidden");
+          loadQuestion(0);
+        }
+      });
+
+      // Travailler uniquement les erreurs
+      btnReviewErrors.addEventListener("click", () => {
+        const errorIndices = [];
+        validationStates.forEach((state, i) => {
+          if (state === false || state === null) errorIndices.push(i);
+        });
+
+        if (errorIndices.length === 0) return;
+
+        // Reset des états uniquement pour les questions erronées
+        errorIndices.forEach(idx => {
+          userSelections[idx] = [];
+          validationStates[idx] = null;
+        });
+
+        filteredIndices = errorIndices;
+        reviewMode = true;
+        resultsScreen.classList.add("hidden");
+        quizCard.classList.remove("hidden");
+        loadQuestion(0);
+      });
+
+      // Revoir l'ensemble avec corrigé
+      btnBrowseAll.addEventListener("click", () => {
+        filteredIndices = [...Array(quizData.length).keys()];
+        reviewMode = false;
+        resultsScreen.classList.add("hidden");
+        quizCard.classList.remove("hidden");
+        loadQuestion(0);
+      });
+    }
+
+    // Lancement au chargement complet
+    window.addEventListener("DOMContentLoaded", initApp);
+  </script>
+</body>
+</html>
