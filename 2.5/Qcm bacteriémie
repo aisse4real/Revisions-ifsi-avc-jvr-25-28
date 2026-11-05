@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QCM CM8 : Bactériémies, Infections Ostéo-articulaires & Antibiothérapies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between selection:bg-teal-100 selection:text-teal-900">
+
+  <!-- Entête Principale -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-700 to-indigo-800 flex items-center justify-center text-white shadow-md shadow-teal-700/20">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <div>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-900 tracking-wide uppercase">UE 2.5 & 2.11 • CM8</span>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Bactériémies & Infections Ostéo-articulaires</h1>
+        </div>
+      </div>
+
+      <!-- Navigation & Score direct -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <div class="text-right hidden sm:block">
+          <div class="text-xs text-slate-500 font-medium">Validation</div>
+          <div class="text-sm font-bold text-slate-800 mono"><span id="header-score" class="text-teal-700">0</span> / <span id="header-validated">0</span> terminées</div>
+        </div>
+        <button id="btn-toggle-grid" class="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors border border-slate-300">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          <span>Grille (40 Q)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barre de Progression Fine -->
+    <div class="w-full bg-slate-200 h-1.5 overflow-hidden">
+      <div id="progress-bar-fill" class="bg-gradient-to-r from-teal-600 to-indigo-600 h-full transition-all duration-300" style="width: 2.5%;"></div>
+    </div>
+  </header>
+
+  <!-- Modal Grille des 40 Questions -->
+  <div id="grid-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[85vh] flex flex-col overflow-hidden border border-slate-200">
+      <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <div>
+          <h2 class="text-sm font-bold text-slate-800">Grille d'évaluation CM8 (40 items)</h2>
+          <p class="text-xs text-slate-500">Bactériémies, Cathéters, Endocardite, Os/Articulations, Pharmaco</p>
+        </div>
+        <button id="btn-close-grid" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-4 overflow-y-auto">
+        <div id="questions-grid-container" class="grid grid-cols-5 sm:grid-cols-8 gap-2">
+          <!-- Dynamique -->
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap gap-3 text-xs text-slate-600 justify-center">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-200 inline-block"></span> Non faite</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-teal-600 inline-block"></span> Correcte</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500 inline-block"></span> Erronée</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded border-2 border-indigo-600 inline-block"></span> En cours</span>
+        </div>
+      </div>
+      <div class="p-3 bg-slate-50 border-t border-slate-100 text-center">
+        <button id="btn-modal-dismiss" class="w-full py-2 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl transition-colors">Retour au questionnaire</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteneur Principal -->
+  <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-center">
+    
+    <!-- Écran Résultats Finaux -->
+    <div id="results-screen" class="hidden bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-200 text-center">
+      <div id="result-badge-icon" class="w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-6"></div>
+      <h2 id="result-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2"></h2>
+      <p id="result-subtitle" class="text-slate-600 text-sm sm:text-base max-w-xl mx-auto mb-6"></p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto mb-8">
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <div class="text-xs uppercase font-semibold text-slate-400">Score Global</div>
+          <div class="text-3xl font-extrabold text-slate-900 mt-1 mono"><span id="final-score-val">0</span> / 40</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <div class="text-xs uppercase font-semibold text-slate-400">Taux Réussite</div>
+          <div id="final-pct-val" class="text-3xl font-extrabold text-teal-700 mt-1 mono">0%</div>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+          <div class="text-xs uppercase font-semibold text-slate-400">Niveau Partiel</div>
+          <div id="final-status-badge" class="text-sm font-bold mt-2 px-2 py-1 rounded-md inline-block"></div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+        <button id="btn-restart-all" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold text-sm shadow-md transition-all">Recommencer l'épreuve complète</button>
+        <button id="btn-review-errors" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm shadow-md transition-all hidden">Travailler uniquement mes erreurs (<span id="count-errors-badge">0</span>)</button>
+        <button id="btn-browse-all" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-all">Consulter toutes les corrections</button>
+      </div>
+    </div>
+
+    <!-- Carte Question Active -->
+    <div id="quiz-card" class="bg-white rounded-3xl p-5 sm:p-8 shadow-xl shadow-slate-200/50 border border-slate-200/80 transition-all">
+      
+      <!-- En-tête Question -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-100 text-teal-900 mono tracking-tight">Question <span id="q-index">1</span> / 40</span>
+          <span id="q-category" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 text-slate-700">Thème</span>
+        </div>
+        <div class="text-xs text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-2.5 py-1 rounded-lg flex items-center gap-1 font-medium">
+          <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+          </svg>
+          <span>1, 2 ou 3 réponses justes</span>
+        </div>
+      </div>
+
+      <!-- Énoncé -->
+      <div id="q-text" class="text-base sm:text-lg font-semibold text-slate-900 leading-snug mb-6">
+        <!-- Rempli par JS -->
+      </div>
+
+      <!-- Liste Options A, B, C, D -->
+      <div id="options-container" class="space-y-3 mb-6">
+        <!-- Rempli par JS -->
+      </div>
+
+      <!-- Feedback Clinique -->
+      <div id="feedback-panel" class="hidden mb-6 p-4 sm:p-5 rounded-2xl border transition-all">
+        <div class="flex items-center gap-2 mb-2">
+          <div id="feedback-icon" class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"></div>
+          <h3 id="feedback-verdict" class="text-sm font-bold tracking-tight"></h3>
+        </div>
+        <div id="feedback-rationale" class="text-xs sm:text-sm text-slate-700 leading-relaxed pl-8 space-y-1.5">
+          <!-- Rempli par JS -->
+        </div>
+      </div>
+
+      <!-- Actions de Navigation -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+        <button id="btn-prev" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium text-xs sm:text-sm flex items-center gap-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Précédent
+        </button>
+
+        <div class="flex items-center gap-2">
+          <button id="btn-validate" class="px-5 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-semibold text-xs sm:text-sm shadow-md shadow-teal-700/20 transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Valider la réponse
+          </button>
+          
+          <button id="btn-next" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-medium text-xs sm:text-sm flex items-center gap-1.5 transition-colors">
+            Suivant
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400">
+    <p>Outil d'ancrage actif CM8 (Dr SAIDANI) • IFSI S3 Avicenne / Jean-Verdier</p>
+  </footer>
+
+  <script>
+    // 40 QUESTIONS COMPLÈTES COUVRANT STRICTEMENT LE CM8
+    // Contrainte : 1, 2 ou 3 réponses justes sans précision, distribution alternée des lettres A, B, C, D
+    const quizData = [
+      {
+        id: 1,
+        theme: "Bactériémies • Définitions",
+        question: "Concernant les définitions fondamentales de la bactériémie et de la fongémie :",
+        options: [
+          { label: "A", text: "La bactériémie est définie par la présence d'une bactérie vivante dans le sang circulant, obligatoirement authentifiée par des hémocultures positives." },
+          { label: "B", text: "Une fongémie correspond à la présence de champignons dans le sang circulant, authentifiée le plus souvent par des hémocultures fongiques positives à levures (Candida)." },
+          { label: "C", text: "La bactériémie est une infection bénigne qui n'associe jamais de syndrome inflammatoire biologique (SIB)." },
+          { label: "D", text: "Chez le patient hospitalisé, la fréquence d'une bactériémie est d'environ 1 %." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont les définitions exactes du cours (diapos 2-3). C est faux : la bactériémie associe quasi constamment fièvre et syndrome inflammatoire biologique (SIB)."
+      },
+      {
+        id: 2,
+        theme: "SRIS, Sepsis & Choc",
+        question: "Concernant le Syndrome de Réponse Inflammatoire Systémique (SRIS), le sepsis et le choc :",
+        options: [
+          { label: "A", text: "Le SRIS se définit par au moins 2 critères parmi : Température > 38,3 °C ou < 36 °C, FC > 90 bpm, FR > 20/min ou hyperventilation (PaCO2 < 32 mmHg), Leucocytes > 12 000 ou < 4 000/mm³." },
+          { label: "B", text: "Le SRIS est toujours d'origine infectieuse et ne survient jamais lors d'une pancréatite aiguë, d'un choc ou d'une ischémie." },
+          { label: "C", text: "La formule physiopathologique du sepsis est : Sepsis = SRIS + Infection." },
+          { label: "D", text: "L'état de choc est une insuffisance circulatoire aiguë altérant de façon durable l'oxygénation et le métabolisme cellulaire tissulaire." }
+        ],
+        correct: ["A", "C", "D"],
+        rationale: "A, C et D sont exacts (diapo 3). B est faux : le SRIS peut être provoqué par des agressions non infectieuses (pancréatite, brûlures, ischémie, choc cardiogénique, maladies systémiques)."
+      },
+      {
+        id: 3,
+        theme: "Épidémiologie des Bactériémies",
+        question: "Quels sont les agents infectieux les plus fréquemment responsables de bactériémies communautaires selon les données épidémiologiques du cours ?",
+        options: [
+          { label: "A", text: "Staphylococcus aureus (et staphylocoques) pour environ 30 % des cas." },
+          { label: "B", text: "Escherichia coli pour environ 30 % des cas." },
+          { label: "C", text: "Les autres Bacilles à Gram Négatif (BGN) représentent 20 % des cas, et Streptococcus pneumoniae (pneumocoque) 10 %." },
+          { label: "D", text: "Les virus respiratoires représentent plus de 50 % des causes de bactériémies." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont conformes au camembert épidémiologique (diapo 5). D est aberrant : une bactériémie est par définition bactérienne (les virus ne provoquent pas de bactériémie)."
+      },
+      {
+        id: 4,
+        theme: "Portes d'entrée des Bactériémies",
+        question: "À propos des portes d'entrée préférentielles des bactériémies (communautaires et associées aux soins) :",
+        options: [
+          { label: "A", text: "Les voies uro-génitales et les cathéters vasculaires représentent chacun environ 20 % des portes d'entrée." },
+          { label: "B", text: "Les voies respiratoires et le tube digestif représentent chacun environ 15 % des cas." },
+          { label: "C", text: "La porte d'entrée cutanée et la porte d'entrée osseuse représentent chacune environ 5 % des cas." },
+          { label: "D", text: "La porte d'entrée reste inconnue dans moins de 0,1 % des cas." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapo 6). D est faux : la porte d'entrée reste inconnue dans environ 10 % des bactériémies."
+      },
+      {
+        id: 5,
+        theme: "Corrélation Germes / Portes d'entrée",
+        question: "Quelle corrélation entre germe isolé et porte d'entrée préférentielle à rechercher est conforme aux données du cours ?",
+        options: [
+          { label: "A", text: "Streptocoque oral ➔ Cavité buccale et soins dentaires." },
+          { label: "B", text: "Streptococcus pneumoniae (pneumocoque) ➔ Poumon, méninges, sphère ORL." },
+          { label: "C", text: "Staphylococcus aureus ou staphylocoque à coagulase négative ➔ Peau et cathéter vasculaire." },
+          { label: "D", text: "Escherichia coli et entérocoques ➔ Exclusivement le parenchyme cérébral." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont conformes au tableau 7. D est faux : E. coli et les entérocoques ont pour porte d'entrée les voies urinaires, le tube digestif, les voies biliaires ou un cathéter vasculaire."
+      },
+      {
+        id: 6,
+        theme: "Germes & Portes d'entrée (suite)",
+        question: "Devant une bactériémie ou fongémie documentée, quelles recherches de foyers primitifs sont préconisées ?",
+        options: [
+          { label: "A", text: "Candida ➔ Rechercher une porte d'entrée sur le tube digestif ou un cathéter vasculaire." },
+          { label: "B", text: "Bactéries anaérobies ➔ Rechercher une porte d'entrée au niveau du côlon ou du pelvis." },
+          { label: "C", text: "Streptococcus pyogenes ➔ Rechercher en premier lieu une lésion cutanée (érysipèle, plaie)." },
+          { label: "D", text: "La mise en évidence de Staphylococcus aureus impose d'arrêter immédiatement toute recherche de porte d'entrée." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapo 7). D est une faute clinique majeure : l'isolement de S. aureus impose au contraire une traque impérative de la porte d'entrée (peau, cathéter) et des métastases septiques (endocardite, os)."
+      },
+      {
+        id: 7,
+        theme: "Conduite à Tenir Pratique",
+        question: "Les 4 étapes hiérarchisées de la prise en charge immédiate d'une bactériémie suspectée sont :",
+        options: [
+          { label: "A", text: "1. Réaliser des hémocultures avant toute antibiothérapie." },
+          { label: "B", text: "2. Évaluer les signes de gravité immédiats (sepsis, choc septique)." },
+          { label: "C", text: "3. Rechercher la porte d'entrée et les localisations septiques secondaires métastatiques." },
+          { label: "D", text: "4. Attendre au moins 72 heures les résultats définitifs de culture avant d'initier un antibiotique, même en cas de choc septique." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont les 3 premières étapes clés (diapo 8). D est faux et mortel : le traitement antibiotique doit débuter dès les prélèvements réalisés sans tarder, en particulier en présence de signes de gravité."
+      },
+      {
+        id: 8,
+        theme: "Hémocultures • Phase Pré-analytique",
+        question: "Quelles précautions strictes sont requises avant la réalisation d'un prélèvement d'hémoculture ?",
+        options: [
+          { label: "A", text: "Fermer la porte de la chambre du patient pour limiter l'aérobiocontamination ambiante." },
+          { label: "B", text: "Vérifier la prescription médicale, les règles d'identitovigilance et préparer les bons de demande étiquetés." },
+          { label: "C", text: "Vérifier la limpidité et la date de péremption des flacons aérobies et anaérobies." },
+          { label: "D", text: "Porter un masque de type chirurgical et réaliser une friction des mains avec une Solution Hydro-Alcoolique (SHA)." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions représentent les facteurs clés pré-analytiques d'une hémoculture de qualité (diapo 9)."
+      },
+      {
+        id: 9,
+        theme: "Hémocultures • Choix du Site",
+        question: "Concernant le choix du site de ponction pour une hémoculture de qualité :",
+        options: [
+          { label: "A", text: "La ponction veineuse périphérique est la seule méthode validée en routine pour prélever le sang en vue de culture microbienne." },
+          { label: "B", text: "Le prélèvement de sang via un Dispositif IntraVeineux (DIV) déjà en place doit être banni, même si le patient est difficile à piquer (risque majeur de faux positifs par contamination cutanée)." },
+          { label: "C", text: "L'unique exception autorisant le prélèvement via un DIV est le diagnostic d'infection liée au cathéter par la méthode des hémocultures appariées." },
+          { label: "D", text: "On privilégie toujours une ponction sur le bras hémiplégique ou du côté d'une fistule artério-veineuse." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapo 10). D est une contre-indication formelle au site de ponction."
+      },
+      {
+        id: 10,
+        theme: "Hémocultures • Antisepsie",
+        question: "Concernant l'antisepsie cutanée et la préparation du matériel d'hémoculture :",
+        options: [
+          { label: "A", text: "Désinfection de l'opercule en caoutchouc des flacons avec un antiseptique alcoolique (ex : Bétadine alcoolique 5 %) en laissant la compresse jusqu'au prélèvement." },
+          { label: "B", text: "L'antisepsie cutanée large du site de ponction se fait en escargot ou de haut en bas sans jamais repasser sur la zone traitée." },
+          { label: "C", text: "Après l'antisepsie cutanée et le séchage spontané, l'infirmier(ère) peut repalper la veine à main nue pour vérifier sa trajectoire." },
+          { label: "D", text: "Chez l'adulte, la détersion puis la désinfection cutanée utilisent préférentiellement des antiseptiques alcooliques (chlorhexidine alcoolique ou Bétadine alcoolique)." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exacts (diapos 10-11). C est formellement interdit : après l'antisepsie cutanée, il ne faut plus jamais toucher la zone de ponction (risque d'inoculation de la flore résidente)."
+      },
+      {
+        id: 11,
+        theme: "Hémocultures • Volume Mis en Culture",
+        question: "Pourquoi le volume de sang total mis en culture est-il considéré comme le paramètre fondamental de l'hémoculture ?",
+        options: [
+          { label: "A", text: "Le volume total recommandé chez l'adulte est de 40 à 60 mL de sang par épisode." },
+          { label: "B", text: "Le volume optimal de remplissage par flacon est de 8 à 10 mL (volume acceptable entre 3 et 10 mL)." },
+          { label: "C", text: "Un volume insuffisant (< 3 mL/flacon) expose directement à un risque de faux négatif car la bactériémie est paucibacillaire." },
+          { label: "D", text: "Un volume excessif de sang dans le flacon n'a aucun inconvénient et améliore toujours la pousse bactérienne." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapo 12). D est faux : un excès de sang expose au risque de faux positifs ou d'inhibition microbienne par l'activité des globules blancs de l'hôte."
+      },
+      {
+        id: 12,
+        theme: "Hémocultures • Prélèvement Unique & Ordre",
+        question: "Lors d'un prélèvement d'hémocultures chez l'adulte réalisé en un seul geste (1 ponction veineuse) :",
+        options: [
+          { label: "A", text: "On prélève 4 à 6 flacons bien remplis (8 à 10 mL/flacon), soit 2 à 3 flacons aérobies et 2 à 3 flacons anaérobies." },
+          { label: "B", text: "On prélève impérativement en premier le flacon AÉROBIE pour purger l'air contenu dans la tubulure du dispositif de prélèvement." },
+          { label: "C", text: "On prélève en second le flacon ANAÉROBIE afin qu'aucune bulle d'air ne pénètre dans le milieu de culture." },
+          { label: "D", text: "Le flacon doit être maintenu couché à l'horizontale pendant tout le remplissage." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapo 13). D est faux : le flacon doit impérativement être maintenu en position verticale pour surveiller le niveau de remplissage."
+      },
+      {
+        id: 13,
+        theme: "Hémocultures • Protocole Endocardite",
+        question: "Quel est le protocole « traditionnel » de réalisation des hémocultures lors d'une suspicion d'endocardite infectieuse ?",
+        options: [
+          { label: "A", text: "3 paires d'hémocultures (flacons aérobies et anaérobies) obtenues par 3 ponctions veineuses distinctes échelonnées sur 24 heures." },
+          { label: "B", text: "Les ponctions veineuses doivent être espacées d'une heure minimum l'une de l'autre." },
+          { label: "C", text: "Les prélèvements doivent impérativement être réalisés avant toute antibiothérapie." },
+          { label: "D", text: "Une 2e série d'hémocultures est indiquée si la première série reste négative après 48 à 72 heures." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions définissent rigoureusement le protocole diagnostique d'hémocultures de l'endocardite infectieuse (diapos 13, 15, 49)."
+      },
+      {
+        id: 14,
+        theme: "Hémocultures • Acheminement",
+        question: "Concernant l'étiquetage et les conditions d'acheminement des flacons d'hémocultures au laboratoire :",
+        options: [
+          { label: "A", text: "Les flacons doivent être étiquetés avec le bon de demande et acheminés dès que possible au laboratoire." },
+          { label: "B", text: "Si le transport n'est pas immédiat, les flacons doivent être conservés à température ambiante (systèmes automatisés)." },
+          { label: "C", text: "Il faut impérativement placer les flacons au réfrigérateur à +4 °C en attendant le coursier." },
+          { label: "D", text: "Les flacons doivent être numérotés dans l'ordre chronologique de prélèvement." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exacts (diapos 13 et 16). C est une erreur technique grave : les flacons d'hémocultures ne doivent JAMAIS être réfrigérés sous peine de tuer les bactéries thermosensibles."
+      },
+      {
+        id: 15,
+        theme: "Cathéter Veineux Périphérique (VVP)",
+        question: "Quelles sont les contre-indications formelles ou relatives de pose d'un cathéter veineux périphérique sur un membre ?",
+        options: [
+          { label: "A", text: "Membre du côté d'un curage ganglionnaire axillaire ou d'une fistule artério-veineuse d'hémodialyse." },
+          { label: "B", text: "Membre hémiplégique ou membre sur lequel une tumeur maligne a été diagnostiquée." },
+          { label: "C", text: "Pose en regard direct d'une articulation mobile ou sur une zone de lésion cutanée / zone irradiée." },
+          { label: "D", text: "Présence d'un antécédent de phlébite du membre supérieur." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 items constituent la liste des contre-indications du cours à la pose d'une VVP (diapo 18)."
+      },
+      {
+        id: 16,
+        theme: "Surveillance & Règles de Gestion d'une VVP",
+        question: "Pour prévenir et dépister les complications infectieuses et mécaniques d'une VVP :",
+        options: [
+          { label: "A", text: "Changer les cathéters veineux périphériques systématiquement toutes les 96 heures maximum." },
+          { label: "B", text: "Changer les tubulures et les annexes (rampes et robinets) toutes les 96 heures, sauf pour les produits sanguins et lipides (changement à chaque poche)." },
+          { label: "C", text: "Utiliser une seringue d'au moins 10 mL pour les rinçages et ne jamais désobstruer en force une VVP." },
+          { label: "D", text: "Déposer les rampes et robinets directement sur les draps du lit du patient sans protection." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapo 21). D est formellement interdit : les rampes doivent être fixées sur la potence et ne doivent en aucun cas toucher la literie (risque de colonisation)."
+      },
+      {
+        id: 17,
+        theme: "Infection Locale de Cathéter (ILC)",
+        question: "Concernant le diagnostic clinique d'une Infection Locale de Cathéter (ILC) :",
+        options: [
+          { label: "A", text: "L'ILC est certaine en cas d'écoulement purulent au niveau de l'orifice cutané." },
+          { label: "B", text: "L'ILC est certaine en cas de tunnélite (cordon inflammatoire le long du trajet sous-cutané)." },
+          { label: "C", text: "L'ILC est cliniquement probable en cas de survenue de fièvre et de frissons au décours immédiat du branchement d'une perfusion." },
+          { label: "D", text: "La présence de pus au point d'insertion n'impose aucun avis médical ni retrait tant que le patient n'a pas 40 °C." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont les critères diagnostics clés (diapos 25-26). D est faux : l'écoulement purulent impose un avis médical immédiat, le retrait du matériel et une antibiothérapie."
+      },
+      {
+        id: 18,
+        theme: "Hémocultures Appariées sur Cathéter (DIV)",
+        question: "La méthode des hémocultures appariées (matériel en place) pour diagnostiquer une infection sur cathéter exige :",
+        options: [
+          { label: "A", text: "Un prélèvement en 1er sur veine périphérique, puis en 2e via le DIV (sans purge préalable), espacés de 10 minutes maximum." },
+          { label: "B", text: "Un volume de sang prélevé par flacon via le DIV strictement identique à celui prélevé en périphérie." },
+          { label: "C", text: "Un acheminement immédiat au laboratoire et une incubation simultanée dans l'automate de culture." },
+          { label: "D", text: "Une purge de 50 mL de sang jetée à la poubelle avant de remplir les flacons du DIV." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont conformes à la méthode validée (diapos 14 et 27). D est faux : le prélèvement sur DIV se fait sans purge préalable pour préserver l'inoculum bactérien intraluminal."
+      },
+      {
+        id: 19,
+        theme: "Délai Différentiel de Positivité (DDP)",
+        question: "À propos du Délai Différentiel de Positivité (DDP) calculé entre l'hémoculture sur cathéter et l'hémoculture périphérique :",
+        options: [
+          { label: "A", text: "Le DDP est fondé sur le fait que la charge bactérienne (inoculum) est beaucoup plus forte dans le cathéter infecté qu'en périphérie." },
+          { label: "B", text: "Un délai de positivité du flacon prélevé sur le cathéter plus précoce d'au moins 2 heures (DDP ≥ 2h) par rapport au flacon périphérique affirme l'ILC." },
+          { label: "C", text: "Si le flacon périphérique pousse avant le cathéter, l'infection liée au cathéter est formellement démontrée." },
+          { label: "D", text: "Cette méthode permet d'authentifier une infection de cathéter sans nécessairement devoir retirer le dispositif d'emblée." }
+        ],
+        correct: ["A", "B", "D"],
+        rationale: "A, B et D sont exacts (diapo 28). C est faux : c'est l'hémoculture sur cathéter qui doit sonner positive au moins 2 heures avant celle de la périphérie."
+      },
+      {
+        id: 20,
+        theme: "Conduite à Tenir • CVC Inflammatoire vs Non Inflammatoire",
+        question: "Quelle est la conduite à tenir infirmière face à un cathéter veineux central (CVC ou CCI/PAC) suspect d'infection ?",
+        options: [
+          { label: "A", text: "Si le CVC est inflammatoire (cellulite, pus) : NE PAS perfuser dessus, prévenir le médecin, faire un prélèvement local si pus et poser une VVP en urgence pour passer l'antibiothérapie." },
+          { label: "B", text: "Un PAC avec sepsis local sévère ou écoulement de pus doit obligatoirement être retiré et envoyé en bactériologie." },
+          { label: "C", text: "Si le CVC est d'aspect non inflammatoire avec suspicion clinique : poser une VVP, réaliser les hémocultures couplées et décider du maintien/retrait selon l'évolution à 48-72h et le germe." },
+          { label: "D", text: "En cas d'échec d'une antibiothérapie adaptée avec fièvre persistante au branchement, la CCI doit être maintenue indéfiniment." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapos 29, 30, 33). D est faux : l'échec d'une antibiothérapie adaptée impose le retrait de la CCI."
+      },
+      {
+        id: 21,
+        theme: "Physiopathologie de l'Endocardite",
+        question: "Concernant la physiopathologie de l'Endocardite Infectieuse (EI) :",
+        options: [
+          { label: "A", text: "Elle correspond à l'infection d'une ou plusieurs valves cardiaques (natives ou prothétiques) ou de l'endocarde pariétal." },
+          { label: "B", text: "La formation de la VÉGÉTATION résulte de l'adhésion de microorganismes à un endocarde lésé, formant un amas de fibrine, de plaquettes et de bactéries." },
+          { label: "C", text: "Les végétations peuvent entraîner une destruction valvulaire, des abcès septaux ou des perforations avec insuffisance cardiaque aiguë." },
+          { label: "D", text: "Les végétations ne peuvent jamais s'emboliser dans la circulation systémique." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapos 35-36). D est faux : le risque majeur de l'EI est l'embolisation de fragments de végétations dans tout l'organisme."
+      },
+      {
+        id: 22,
+        theme: "Cardiopathies à Risque • Groupe A vs Groupe B",
+        question: "Quelles cardiopathies appartiennent au Groupe A (HAUT RISQUE d'endocardite infectieuse) selon la classification du cours ?",
+        options: [
+          { label: "A", text: "Les porteurs de prothèses valvulaires (mécaniques, homogreffes ou bioprothèses)." },
+          { label: "B", text: "Les cardiopathies congénitales cyanogènes non opérées et leurs dérivations chirurgicales." },
+          { label: "C", text: "Les patients ayant un antécédent d'endocardite infectieuse." },
+          { label: "D", text: "La communication inter-auriculaire (CIA) non opérée." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C constituent le Groupe A à haut risque (diapo 39). La CIA n'est même pas dans le groupe B (risque négligeable)."
+      },
+      {
+        id: 23,
+        theme: "Cardiopathies à Risque • Groupe B",
+        question: "Parmi les affections suivantes, lesquelles appartiennent au Groupe B (risque moins élevé mais réel d'endocardite) ?",
+        options: [
+          { label: "A", text: "Valvulopathies natives : Insuffisance Aortique (IA), Insuffisance Mitrale (IM), Rétrécissement Aortique (RA)." },
+          { label: "B", text: "Prolapsus de la valve mitrale (PVM) avec insuffisance mitrale et/ou épaississement valvulaire." },
+          { label: "C", text: "Bicuspidie aortique et cardiomyopathie hypertrophique obstructive avec souffle." },
+          { label: "D", text: "Présence d'une prothèse valvulaire mécanique aortique." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C appartiennent au Groupe B (diapo 39). D appartient au Groupe A à haut risque."
+      },
+      {
+        id: 24,
+        theme: "Sémiologie Extra-cardiaque de l'Endocardite",
+        question: "Quels signes cutanés ou ophtalmologiques évocateurs d'une endocardite infectieuse doivent être recherchés à l'examen clinique ?",
+        options: [
+          { label: "A", text: "Nodosités ou faux panaris d'Osler (nodosités rouge-violacé très douloureuses sur la pulpe des doigts ou orteils)." },
+          { label: "B", text: "Placards de Janeway (macules érythémateuses palmo-plantaires planes et totalement indolores)." },
+          { label: "C", text: "Hémorragies sous-unguéales en flammèches (splinter hemorrhages) et purpura vasculaire/conjonctival." },
+          { label: "D", text: "Taches de Roth au fond d'œil (hémorragies rétiniennes à centre blanc pâle composé de fibrine)." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 items sont les signes sémiologiques classiques d'EI illustrés dans le cours (diapos 40-47)."
+      },
+      {
+        id: 25,
+        theme: "Situations Cliniques Évocatrices d'Endocardite",
+        question: "Dans quelles situations cliniques l'endocardite infectieuse doit-elle être recherchée de façon systématique ?",
+        options: [
+          { label: "A", text: "Apparition ou modification d'un souffle cardiaque, surtout s'il est de type régurgitant." },
+          { label: "B", text: "Survenue d'un AVC (ischémique ou hémorragique) ou d'une insuffisance cardiaque aiguë fébrile." },
+          { label: "C", text: "Découverte d'une spondylodiscite ou de manifestations emboliques inexpliquées fébriles." },
+          { label: "D", text: "Survenue d'un bloc auriculo-ventriculaire (BAV) fébrile, faisant craindre un abcès septal aortique." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions sont des indications formelles de recherche systématique d'une EI (Tableau 5, diapo 48)."
+      },
+      {
+        id: 26,
+        theme: "Bilan Paraclinique de l'Endocardite",
+        question: "Le bilan diagnostique d'une suspicion d'endocardite infectieuse comporte obligatoirement :",
+        options: [
+          { label: "A", text: "3 paires d'hémocultures sur 24h espacées d'1 heure d'intervalle minimum." },
+          { label: "B", text: "Une échocardiographie transthoracique (ETT) couplée à une échocardiographie transœsophagienne (ETO)." },
+          { label: "C", text: "Un scanner TAP (Thoraco-Abdomino-Pelvien) et/ou IRM cérébrale à la recherche d'embolies septiques secondaires." },
+          { label: "D", text: "Un test de marche de 6 minutes à jeun." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C constituent le trépied diagnostique de l'EI (diapo 49). D n'a aucun sens en phase aiguë infectieuse."
+      },
+      {
+        id: 27,
+        theme: "Principes Thérapeutiques de l'Endocardite",
+        question: "Concernant le traitement curatif d'une endocardite infectieuse :",
+        options: [
+          { label: "A", text: "L'antibiothérapie doit être bactéricide, prolongée et administrée par voie intraveineuse à forte dose." },
+          { label: "B", text: "L'antibiothérapie probabiliste immédiate est réservée aux formes graves (sepsis, choc septique) ou avant chirurgie valvulaire en urgence." },
+          { label: "C", text: "En dehors de l'urgence vitale, l'antibiothérapie est débutée après documentation microbiologique pour être parfaitement ciblée." },
+          { label: "D", text: "Le traitement de la porte d'entrée infectieuse est facultatif si la valve est soignée." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapo 50). D est faux : le traitement de la porte d'entrée est obligatoire pour éviter toute récidive."
+      },
+      {
+        id: 28,
+        theme: "Infections Ostéo-articulaires • Généralités",
+        question: "À propos des infections ostéo-articulaires (IOA) selon le cours du Dr Saidani :",
+        options: [
+          { label: "A", text: "Une IOA est dite aiguë si elle évolue depuis moins de 1 mois, et chronique si elle évolue depuis plus de 1 mois." },
+          { label: "B", text: "La localisation articulaire est appelée arthrite et la localisation osseuse est appelée ostéite." },
+          { label: "C", text: "Leur prise en charge est très souvent médico-chirurgicale." },
+          { label: "D", text: "Le diagnostic microbiologique est secondaire et n'influence pas le choix des antibiotiques." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont conformes aux généralités du cours (diapo 53). D est faux : la documentation microbiologique est essentielle."
+      },
+      {
+        id: 29,
+        theme: "Modes de Contamination des IOA",
+        question: "Quels sont les mécanismes de contamination d'une infection ostéo-articulaire ?",
+        options: [
+          { label: "A", text: "Inoculation directe : fracture ouverte souillée, ponction/infiltration, chirurgie avec prothèse ou ostéosynthèse." },
+          { label: "B", text: "Extension par contiguïté : foyer septique de voisinage (ex : escarre creusant au sacrum causant une ostéite sacrée)." },
+          { label: "C", text: "Voie hématogène : bactériémie secondaire à un foyer cutané, urinaire, digestif ou endovasculaire (endocardite)." },
+          { label: "D", text: "Contamination purement psychosomatique sans germe." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont les 3 modes de contamination décrits (diapos 54-55)."
+      },
+      {
+        id: 30,
+        theme: "Germes Spécifiques des IOA Selon le Terrain",
+        question: "Quelles associations entre terrain particulier et germes responsables d'infections ostéo-articulaires sont exactes ?",
+        options: [
+          { label: "A", text: "Toxicomanie intraveineuse ➔ Staphylococcus aureus, Pseudomonas aeruginosa, Candida." },
+          { label: "B", text: "Patient diabétique (mal perforant, ulcère) ➔ Staphylococcus aureus, Bacilles à Gram Négatif (BGN), anaérobies." },
+          { label: "C", text: "Contact ou morsure animale ➔ Pasteurella multocida, Brucella." },
+          { label: "D", text: "Post-opératoire de prothèse ➔ Staphylococcus aureus, Staphylocoques à coagulase négative, Cutibacterium (Propionibacterium) acnes." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions correspondent rigoureusement au tableau des agents pathogènes selon le contexte (diapos 56, 60, 71, 78)."
+      },
+      {
+        id: 31,
+        theme: "Arthrite Septique Aiguë • Clinique",
+        question: "Le tableau clinique typique d'une arthrite septique aiguë se caractérise par :",
+        options: [
+          { label: "A", text: "Une monoarthrite aiguë de survenue brutale (le genou chez l'adulte/enfant, la hanche chez le nourrisson)." },
+          { label: "B", text: "Une douleur articulaire intense pulsatile associée à une impotence fonctionnelle majeure du membre." },
+          { label: "C", text: "Des signes inflammatoires locaux (chaleur, rougeur, œdème, épanchement articulaire abondant)." },
+          { label: "D", text: "Une disparition complète de toute douleur lors de la mobilisation passive." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapos 57-59). D est faux : la moindre mobilisation passive déclenche une douleur syncopale."
+      },
+      {
+        id: 32,
+        theme: "Ponction Articulaire & Diagnostic Différentiel",
+        question: "Concernant la ponction articulaire du genou réalisée en urgence devant une suspicion d'arthrite septique :",
+        options: [
+          { label: "A", text: "Elle s'effectue au lit du malade au niveau du cul-de-sac synovial sous-quadricipital avant toute antibiothérapie." },
+          { label: "B", text: "L'aspect du liquide est typiquement trouble ou purulent, riche en polynucléaires neutrophiles (> 10 000/mm³)." },
+          { label: "C", text: "Un liquide citrin clair oriente vers une arthrite inflammatoire microcristalline (goutte, chondrocalcinose)." },
+          { label: "D", text: "La présence de sang incoagulable (hémarthrose) fait rechercher un traumatisme (fracture intra-articulaire, rupture du ligament croisé)." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions sont conformes aux analyses cytobactériologiques et diagnostics différentiels du cours (diapos 61-64)."
+      },
+      {
+        id: 33,
+        theme: "Traitement de l'Arthrite Septique",
+        question: "La prise en charge médico-chirurgicale d'une arthrite septique comprend :",
+        options: [
+          { label: "A", text: "Une antibiothérapie par voie IV à forte posologie, débutée après les prélèvements et d'une durée minimale de 4 semaines." },
+          { label: "B", text: "Un lavage articulaire chirurgical en urgence (par arthrotomie ou arthroscopie) pour évacuer le liquide septique." },
+          { label: "C", text: "Une immobilisation antalgique les premiers jours, puis une mobilisation passive sans appui dès la régression des signes locaux." },
+          { label: "D", text: "L'autorisation d'un appui complet immédiat pour forcer sur l'articulation infectée." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont conformes à la prise en charge (diapos 66-67). D est formellement contre-indiqué en phase aiguë."
+      },
+      {
+        id: 34,
+        theme: "Infections sur Prothèse Articulaire",
+        question: "Concernant les infections sur prothèse ostéo-articulaire :",
+        options: [
+          { label: "A", text: "L'infection précoce (< 1 mois post-opératoire) se traduit par un incident cicatriciel (désunion, écoulement purulent, cicatrice inflammatoire)." },
+          { label: "B", text: "L'infection chronique tardive (> 1 mois, souvent des mois/années après) se manifeste par une douleur permanente où le patient dit n'avoir 'jamais été bien' depuis l'intervention." },
+          { label: "C", text: "Une infection précoce peut être traitée par simple lavage chirurgical (arthrotomie-lavage) en laissant la prothèse en place." },
+          { label: "D", text: "Une infection chronique avec descellement impose l'ablation de la prothèse et une antibiothérapie de 6 semaines à 3 mois." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions correspondent aux formes cliniques, délais et conduites médico-chirurgicales (diapos 74-86)."
+      },
+      {
+        id: 35,
+        theme: "Spondylodiscite • Clinique & Diagnostic",
+        question: "Concernant la spondylodiscite infectieuse :",
+        options: [
+          { label: "A", text: "Elle touche préférentiellement l'adulte de plus de 50 ans et siège au niveau lombaire dans 70 % des cas." },
+          { label: "B", text: "Elle associe des douleurs vertébrales, une raideur rachidienne et un syndrome infectieux inconstant." },
+          { label: "C", text: "Le staphylocoque est responsable dans 50 % des cas, suivi des BGN (15 %) et des streptocoques (10 %)." },
+          { label: "D", text: "La radiographie standard du rachis est pathognomonique et montre des destructions majeures dès les premières 24 heures." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont exacts (diapos 83-85). D est faux : la radiographie standard est strictement normale au début ; le pincement discal et les géodes en miroir n'apparaissent qu'après 3 semaines."
+      },
+      {
+        id: 36,
+        theme: "Spondylodiscite • Traitement & Immobilisation",
+        question: "Quels sont les piliers thérapeutiques de la spondylodiscite non compliquée de compression médullaire ?",
+        options: [
+          { label: "A", text: "Une antibiothérapie ciblée après documentation (hémocultures ou ponction-biopsie disco-vertébrale) d'une durée de 6 semaines à 3 mois." },
+          { label: "B", text: "Une immobilisation stricte en décubitus dorsal pendant 3 semaines." },
+          { label: "C", text: "Une reverticalisation progressive sous couvert du port d'un corset rigide pendant 1 mois." },
+          { label: "D", text: "Une reprise immédiate de la course à pied sans contention." }
+        ],
+        correct: ["A", "B", "C"],
+        rationale: "A, B et C sont conformes au protocole de soins (diapo 89). D est exclu."
+      },
+      {
+        id: 37,
+        theme: "Pharmacologie • Cibles Bactériennes des ATB",
+        question: "Quelles associations entre classe d'antibiotiques et cible cellulaire bactérienne sont exactes selon le cours ?",
+        options: [
+          { label: "A", text: "Paroi bactérienne ➔ Bêta-lactamines (Pénicillines, Céphalosporines, Carbapénèmes), Glycopeptides (Vancomycine), Fosfomycine." },
+          { label: "B", text: "Membrane cytoplasmique ➔ Polymyxines." },
+          { label: "C", text: "ARN des ribosomes (inhibition de la synthèse des protéines) ➔ Aminosides, Macrolides, Tétracyclines." },
+          { label: "D", text: "ADN bactérien (inhibition de la réplication) ➔ Quinolones / Fluoroquinolones." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions correspondent fidèlement au schéma des cibles réplicatives (diapo 92)."
+      },
+      {
+        id: 38,
+        theme: "Effets Indésirables Majeurs des Antibiotiques",
+        question: "Quels effets indésirables doivent être surveillés en soins infirmiers selon la classe d'antibiotique administrée ?",
+        options: [
+          { label: "A", text: "Aminosides et Vancomycine ➔ Ototoxicité vestibulaire/auditive et néphrotoxicité avec risque d'insuffisance rénale aiguë." },
+          { label: "B", text: "Fluoroquinolones ➔ Tendinopathies (risque de rupture du tendon d'Achille), photosensibilité et confusion chez le sujet âgé." },
+          { label: "C", text: "Tétracyclines (Doxycycline) ➔ Photosensibilité cutanée et hypoplasie de l'émail dentaire chez l'enfant." },
+          { label: "D", text: "Métronidazole ➔ Goût métallique dans la bouche, glossite et neuropathies périphériques en cure prolongée." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions résument les toxicités d'organe caractéristiques du tableau Gargantua (diapos 93-94)."
+      },
+      {
+        id: 39,
+        theme: "Bon Usage des Antibiotiques à l'Hôpital",
+        question: "Les 3 volets et messages clés pour préserver l'efficacité des antibiotiques à l'hôpital comprennent :",
+        options: [
+          { label: "A", text: "Savoir dire non : traiter les seules infections bactériennes, ne jamais traiter une simple colonisation." },
+          { label: "B", text: "Mieux utiliser : réévaluer obligatoirement la prescription à 48-72 heures pour adapter selon l'antibiogramme et désescalader le spectre." },
+          { label: "C", text: "Raccourcir les durées de traitement et savoir refuser les associations d'antibiotiques inutiles." },
+          { label: "D", text: "Prévenir les infections : limiter la durée des dispositifs invasifs, prévenir la transmission croisée manuportée (SHA) et vacciner." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 propositions constituent le programme institutionnel des 10 messages clés (diapos 95, 98)."
+      },
+      {
+        id: 40,
+        theme: "Santé Publique & Rôle Infirmier",
+        question: "Concernant la consommation des antibiotiques et le rôle propre/délégué de l'infirmier(ère) :",
+        options: [
+          { label: "A", text: "En France, environ 93 % des antibiotiques sont prescrits en médecine de ville." },
+          { label: "B", text: "L'émergence de résistances bactériennes s'effectue par sélection de mutants ou par transfert horizontal de gènes de résistance." },
+          { label: "C", text: "Les Carbapénèmes (ex : Imipénem) sont des molécules de dernier recours à préserver strictement pour éviter les impasses thérapeutiques." },
+          { label: "D", text: "Le rôle de l'IDE inclut la surveillance de la voie d'administration, le respect des vitesses de perfusion, le suivi des dosages sériques au long cours et l'éducation au bon usage." }
+        ],
+        correct: ["A", "B", "C", "D"],
+        rationale: "Les 4 items sont tirés des données de santé publique et des fiches rôles IDE du support (diapos 93, 96, 97, 99)."
+      }
+    ];
+
+    // Variables d'état
+    let currentIdx = 0;
+    let userSelections = Array(quizData.length).fill(null).map(() => []);
+    let validationStates = Array(quizData.length).fill(null);
+    let reviewMode = false;
+    let filteredIndices = [...Array(quizData.length).keys()];
+
+    // DOM
+    const qIndexEl = document.getElementById("q-index");
+    const qCategoryEl = document.getElementById("q-category");
+    const qTextEl = document.getElementById("q-text");
+    const optionsContainer = document.getElementById("options-container");
+    const feedbackPanel = document.getElementById("feedback-panel");
+    const feedbackIcon = document.getElementById("feedback-icon");
+    const feedbackVerdict = document.getElementById("feedback-verdict");
+    const feedbackRationale = document.getElementById("feedback-rationale");
+    const btnValidate = document.getElementById("btn-validate");
+    const btnPrev = document.getElementById("btn-prev");
+    const btnNext = document.getElementById("btn-next");
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const headerScoreEl = document.getElementById("header-score");
+    const headerValidatedEl = document.getElementById("header-validated");
+
+    const quizCard = document.getElementById("quiz-card");
+    const resultsScreen = document.getElementById("results-screen");
+    const gridModal = document.getElementById("grid-modal");
+    const btnToggleGrid = document.getElementById("btn-toggle-grid");
+    const btnCloseGrid = document.getElementById("btn-close-grid");
+    const btnModalDismiss = document.getElementById("btn-modal-dismiss");
+    const questionsGridContainer = document.getElementById("questions-grid-container");
+
+    const finalScoreVal = document.getElementById("final-score-val");
+    const finalPctVal = document.getElementById("final-pct-val");
+    const finalStatusBadge = document.getElementById("final-status-badge");
+    const resultBadgeIcon = document.getElementById("result-badge-icon");
+    const resultTitle = document.getElementById("result-title");
+    const resultSubtitle = document.getElementById("result-subtitle");
+    const btnRestartAll = document.getElementById("btn-restart-all");
+    const btnReviewErrors = document.getElementById("btn-review-errors");
+    const btnBrowseAll = document.getElementById("btn-browse-all");
+    const countErrorsBadge = document.getElementById("count-errors-badge");
+
+    function initApp() {
+      renderQuestionGrid();
+      loadQuestion(0);
+      setupEvents();
+    }
+
+    function loadQuestion(indexInFiltered) {
+      if (indexInFiltered < 0 || indexInFiltered >= filteredIndices.length) return;
+      currentIdx = indexInFiltered;
+      const actualIndex = filteredIndices[currentIdx];
+      const q = quizData[actualIndex];
+
+      qIndexEl.textContent = actualIndex + 1;
+      qCategoryEl.textContent = q.theme;
+      qTextEl.textContent = q.question;
+
+      const progressPercent = ((actualIndex + 1) / quizData.length) * 100;
+      progressBarFill.style.width = `${progressPercent}%`;
+
+      optionsContainer.innerHTML = "";
+      const isAlreadyValidated = validationStates[actualIndex] !== null;
+
+      q.options.forEach(opt => {
+        const isChecked = userSelections[actualIndex].includes(opt.label);
+        const optButton = document.createElement("button");
+        optButton.type = "button";
+        optButton.className = `w-full text-left p-3.5 sm:p-4 rounded-2xl border transition-all flex items-start gap-3.5 select-none ${
+          isChecked 
+            ? "border-teal-600 bg-teal-50/70 text-teal-950 font-medium shadow-xs" 
+            : "border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 bg-white text-slate-800"
+        } ${isAlreadyValidated ? "cursor-default" : "cursor-pointer active:scale-[0.99]"}`;
+
+        if (isAlreadyValidated) {
+          const isCorrectAnswer = q.correct.includes(opt.label);
+          if (isCorrectAnswer) {
+            optButton.classList.add("ring-2", "ring-teal-600", "bg-teal-50", "border-teal-300");
+          } else if (isChecked && !isCorrectAnswer) {
+            optButton.classList.add("ring-2", "ring-rose-500", "bg-rose-50", "border-rose-300");
+          }
+        }
+
+        const checkboxEl = document.createElement("div");
+        checkboxEl.className = `mt-0.5 w-5 h-5 rounded-md flex-shrink-0 flex items-center justify-center border font-bold text-xs transition-colors ${
+          isChecked 
+            ? "bg-teal-700 border-teal-700 text-white" 
+            : "border-slate-300 bg-slate-50 text-slate-500"
+        }`;
+        checkboxEl.textContent = opt.label;
+
+        const textWrapper = document.createElement("div");
+        textWrapper.className = "flex-1 text-xs sm:text-sm leading-relaxed";
+        textWrapper.textContent = opt.text;
+
+        optButton.appendChild(checkboxEl);
+        optButton.appendChild(textWrapper);
+
+        if (!isAlreadyValidated) {
+          optButton.addEventListener("click", () => toggleOption(actualIndex, opt.label));
+        }
+
+        optionsContainer.appendChild(optButton);
+      });
+
+      if (isAlreadyValidated) {
+        showFeedback(actualIndex);
+        btnValidate.classList.add("hidden");
+      } else {
+        feedbackPanel.classList.add("hidden");
+        btnValidate.classList.remove("hidden");
+      }
+
+      btnPrev.disabled = currentIdx === 0;
+      if (currentIdx === filteredIndices.length - 1) {
+        btnNext.innerHTML = `Terminer <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>`;
+      } else {
+        btnNext.innerHTML = `Suivant <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>`;
+      }
+
+      updateStats();
+      renderQuestionGrid();
+    }
+
+    function toggleOption(actualIndex, letter) {
+      if (validationStates[actualIndex] !== null) return;
+      const selections = userSelections[actualIndex];
+      const pos = selections.indexOf(letter);
+      if (pos > -1) {
+        selections.splice(pos, 1);
+      } else {
+        selections.push(letter);
+        selections.sort();
+      }
+      loadQuestion(currentIdx);
+    }
+
+    function validateCurrentQuestion() {
+      const actualIndex = filteredIndices[currentIdx];
+      const selected = userSelections[actualIndex];
+
+      if (selected.length === 0) {
+        const toast = document.createElement("div");
+        toast.className = "fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs font-semibold px-4 py-2 rounded-xl shadow-lg z-50 animate-bounce";
+        toast.textContent = "Sélectionnez au moins une proposition pour valider.";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+        return;
+      }
+
+      const q = quizData[actualIndex];
+      const isExactlyCorrect = 
+        selected.length === q.correct.length && 
+        selected.every(letter => q.correct.includes(letter));
+
+      validationStates[actualIndex] = isExactlyCorrect;
+      loadQuestion(currentIdx);
+    }
+
+    function showFeedback(actualIndex) {
+      const q = quizData[actualIndex];
+      const isCorrect = validationStates[actualIndex];
+      const userAns = userSelections[actualIndex].join(", ");
+      const correctAns = q.correct.join(", ");
+
+      feedbackPanel.classList.remove("hidden", "bg-teal-50", "border-teal-200", "bg-rose-50", "border-rose-200");
+
+      if (isCorrect) {
+        feedbackPanel.classList.add("bg-teal-50/80", "border-teal-200");
+        feedbackIcon.className = "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-teal-700";
+        feedbackIcon.innerHTML = "✓";
+        feedbackVerdict.className = "text-sm font-bold text-teal-950";
+        feedbackVerdict.textContent = `Exact ! Réponse conforme [ ${correctAns} ]`;
+      } else {
+        feedbackPanel.classList.add("bg-rose-50/80", "border-rose-200");
+        feedbackIcon.className = "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-rose-600";
+        feedbackIcon.innerHTML = "✕";
+        feedbackVerdict.className = "text-sm font-bold text-rose-950";
+        feedbackVerdict.textContent = `Erreur / Incomplet (Vos coches : [ ${userAns || "Aucune"} ] • Attendu : [ ${correctAns} ])`;
+      }
+
+      feedbackRationale.innerHTML = `
+        <div class="font-medium text-slate-900 mb-1">Raisonnement clinique CM8 :</div>
+        <p class="text-slate-600 leading-relaxed">${q.rationale}</p>
+      `;
+    }
+
+    function updateStats() {
+      const validatedCount = validationStates.filter(s => s !== null).length;
+      const correctCount = validationStates.filter(s => s === true).length;
+      headerValidatedEl.textContent = validatedCount;
+      headerScoreEl.textContent = correctCount;
+    }
+
+    function renderQuestionGrid() {
+      questionsGridContainer.innerHTML = "";
+      quizData.forEach((_, idx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        const actualCurIdx = filteredIndices[currentIdx];
+        const isCurrent = idx === actualCurIdx;
+        const state = validationStates[idx];
+
+        let baseClasses = "h-9 rounded-xl font-mono text-xs font-bold transition-all flex items-center justify-center ";
+        if (state === true) {
+          baseClasses += "bg-teal-700 text-white shadow-xs ";
+        } else if (state === false) {
+          baseClasses += "bg-rose-500 text-white shadow-xs ";
+        } else {
+          baseClasses += "bg-slate-100 hover:bg-slate-200 text-slate-700 ";
+        }
+
+        if (isCurrent) {
+          baseClasses += "ring-2 ring-indigo-600 ring-offset-2 scale-105 ";
+        }
+
+        btn.className = baseClasses;
+        btn.textContent = idx + 1;
+
+        btn.addEventListener("click", () => {
+          if (reviewMode) {
+            filteredIndices = [...Array(quizData.length).keys()];
+            reviewMode = false;
+          }
+          gridModal.classList.add("hidden");
+          quizCard.classList.remove("hidden");
+          resultsScreen.classList.add("hidden");
+          const targetIndex = filteredIndices.indexOf(idx);
+          if (targetIndex !== -1) {
+            loadQuestion(targetIndex);
+          }
+        });
+
+        questionsGridContainer.appendChild(btn);
+      });
+    }
+
+    function showFinalResults() {
+      quizCard.classList.add("hidden");
+      resultsScreen.classList.remove("hidden");
+
+      const correctCount = validationStates.filter(s => s === true).length;
+      const totalCount = quizData.length;
+      const pct = Math.round((correctCount / totalCount) * 100);
+
+      finalScoreVal.textContent = correctCount;
+      finalPctVal.textContent = `${pct}%`;
+
+      finalStatusBadge.className = "text-xs uppercase font-extrabold px-3 py-1.5 rounded-lg tracking-wider ";
+      if (pct >= 85) {
+        resultBadgeIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-4 bg-teal-700 shadow-teal-700/30";
+        resultBadgeIcon.innerHTML = "🏆";
+        resultTitle.textContent = "Excellence Académique (Niveau A)";
+        resultSubtitle.textContent = "Vous maîtrisez avec précision l'ensemble du CM8 : bactériémies, protocole d'hémocultures, endocardite, infections ostéo-articulaires et pharmacovigilance.";
+        finalStatusBadge.classList.add("bg-teal-100", "text-teal-900");
+        finalStatusBadge.textContent = "Validation Partiel Assurée";
+      } else if (pct >= 65) {
+        resultBadgeIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-4 bg-indigo-600 shadow-indigo-600/30";
+        resultBadgeIcon.innerHTML = "🎯";
+        resultTitle.textContent = "Acquis Globalement Validé (Niveau B)";
+        resultSubtitle.textContent = "Les principes généraux sont compris. Revoyez les pièges sur le DDP, les critères de prothèse tardive et les surveillances néphro/ototoxiques.";
+        finalStatusBadge.classList.add("bg-indigo-100", "text-indigo-900");
+        finalStatusBadge.textContent = "À Consolider";
+      } else {
+        resultBadgeIcon.className = "w-20 h-20 rounded-full mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-4 bg-rose-500 shadow-rose-500/30";
+        resultBadgeIcon.innerHTML = "⚠️";
+        resultTitle.textContent = "Risque d'Ajournement (Niveau C)";
+        resultSubtitle.textContent = "Des notions éliminatoires (contre-indications de ponction, volume d'hémoculture, règles d'asepsie et cibles d'antibiothérapie) doivent être impérativement reprises.";
+        finalStatusBadge.classList.add("bg-rose-100", "text-rose-800");
+        finalStatusBadge.textContent = "Insuffisant";
+      }
+
+      const errorIndices = [];
+      validationStates.forEach((state, i) => {
+        if (state === false || state === null) errorIndices.push(i);
+      });
+
+      if (errorIndices.length > 0) {
+        btnReviewErrors.classList.remove("hidden");
+        countErrorsBadge.textContent = errorIndices.length;
+      } else {
+        btnReviewErrors.classList.add("hidden");
+      }
+    }
+
+    function setupEvents() {
+      btnValidate.addEventListener("click", validateCurrentQuestion);
+
+      btnPrev.addEventListener("click", () => {
+        if (currentIdx > 0) {
+          loadQuestion(currentIdx - 1);
+        }
+      });
+
+      btnNext.addEventListener("click", () => {
+        if (currentIdx < filteredIndices.length - 1) {
+          loadQuestion(currentIdx + 1);
+        } else {
+          showFinalResults();
+        }
+      });
+
+      btnToggleGrid.addEventListener("click", () => {
+        renderQuestionGrid();
+        gridModal.classList.remove("hidden");
+      });
+      btnCloseGrid.addEventListener("click", () => gridModal.classList.add("hidden"));
+      btnModalDismiss.addEventListener("click", () => gridModal.classList.add("hidden"));
+
+      btnRestartAll.addEventListener("click", () => {
+        userSelections = Array(quizData.length).fill(null).map(() => []);
+        validationStates = Array(quizData.length).fill(null);
+        filteredIndices = [...Array(quizData.length).keys()];
+        reviewMode = false;
+        resultsScreen.classList.add("hidden");
+        quizCard.classList.remove("hidden");
+        loadQuestion(0);
+      });
+
+      btnReviewErrors.addEventListener("click", () => {
+        const errorIndices = [];
+        validationStates.forEach((state, i) => {
+          if (state === false || state === null) errorIndices.push(i);
+        });
+
+        if (errorIndices.length === 0) return;
+
+        errorIndices.forEach(idx => {
+          userSelections[idx] = [];
+          validationStates[idx] = null;
+        });
+
+        filteredIndices = errorIndices;
+        reviewMode = true;
+        resultsScreen.classList.add("hidden");
+        quizCard.classList.remove("hidden");
+        loadQuestion(0);
+      });
+
+      btnBrowseAll.addEventListener("click", () => {
+        filteredIndices = [...Array(quizData.length).keys()];
+        reviewMode = false;
+        resultsScreen.classList.add("hidden");
+        quizCard.classList.remove("hidden");
+        loadQuestion(0);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", initApp);
+  </script>
+</body>
+</html>
