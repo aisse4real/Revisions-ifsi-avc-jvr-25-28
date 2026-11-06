@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM UE 2.5 - Infectiologie Générale (CM2 - Dr Méchaï)</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .sub-header {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .grid-toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .grid-toggle-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .grid-item.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.08);
+            background: #e0f2fe;
+        }
+
+        .grid-item.correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border-color: #86efac;
+        }
+
+        .grid-item.incorrect {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-color: #fca5a5;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 0.85rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            pointer-events: none;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        button.action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        button.action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        button.secondary-btn:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        button.secondary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-bg);
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .feynman-tip {
+            margin-top: 0.6rem;
+            font-style: italic;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            padding-top: 0.6rem;
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2.2rem;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2rem auto;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-pass {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 4px solid var(--success);
+        }
+
+        .score-fail {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 4px solid var(--danger);
+        }
+
+        .filter-error-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IFSI S3 : UE 2.5 Processus Infectieux (CM2 - Dr Méchaï)</h1>
+        <div class="sub-header">Infectiologie Générale • Physiopathologie, Prélèvements & Isolement (40 QCM)</div>
+        <div class="stats-bar">
+            <span id="progress-indicator">Question 1 / 40</span>
+            <span id="score-indicator">Score : 0 / 0</span>
+            <button class="grid-toggle-btn" onclick="toggleFilterErrors()" id="filter-btn">Mode normal</button>
+        </div>
+    </header>
+
+    <div class="question-grid" id="question-grid"></div>
+
+    <main class="card" id="quiz-card">
+        <div class="q-number" id="q-label">Question 1</div>
+        <div class="q-text" id="q-text">Chargement...</div>
+
+        <div class="options-list" id="options-container"></div>
+
+        <div class="btn-group">
+            <button class="action-btn" id="validate-btn" onclick="validateCurrent()">Valider ma réponse</button>
+            <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button class="secondary-btn" id="next-btn" onclick="nextQuestion()" disabled>Suivant</button>
+            <button class="secondary-btn" style="margin-left:auto" onclick="showResultsModal()">Bilan</button>
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+    </main>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-card">
+        <h2 id="modal-title">Bilan de l'Épreuve</h2>
+        <div class="score-circle" id="modal-score-circle">--</div>
+        <p id="modal-feedback-text" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <button class="filter-error-btn" id="modal-retry-errors" onclick="startErrorReview()">Travailler uniquement mes erreurs</button>
+            <button class="action-btn" onclick="restartQuiz()">Recommencer l'épreuve complète</button>
+            <button class="secondary-btn" onclick="closeResultsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        id: 1,
+        question: "Quels types d'agents pathogènes peuvent être responsables d'une infection chez l'être humain selon le cours ?",
+        options: [
+            "Bactéries et virus",
+            "Parasites et champignons",
+            "Prions",
+            "Rayonnements ultraviolets"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le Dr Méchaï liste 5 grandes classes de pathogènes infectieux : virus, bactéries, parasites, champignons et prions (agents transmissibles non conventionnels)."
+    },
+    {
+        id: 2,
+        question: "Concernant la composition cellulaire et génétique de l'organisme humain, quelles affirmations sont exactes ?",
+        options: [
+            "Notre corps compte environ 10^14 bactéries pour seulement 10^13 cellules eucaryotes humaines",
+            "Environ 99 % de l'ADN total retrouvé chez l'humain est d'origine bactérienne",
+            "90 % des cellules de l'organisme sont d'origine bactérienne",
+            "Les poumons et la vessie sont physiologiquement totalement dépourvus de tout microorganisme"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'être humain abrite 10^14 bactéries pour 10^13 cellules eucaryotes (90 % de cellules bactériennes et 99 % d'ADN bactérien). Même les poumons abritent une flore commensale de 10^5 bactéries/mL."
+    },
+    {
+        id: 3,
+        question: "Quels sont les 5 phyla bactériens qui constituent 95 % du microbiote intestinal humain ?",
+        options: [
+            "Firmicutes et Bacteroidetes",
+            "Actinobacteria et Proteobacteria",
+            "Verrucomicrobia",
+            "Cyanobacteria et Spirochaetes"
+        ],
+        correct: [0, 1, 2],
+        rationale: "95 % du microbiote intestinal (3,9 x 10^13 bactéries) est représenté par les phyla : Firmicutes, Bacteroidetes, Actinobacteria, Proteobacteria et Verrucomicrobia."
+    },
+    {
+        id: 4,
+        question: "Quel microorganisme domine physiologiquement le microbiote vaginal en produisant de l'acide lactique protecteur contre les infections ?",
+        options: [
+            "Lactobacillus",
+            "Escherichia coli",
+            "Staphylococcus aureus",
+            "Candida albicans"
+        ],
+        correct: [0],
+        rationale: "Les lactobacilles (flore de Döderlein) prédominent dans le vagin et sécrètent de l'acide lactique maintenant un pH acide hostile aux pathogènes."
+    },
+    {
+        id: 5,
+        question: "Quels sont les moyens de défense innés anatomiques et cellulaires de l'organisme contre les infections ?",
+        options: [
+            "Barrière cutanéo-muqueuse et rate",
+            "Polynucléaires neutrophiles et lymphocytes T et B",
+            "Système du complément et anticorps",
+            "Antibiothérapie prophylactique systématique"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les moyens de défense propres à l'organisme comprennent les barrières anatomiques (peau, muqueuses, rate) et le système immunitaire (cellulaire et humoral). Les antibiotiques sont des moyens de défense extérieurs."
+    },
+    {
+        id: 6,
+        question: "Quelle est la définition d'un réservoir endogène en infectiologie ?",
+        options: [
+            "Une flore commensale normalement non pathogène qui devient opportuniste lors d'une baisse des défenses (ex : pneumocystose et VIH)",
+            "Un animal sauvage transmettant une zoonose par morsure",
+            "Le sol ou l'eau contenant des spores bactériennes",
+            "Un patient contagieux porteur de la variole ou de la tuberculose"
+        ],
+        correct: [0],
+        rationale: "Le réservoir endogène correspond à notre propre flore commensale, inoffensive chez le sujet sain mais opportuniste en cas d'immunodépression."
+    },
+    {
+        id: 7,
+        question: "Quelles pathologies infectieuses proviennent d'un réservoir d'origine animale (zoonoses) ?",
+        options: [
+            "La peste et la rage",
+            "La fièvre jaune",
+            "La variole et la syphilis",
+            "La rougeole et la grippe saisonnière humaine"
+        ],
+        correct: [0, 1],
+        rationale: "La peste, la rage et la fièvre jaune sont des zoonoses (réservoir animal). La variole, la rougeole et la syphilis ont un réservoir strictement humain."
+    },
+    {
+        id: 8,
+        question: "Quels sont les trois grands modes de transmission d'un agent infectieux décrits dans le cours ?",
+        options: [
+            "Transmission directe (contact cutané, manuporté, sanguin, sexuel ou air)",
+            "Transmission indirecte via des vecteurs environnementaux (sol, eau, moustiques, mouches)",
+            "Transmission verticale (de la mère à l'enfant)",
+            "Transmission par mutation génétique spontanée"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le Dr Méchaï décrit trois modes de transmission : direct (contact/air), indirect (vecteurs environnementaux/arthropodes) et vertical (mère-enfant transplacentaire ou à l'accouchement)."
+    },
+    {
+        id: 9,
+        question: "Quelle est la définition réglementaire d'une infection nosocomiale ?",
+        options: [
+            "Toute infection survenant dans un établissement de santé plus de 48 heures après l'admission du patient",
+            "Toute infection déjà en incubation au moment de l'admission",
+            "Une infection contractée au domicile avant l'hospitalisation",
+            "Une infection survenant dans les 2 heures suivant l'entrée aux urgences"
+        ],
+        correct: [0],
+        rationale: "Une infection est dite nosocomiale si elle se déclare au moins 48 heures après l'admission dans un établissement de santé (ni présente ni en incubation à l'entrée)."
+    },
+    {
+        id: 10,
+        question: "Quelles sont les caractéristiques des précautions complémentaires de type 'Contact' ?",
+        options: [
+            "Chambre individuelle obligatoire (ou regroupement de patients atteints du même germe)",
+            "Indiqué pour BMR, BHRE, Clostridioides difficile, gale, entérovirus",
+            "Port systématique d'un masque FFP2 par le soignant",
+            "Lavage des mains à l'eau et au savon obligatoire pour la gale et Clostridioides difficile"
+        ],
+        correct: [0, 1, 3],
+        rationale: "L'isolement Contact ne nécessite pas de masque. Il exige chambre seule ou cohorte, et un lavage eau + savon pour C. difficile et gale car la SHA est inactive sur les spores et acariens."
+    },
+    {
+        id: 11,
+        question: "Pourquoi la friction hydro-alcoolique (SHA) seule est-elle insuffisante face à un patient porteur de Clostridioides difficile ?",
+        options: [
+            "Les solutions hydro-alcooliques ne détruisent pas les spores bactériennes",
+            "La SHA augmente la motilité des bactéries dans le côlon",
+            "La SHA colore la peau en jaune et empêche le diagnostic",
+            "La SHA est toxique en présence de diarrhée"
+        ],
+        correct: [0],
+        rationale: "La SHA est un désinfectant inefficace sur les formes sporulées de Clostridioides difficile : seul le lavage mécanique à l'eau et au savon permet d'évacuer les spores."
+    },
+    {
+        id: 12,
+        question: "Quelles pathologies justifient la mise en place d'un isolement 'Gouttelettes' (particules > 5 microns) ?",
+        options: [
+            "La grippe, le méningocoque et la coqueluche",
+            "La rubéole, les oreillons et le VRS",
+            "Le Covid-19, le mycoplasme et le parvovirus B19",
+            "La tuberculose pulmonaire active et la rougeole"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Grippe, méningocoque, coqueluche, rubéole, oreillons, VRS, parvovirus B19 et Covid-19 relèvent de l'isolement Gouttelettes. La tuberculose et la rougeole relèvent de l'isolement Air."
+    },
+    {
+        id: 13,
+        question: "Quelles mesures sont obligatoires dans le cadre d'un isolement de type 'Air' (particules < 5 microns) ?",
+        options: [
+            "Port d'un masque de protection FFP2 pour le soignant pénétrant dans la chambre",
+            "Chambre individuelle, idéalement à pression négative",
+            "Port d'un masque chirurgical par le patient en cas de sortie hors de la chambre",
+            "Interdiction formelle de fermer la porte de la chambre"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'isolement Air (ex : tuberculose, rougeole) impose un masque FFP2 pour les soignants, une chambre seule en pression négative avec porte fermée, et un masque chirurgical pour le patient en déplacement."
+    },
+    {
+        id: 14,
+        question: "Dans la coloration de Gram, quelle est la 3e étape clé qui permet de différencier les bactéries à Gram positif des bactéries à Gram négatif ?",
+        options: [
+            "Le lavage / décoloration à l'alcool",
+            "L'application du cristal violet",
+            "L'application du lugol",
+            "La contre-coloration finale à la safranine"
+        ],
+        correct: [0],
+        rationale: "Le lavage à l'alcool décolore les bactéries à paroi fine (Gram négatif) qui perdront le violet, tandis que les Gram positif à paroi épaisse conservent la teinte violette."
+    },
+    {
+        id: 15,
+        question: "Quelles sont les 4 règles fondamentales d'interprétation visuelle de la coloration de Gram au microscope ?",
+        options: [
+            "Violet = Gram positif (+)",
+            "Rose = Gram négatif (-)",
+            "Ronds = Cocci",
+            "Bâtonnets = Bacilles"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Ce sont les 4 règles d'or du cours : Violet = Gram +, Rose = Gram -, Ronds = Cocci, Bâtonnets = Bacilles."
+    },
+    {
+        id: 16,
+        question: "À l'examen direct d'un frottis, l'observation de 'Cocci Gram positif en courtes chaînes' oriente typiquement vers :",
+        options: [
+            "Streptococcus pneumoniae (Pneumocoque)",
+            "Escherichia coli",
+            "Neisseria meningitidis",
+            "Pseudomonas aeruginosa"
+        ],
+        correct: [0],
+        rationale: "Le pneumocoque (Streptococcus pneumoniae) apparaît typiquement au microscope sous forme de cocci à Gram positif disposés en paires ou courtes chaînettes."
+    },
+    {
+        id: 17,
+        question: "À l'examen direct microscopique, l'observation de 'Cocci Gram négatif en diplocoques' (en grains de café) évoque immédiatement :",
+        options: [
+            "Le Méningocoque (Neisseria meningitidis)",
+            "Le Staphylocoque doré",
+            "Le Bacille de Koch",
+            "L'Entérocoque"
+        ],
+        correct: [0],
+        rationale: "Les Neisseria (dont Neisseria meningitidis) apparaissent typiquement comme des cocci à Gram négatif roses regroupés par paires (diplocoques face à face)."
+    },
+    {
+        id: 18,
+        question: "Quelles bactéries constituent la flore commensale habituelle de la peau humaine ?",
+        options: [
+            "Staphylococcus aureus et staphylocoques à coagulase négative",
+            "Propionibacterium (Cutibacterium) acnes",
+            "Corynebacterium et streptocoques (A, C, G)",
+            "Bacteroides fragilis"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La flore cutanée est composée de Staphylococcus aureus, staphylocoques coagulase négative, Cutibacterium acnes, Corynebacterium et streptocoques. Bacteroides fragilis est digestif anaérobie."
+    },
+    {
+        id: 19,
+        question: "Quels types de bactéries prédominent dans la flore digestive de l'organisme humain ?",
+        options: [
+            "Entérobactéries (ex : Escherichia coli)",
+            "Entérocoques",
+            "Bactéries anaérobies strictes (ex : Bacteroides fragilis, Clostridium)",
+            "Pneumocoques"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La flore digestive regroupe les entérobactéries, les entérocoques et une immense majorité d'anaérobies stricts (Bacteroides fragilis, Clostridium)."
+    },
+    {
+        id: 20,
+        question: "Quels microorganismes composent la flore vaginale normale de la femme ?",
+        options: [
+            "Lactobacilles et Streptocoque du groupe B",
+            "Gardnerella vaginalis et Ureaplasma urealyticum",
+            "Anaérobies et Candida albicans (en petite quantité)",
+            "Pseudomonas aeruginosa"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La flore vaginale abrite des lactobacilles, du streptocoque B, Ureaplasma, Gardnerella vaginalis, des anaérobies et Candida albicans en équilibre commensal."
+    },
+    {
+        id: 21,
+        question: "Quelle est la définition clinique de la septicémie selon le cours du Dr Méchaï ?",
+        options: [
+            "Présence de microorganismes viables dans le sang authentifiée par des hémocultures positives, associée à des signes généraux d'infection",
+            "Une infection cutanée superficielle sans fièvre",
+            "Une bactériurie asymptomatique isolée",
+            "Une réaction allergique aiguë sans germe"
+        ],
+        correct: [0],
+        rationale: "La septicémie associe la présence prouvée de germes viables dans le sang circulant (hémoculture positive), des signes généraux d'infection et un foyer primitif avec passage vers le sang."
+    },
+    {
+        id: 22,
+        question: "Quel foyer primitif représente environ 50 % des points de départ des septicémies communautaires ?",
+        options: [
+            "Le foyer pulmonaire (pneumopathies, abcès pulmonaires)",
+            "Le foyer urinaire",
+            "Le foyer des tissus mous et plaies",
+            "Le foyer abdomino-pelvien"
+        ],
+        correct: [0],
+        rationale: "Le foyer pulmonaire est de loin le foyer primitif le plus fréquent de septicémie (environ 50 % des cas), devant les foyers abdomino-pelviens (20 %) et urinaires (10 %)."
+    },
+    {
+        id: 23,
+        question: "Quels sont les facteurs favorisant une septicémie d'origine pulmonaire ?",
+        options: [
+            "La splénectomie (asplénie)",
+            "L'alcoolisme chronique",
+            "Le grand âge",
+            "L'intubation trachéale"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Les 4 facteurs favorisants majeurs d'infection pulmonaire sévère sont la splénectomie, l'alcoolisme, l'âge avancé et la ventilation mécanique / intubation."
+    },
+    {
+        id: 24,
+        question: "Quels sont les facteurs favorisant une bactériémie d'origine abdomino-pelvienne ?",
+        options: [
+            "Tumeur digestive ou chirurgie abdominale récente",
+            "Sigmoïdite, appendicite ou ascite",
+            "Infection biliaire, calculs (lithiase) ou cathétérisme rétrograde",
+            "Port d'un stérilet, IVG ou exploration endo-utérine"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces situations favorisent l'effraction bactérienne abdominale ou pelvienne vers le réseau veineux splanchnique et cave."
+    },
+    {
+        id: 25,
+        question: "Quelles conditions constituent des facteurs de risque majeurs de septicémie d'origine urinaire ?",
+        options: [
+            "Présence d'une sonde vésicale à demeure",
+            "Obstacle lithiasique ou tumoral sur les voies urinaires",
+            "Grossesse ou geste d'instrumentation/chirurgie urologique",
+            "Activité sportive régulière"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les sondes urinaires, obstacles urinaires, chirurgies/endoscopies et la grossesse sont les facteurs favorisants classiques des bactériémies urologiques."
+    },
+    {
+        id: 26,
+        question: "Quelles caractéristiques hémodynamiques et biologiques définissent le Choc Septique ?",
+        options: [
+            "Hypotension artérielle persistante malgré un remplissage vasculaire adéquat",
+            "Nécessité d'administrer des amines vasopressives pour maintenir une PAM ≥ 65 mmHg",
+            "Lactatémie artérielle > 2 mmol/L",
+            "Hypertension artérielle avec bradycardie réflexe"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le choc septique est défini par une hypotension réfractaire au remplissage, exigeant des vasopresseurs pour PAM ≥ 65 mmHg et des lactates > 2 mmol/L (hypoperfusion tissulaire)."
+    },
+    {
+        id: 27,
+        question: "Quels sont les signes cliniques d'alerte immédiate devant faire craindre une évolution vers un choc septique ?",
+        options: [
+            "Hypotension artérielle et tachycardie",
+            "Oligo-anurie (chute de la diurèse horaire)",
+            "Marbrures cutanées (notamment aux genoux)",
+            "Purpura fulminans"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Les signes d'alerte cardiovasculaire et tissulaire sont l'hypotension, la tachycardie, l'oligo-anurie, les marbrures et l'apparition d'un purpura nécrotique."
+    },
+    {
+        id: 28,
+        question: "Sur le plan thermorégulateur, comment se définit la fièvre en pratique médicale ?",
+        options: [
+            "Une température > 38 °C le matin ou > 38,3 °C le soir",
+            "Une température comprise entre 37,5 °C et 38 °C correspond à un fébricule",
+            "En cas de mesure axillaire ou buccale, il faut rajouter 0,5 °C pour estimer la température centrale",
+            "Toute température supérieure à 37,2 °C impose obligatoirement une antibiothérapie en urgence"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La fièvre est définie par > 38 °C matin ou > 38,3 °C soir (37,5-38 = fébricule). Les mesures axillaires/buccales sous-estiment la température centrale de 0,5 °C."
+    },
+    {
+        id: 29,
+        question: "Parmi les situations cliniques suivantes, lesquelles constituent des urgences absolues imposant une prise en charge immédiate devant une fièvre aiguë récente ?",
+        options: [
+            "Syndrome méningé ou coma fébrile",
+            "Purpura fulminans",
+            "Dermohypodermite nécrosante",
+            "Fièvre au retour des tropiques (suspicion de paludisme)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces situations sont des urgences infectieuses vitales listées par le Dr Méchaï : méningite/coma fébrile, purpura fulminans, dermohypodermite nécrosante et paludisme d'importation."
+    },
+    {
+        id: 30,
+        question: "Concernant les fièvres prolongées inexpliquées (évoluant depuis plus de 3 semaines), quelle est la répartition étiologique moyenne présentée dans le cours ?",
+        options: [
+            "60 % d'infections (bactériennes, virales, parasitaires, fungiques)",
+            "20 % de néoplasies (cancers solides et hémopathies)",
+            "10 % de maladies de système (Still, lupus, Horton)",
+            "10 % d'autres causes (allergies médicamenteuses, hyperthyroïdie, fièvre factice)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "C'est la règle des 60 / 20 / 10 / 10 % : 60 % infectieux, 20 % néoplasique, 10 % inflammatoire/systémique et 10 % divers/iatrogène."
+    },
+    {
+        id: 31,
+        question: "Quelles anomalies de la lignée blanche à l'hémogramme (NFS) orientent classiquement le diagnostic infectieux ?",
+        options: [
+            "Polynucléose neutrophile (> 7 000 /mm3) : évoque une infection bactérienne à pyogène",
+            "Neutropénie (< 1 000 /mm3) : peut s'observer dans la typhoïde, la brucellose ou certaines viroses (rougeole, varicelle)",
+            "Éosinophilie (> 500 /mm3) : évoque une helminthiase (parasite), une allergie ou une vascularite",
+            "Lymphocytose (> 4 000 /mm3 chez l'adulte) : oriente vers une virose ou la coqueluche"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Ces 4 seuils et orientations hématologiques sont les repères diagnostiques cardinaux détaillés dans le cours."
+    },
+    {
+        id: 32,
+        question: "Quelles étiologies infectieuses peuvent être responsables d'un syndrome mononucléosique à l'hémogramme ?",
+        options: [
+            "EBV (virus d'Epstein-Barr) et CMV (Cytomégalovirus)",
+            "Primo-infection par le VIH",
+            "Toxoplasmose et listériose",
+            "Tétanos"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le syndrome mononucléosique (lymphocytes T/B activés) est provoqué par l'EBV, le CMV, le VIH, la toxoplasmose et la listériose."
+    },
+    {
+        id: 33,
+        question: "Concernant les marqueurs biologiques de l'inflammation, quelle molécule est la plus sensible et la plus spécifique des infections bactériennes systémiques sévères ?",
+        options: [
+            "La Procalcitonine (PCT)",
+            "La Vitesse de Sédimentation (VS)",
+            "Le cholestérol total",
+            "La troponine I"
+        ],
+        correct: [0],
+        rationale: "La procalcitonine (PCT) s'élève rapidement et spécifiquement en cas d'infection bactérienne invasive et systémique, surpassant la CRP et la VS."
+    },
+    {
+        id: 34,
+        question: "Quels sont les paramètres cytochimiques normaux d'un Liquide Céphalo-Rachidien (LCR) selon le cours du Dr Méchaï ?",
+        options: [
+            "Cellularité < 5 éléments /mm3 (toléré jusqu'à 10)",
+            "Protéinorachie < 0,5 g/L",
+            "Glycorachie égale à environ la moitié de la glycémie sanguine",
+            "LCR macroscopiquement trouble et lactescent"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le LCR normal est eau de roche, comporte < 5 cellules/mm3, une protéinorachie < 0,5 g/L et une glycorachie représentant environ 50 % de la glycémie."
+    },
+    {
+        id: 35,
+        question: "Quels critères cytochimiques définissent une infection d'un liquide d'ascite péritonéale ?",
+        options: [
+            "Aspect trouble ou purulent",
+            "Taux de polynucléaires neutrophiles > 250 /mm3",
+            "Taux de protéines > 25 g/L",
+            "Absence totale de globules blancs"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'ascite est infectée si elle est trouble, contient plus de 250 neutrophiles/mm3 et des protéines > 25 g/L."
+    },
+    {
+        id: 36,
+        question: "Concernant la technique de prélèvement d'hémocultures chez l'adulte, quelles affirmations sont exactes ?",
+        options: [
+            "Le volume total de sang recommandé est de 10 à 30 mL répartis sur 2 à 4 flacons",
+            "Il faut impérativement prélever un flacon aérobie et un flacon anaérobie",
+            "Le prélèvement doit être fait sur veine périphérique (ex : pli du coude) et JAMAIS sur cathéter périphérique",
+            "Après prélèvement, il faut retourner le flacon 3 à 4 fois pour mélanger le sang au bouillon"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces recommandations sont strictes : 10-30 mL au total (2-4 flacons), aérobie + anaérobie, ponction périphérique exclusive, agitation douce par retournement 3-4 fois."
+    },
+    {
+        id: 37,
+        question: "Quelle est la règle de bonne pratique infirmière pour prélever un ECBU chez un patient porteur d'une sonde urinaire à demeure avec système clos ?",
+        options: [
+            "Désinfecter le site de prélèvement en caoutchouc et ponctionner directement avec une seringue stérile",
+            "Ne jamais déconnecter la sonde du sac collecteur pour maintenir le système clos",
+            "Ne pas clamper la sonde",
+            "Vider le sac collecteur dans un bocal non stérile"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Sur sonde à demeure, le prélèvement se fait à la seringue après désinfection de l'opercule spécifique. On ne déconnecte JAMAIS et on ne clampe pas pour préserver le système clos."
+    },
+    {
+        id: 38,
+        question: "Chez un nourrisson ou jeune enfant nécessitant un ECBU avec pose d'un sac collecteur adhésif périnéal, quelle est la durée maximale de maintien du sac ?",
+        options: [
+            "Conserver le sac collecteur au maximum 20 minutes",
+            "Laisser le sac en place pendant 24 heures",
+            "Conserver le sac jusqu'à ce qu'il se décolle spontanément",
+            "Laisser le sac 4 heures sans faire de toilette préalable"
+        ],
+        correct: [0],
+        rationale: "Le sac collecteur urinaire pédiatrique ne doit jamais rester plus de 20 minutes en place sous peine d'être massivement contaminé par les germes cutanés périnéaux."
+    },
+    {
+        id: 39,
+        question: "Face à une diarrhée aiguë fébrile chez un patient hospitalisé, quels prélèvements et consignes de transport s'imposent ?",
+        options: [
+            "Coproculture et recherche spécifique de toxines de Clostridioides difficile",
+            "Recueillir les selles liquides, muqueuses ou sanglantes en évitant toute contamination par l'urine",
+            "Envoi au laboratoire en 1 à 4 heures ou conservation à +4 °C pendant 8 heures maximum",
+            "Les écouvillons desséchés sont conformes et prioritaires"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Toute diarrhée nosocomiale = copro + recherche C. difficile. Éviter l'urine, acheminer en 1-4h (+4 °C max 8h). Les écouvillons desséchés sont rejetés par le labo."
+    },
+    {
+        id: 40,
+        question: "Quelle mesure simple d'hygiène constitue le pilier majeur de la prévention de la transmission croisée des bactéries multi-résistantes (BMR) à l'hôpital ?",
+        options: [
+            "L'hygiène des mains par friction avec une Solution Hydro-Alcoolique (SHA)",
+            "L'antibiothérapie préventive de tout le personnel soignant",
+            "La fermeture définitive du bloc opératoire",
+            "Le port obligatoire de bottes chirurgicales dans les couloirs"
+        ],
+        correct: [0],
+        rationale: "La friction hydro-alcoolique des mains est la mesure n°1 validée mondialement pour briser la chaîne de transmission manuportée des souches bactériennes résistantes."
+    }
+];
+
+let currentIndex = 0;
+let userAnswers = {};
+let reviewMode = false;
+let displayedQuestions = [...questions];
+
+function init() {
+    renderGrid();
+    loadQuestion(currentIndex);
+    updateStats();
+}
+
+function getErrorQuestions() {
+    return questions.filter(q => {
+        const userAns = userAnswers[q.id];
+        if (!userAns) return false;
+        const sortedUser = [...userAns].sort().join(',');
+        const sortedCorr = [...q.correct].sort().join(',');
+        return sortedUser !== sortedCorr;
+    });
+}
+
+function renderGrid() {
+    const grid = document.getElementById('question-grid');
+    grid.innerHTML = '';
+    displayedQuestions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.textContent = q.id;
+        if (idx === currentIndex) item.classList.add('active');
+
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) {
+                item.classList.add('correct');
+            } else {
+                item.classList.add('incorrect');
+            }
+        }
+
+        item.onclick = () => {
+            currentIndex = idx;
+            loadQuestion(currentIndex);
+        };
+        grid.appendChild(item);
+    });
+}
+
+function loadQuestion(index) {
+    if (displayedQuestions.length === 0) {
+        document.getElementById('q-label').textContent = "Terminé";
+        document.getElementById('q-text').textContent = "Aucune erreur enregistrée ! Toutes vos réponses sont exactes.";
+        document.getElementById('options-container').innerHTML = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('validate-btn').disabled = true;
+        return;
+    }
+
+    const q = displayedQuestions[index];
+    document.getElementById('q-label').textContent = `Question ${q.id} sur 40 ${reviewMode ? '(Mode Erreurs)' : ''}`;
+    document.getElementById('q-text').textContent = q.question;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentSelections = userAnswers[q.id] || [];
+    const isAnswered = userAnswers[q.id] !== undefined;
+
+    q.options.forEach((optText, optIdx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'option-item';
+        if (currentSelections.includes(optIdx)) optDiv.classList.add('selected');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = currentSelections.includes(optIdx);
+
+        const label = document.createElement('span');
+        label.innerHTML = `<span class="opt-letter">${letters[optIdx]}.</span> ${optText}`;
+
+        optDiv.appendChild(chk);
+        optDiv.appendChild(label);
+
+        if (!isAnswered) {
+            optDiv.onclick = () => {
+                chk.checked = !chk.checked;
+                if (chk.checked) {
+                    optDiv.classList.add('selected');
+                } else {
+                    optDiv.classList.remove('selected');
+                }
+            };
+        } else {
+            optDiv.style.cursor = 'default';
+        }
+
+        optContainer.appendChild(optDiv);
+    });
+
+    const feedback = document.getElementById('feedback');
+    if (isAnswered) {
+        showFeedbackUI(q);
+        document.getElementById('validate-btn').disabled = true;
+    } else {
+        feedback.style.display = 'none';
+        feedback.className = 'feedback-box';
+        document.getElementById('validate-btn').disabled = false;
+    }
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').disabled = (index === displayedQuestions.length - 1);
+
+    renderGrid();
+}
+
+function validateCurrent() {
+    const q = displayedQuestions[currentIndex];
+    const optContainer = document.getElementById('options-container');
+    const checkboxes = optContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = [];
+    checkboxes.forEach((cb, idx) => {
+        if (cb.checked) selected.push(idx);
+    });
+
+    if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une proposition.");
+        return;
+    }
+
+    userAnswers[q.id] = selected;
+    showFeedbackUI(q);
+    document.getElementById('validate-btn').disabled = true;
+    updateStats();
+    renderGrid();
+}
+
+function showFeedbackUI(q) {
+    const feedback = document.getElementById('feedback');
+    const letters = ['A', 'B', 'C', 'D'];
+    const sortedUser = [...(userAnswers[q.id] || [])].sort().join(',');
+    const sortedCorr = [...q.correct].sort().join(',');
+    const isCorrect = (sortedUser === sortedCorr);
+
+    const corrLetters = q.correct.map(i => letters[i]).join(', ');
+
+    feedback.style.display = 'block';
+    if (isCorrect) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>Exact !</strong> (Réponse : ${corrLetters})<br>${q.rationale}`;
+    } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>Inexact ou incomplet.</strong> Bonne(s) réponse(s) : <strong>${corrLetters}</strong><br>${q.rationale}
+        <div class="feynman-tip">💡 <strong>Astuce Feynman :</strong> Reformulez avec vos propres mots simples la raison pour laquelle ${corrLetters} est la seule conduite logique.</div>`;
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion(currentIndex);
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < displayedQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+}
+
+function updateStats() {
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    document.getElementById('progress-indicator').textContent = `Question ${currentIndex + 1} / ${displayedQuestions.length}`;
+    document.getElementById('score-indicator').textContent = `Score : ${score} / ${totalAnswered} validées`;
+}
+
+function toggleFilterErrors() {
+    const btn = document.getElementById('filter-btn');
+    if (!reviewMode) {
+        const errors = getErrorQuestions();
+        if (errors.length === 0) {
+            alert("Aucune erreur enregistrée pour l'instant ! Continuez votre test.");
+            return;
+        }
+        reviewMode = true;
+        displayedQuestions = errors;
+        currentIndex = 0;
+        btn.textContent = "Retour épreuve";
+        btn.style.background = "var(--warning)";
+    } else {
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        btn.textContent = "Mode normal";
+        btn.style.background = "var(--primary)";
+    }
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function showResultsModal() {
+    const modal = document.getElementById('results-modal');
+    const circle = document.getElementById('modal-score-circle');
+    const title = document.getElementById('modal-title');
+    const text = document.getElementById('modal-feedback-text');
+
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    const percent = Math.round((score / questions.length) * 100);
+    circle.textContent = `${score} / 40`;
+
+    if (score >= 32) {
+        circle.className = 'score-circle score-pass';
+        title.textContent = "Validation Réussie (Niveau A)";
+        text.textContent = `Excellent ! Vous atteignez ${percent} % de bonnes réponses sur le CM2. Les définitions du sepsis, l'isolement septique et les protocoles de prélèvements sont parfaitement maîtrisés.`;
+    } else {
+        circle.className = 'score-circle score-fail';
+        title.textContent = "Risque d'Ajournement (Niveau B/C)";
+        text.textContent = `Score actuel : ${score}/40 (${percent} %). Des points éliminatoires (règles de prélèvement sur sonde urinaire, coloration de Gram, score qSOFA ou protocoles d'isolement) doivent être repris avec le bouton d'erreurs.`;
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeResultsModal() {
+    document.getElementById('results-modal').style.display = 'none';
+}
+
+function startErrorReview() {
+    closeResultsModal();
+    const errors = getErrorQuestions();
+    if (errors.length === 0) {
+        alert("Félicitations, vous n'avez aucune erreur !");
+        return;
+    }
+    reviewMode = true;
+    displayedQuestions = errors;
+    currentIndex = 0;
+    document.getElementById('filter-btn').textContent = "Retour épreuve";
+    document.getElementById('filter-btn').style.background = "var(--warning)";
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function restartQuiz() {
+    if (confirm("Voulez-vous réinitialiser toutes vos réponses et recommencer à zéro ?")) {
+        userAnswers = {};
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        document.getElementById('filter-btn').textContent = "Mode normal";
+        document.getElementById('filter-btn').style.background = "var(--primary)";
+        closeResultsModal();
+        updateStats();
+        loadQuestion(0);
+        renderGrid();
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
