@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM UE 2.5 - Infections Neurologiques & Méningites (CM4)</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #15803d;
+            --success-bg: #dcfce7;
+            --danger: #b91c1c;
+            --danger-bg: #fee2e2;
+            --warning: #b45309;
+            --warning-bg: #fef3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .sub-header {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eff6ff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary);
+        }
+
+        .grid-toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .grid-item.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.08);
+        }
+
+        .grid-item.correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border-color: #86efac;
+        }
+
+        .grid-item.incorrect {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-color: #fca5a5;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: var(--primary-light);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 0.85rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            pointer-events: none;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+
+        button.action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .feedback-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-bg);
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .feynman-tip {
+            margin-top: 0.5rem;
+            font-style: italic;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            padding-top: 0.5rem;
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2.2rem;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2rem auto;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-pass {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 4px solid var(--success);
+        }
+
+        .score-fail {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 4px solid var(--danger);
+        }
+
+        .filter-error-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IFSI S3 : UE 2.5 Processus Infectieux (CM4 - Dr Brebant)</h1>
+        <div class="sub-header">Infections Neurologiques & Méningites • Entraînement Haute Fidélité (40 QCM)</div>
+        <div class="stats-bar">
+            <span id="progress-indicator">Question 1 / 40</span>
+            <span id="score-indicator">Score : 0 / 0</span>
+            <button class="grid-toggle-btn" onclick="toggleFilterErrors()" id="filter-btn">Mode normal</button>
+        </div>
+    </header>
+
+    <div class="question-grid" id="question-grid"></div>
+
+    <main class="card" id="quiz-card">
+        <div class="q-number" id="q-label">Question 1</div>
+        <div class="q-text" id="q-text">Chargement de la question...</div>
+
+        <div class="options-list" id="options-container"></div>
+
+        <div class="btn-group">
+            <button class="action-btn" id="validate-btn" onclick="validateCurrent()">Valider ma réponse</button>
+            <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button class="secondary-btn" id="next-btn" onclick="nextQuestion()" disabled>Suivant</button>
+            <button class="secondary-btn" style="margin-left:auto" onclick="showResultsModal()">Bilan</button>
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+    </main>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-card">
+        <h2 id="modal-title">Bilan de l'Épreuve</h2>
+        <div class="score-circle" id="modal-score-circle">--</div>
+        <p id="modal-feedback-text" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <button class="filter-error-btn" id="modal-retry-errors" onclick="startErrorReview()">Travailler uniquement mes erreurs</button>
+            <button class="action-btn" onclick="restartQuiz()">Recommencer l'épreuve complète</button>
+            <button class="secondary-btn" onclick="closeResultsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        id: 1,
+        question: "Quelles structures composent les leptoméninges ?",
+        options: [
+            "L'arachnoïde",
+            "La dure-mère",
+            "La pie-mère",
+            "La boîte crânienne"
+        ],
+        correct: [0, 2],
+        rationale: "Les méninges se divisent en pachyméninge (la dure-mère, épaisse et fibreuse) et leptoméninges (l'arachnoïde et la pie-mère, fines et nourricières)."
+    },
+    {
+        id: 2,
+        question: "Concernant la sécrétion et la circulation du Liquide Céphalo-Rachidien (LCR), quelles affirmations sont exactes ?",
+        options: [
+            "Le LCR est produit en continu par les plexus choroïdes",
+            "Le LCR circule dans l'espace épidural",
+            "Le LCR est réabsorbé par les granulations arachnoïdiennes dans les sinus veineux",
+            "Le LCR protège le système nerveux uniquement par son action bactériostatique"
+        ],
+        correct: [0, 2],
+        rationale: "Le LCR est produit par les plexus choroïdes (dans les ventricules) et réabsorbé par les granulations arachnoïdiennes. Il circule dans l'espace sous-arachnoïdien et joue un rôle d'amortisseur mécanique et nutritif."
+    },
+    {
+        id: 3,
+        question: "Quels sont les mécanismes physiopathologiques pouvant conduire à une infection méningée ?",
+        options: [
+            "Le passage hématogène à partir d'une bactériémie",
+            "L'inoculation directe suite à un traumatisme ou un geste chirurgical",
+            "L'extension par contiguïté depuis un foyer ORL (otite, sinusite)",
+            "La transmission génétique autosomique dominante"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les trois voies d'infection méningée sont le passage sanguin (hématogène), la contiguïté de voisinage (foyer ORL) et l'inoculation directe (brèche post-traumatique ou chirurgie)."
+    },
+    {
+        id: 4,
+        question: "Quels sont les agents infectieux les plus fréquemment responsables de méningites d'évolution spontanément bénigne ?",
+        options: [
+            "Les entérovirus",
+            "Le pneumocoque",
+            "Le méningocoque B",
+            "L'herpès simplex virus (dans sa forme encéphalitique aiguë)"
+        ],
+        correct: [0],
+        rationale: "Les entérovirus sont la cause la plus fréquente de méningite à liquide clair chez l'adulte et l'enfant, le plus souvent bénignes avec guérison spontanée."
+    },
+    {
+        id: 5,
+        question: "Quels agents pathogènes sont à rechercher en priorité en cas d'infection neurologique chez un patient fortement immunodéprimé ?",
+        options: [
+            "Cryptococcus neoformans",
+            "Toxoplasma gondii",
+            "Mycobacterium tuberculosis",
+            "Rhinovirus"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Chez les immunodéprimés (VIH, greffés, chimiothérapie), on traque les germes opportunistes : Cryptocoque, Toxoplasme et Bacille de Koch (tuberculose)."
+    },
+    {
+        id: 6,
+        question: "Quels sont les signes caractéristiques du syndrome méningé ?",
+        options: [
+            "Des céphalées violentes, diffuses, accentuées par le bruit et la lumière",
+            "Une raideur de nuque invincible",
+            "Des vomissements spontanés en jet, sans effort de nausée préalable",
+            "Une hyperréflexie ostéo-tendineuse unilatérale indolore"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le syndrome méningé associe céphalées intenses avec photophobie/phonophobie, vomissements en jet et raideur de nuque par contracture douloureuse réflexe."
+    },
+    {
+        id: 7,
+        question: "Quelle position antalgique évocatrice peut spontanément adopter un patient présentant un syndrome méningé ?",
+        options: [
+            "L'attitude en 'chien de fusil' (couché en décubitus latéral, genoux et tête repliés)",
+            "L'orthopnée stricte assise penchée en avant",
+            "Le décubitus ventral tête hyperextendue",
+            "La position de Trendelenburg inversée"
+        ],
+        correct: [0],
+        rationale: "La position en 'chien de fusil' (membres fléchis, rachis enroulé) diminue la mise sous tension mécanique des racines nerveuses et des méninges enflammées."
+    },
+    {
+        id: 8,
+        question: "Parmi les propositions suivantes, quelles tranches d'âge présentent la plus forte incidence d'Infections Invasives à Méningocoque (IIM) ?",
+        options: [
+            "Les nouveau-nés et nourrissons de moins de 1 an",
+            "Les adolescents et jeunes adultes (15-24 ans)",
+            "Les enfants scolarisés de 8 à 10 ans uniquement",
+            "Les adultes de 40 à 50 ans sans comorbidité"
+        ],
+        correct: [0, 1],
+        rationale: "L'épidémiologie des IIM montre un pic majeur chez les nourrissons de moins de 1 an, suivi d'un second pic chez les 15-24 ans, ainsi qu'une remontée chez les personnes très âgées."
+    },
+    {
+        id: 9,
+        question: "Quelle est la particularité sémiologique de la méningite chez le sujet âgé ?",
+        options: [
+            "Les symptômes méningés sont fréquemment frustres ou atypiques",
+            "La raideur de nuque est systématiquement hyperalgique et d'apparition brutale",
+            "L'infection se manifeste souvent par une simple confusion ou un trouble du comportement inexpliqué",
+            "La fièvre est obligatoirement supérieure à 41 °C"
+        ],
+        correct: [0, 2],
+        rationale: "Chez la personne âgée, les signes méningés sont souvent trompeurs ou frustres ; toute confusion ou altération de l'état général fébrile doit faire évoquer le diagnostic."
+    },
+    {
+        id: 10,
+        question: "Quels éléments définissent le syndrome encéphalitique (faisant évoquer une méningo-encéphalite) ?",
+        options: [
+            "Des troubles de vigilance ou de la conscience",
+            "Des crises d'épilepsie focales ou généralisées",
+            "Des signes de focalisation neurologique (déficit moteur, aphasie, atteinte des nerfs crâniens)",
+            "Une diarrhée aqueuse isolée"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'atteinte du parenchyme encéphalique se traduit par des troubles de vigilance/confusion, des crises d'épilepsie et/ou des signes de focalisation (déficit moteur, paires crâniennes)."
+    },
+    {
+        id: 11,
+        question: "La présence de troubles neurovégétatifs (irrégularité du pouls, de la tension artérielle et de la température) chez un patient comateux témoigne :",
+        options: [
+            "D'une souffrance du tronc cérébral",
+            "D'une intoxication alimentaire aiguë",
+            "D'un syndrome méningé isolé sans gravité",
+            "D'une atteinte exclusive des cordons postérieurs de la moelle épinière"
+        ],
+        correct: [0],
+        rationale: "L'instabilité neurovégétative (dysrégulation tensionnelle, thermique et cardiaque) est un signe de gravité extrême signifiant une souffrance du tronc cérébral."
+    },
+    {
+        id: 12,
+        question: "Quels critères cliniques constituent le score de tri rapide qSOFA ?",
+        options: [
+            "Fréquence respiratoire ≥ 22 /min",
+            "Altération de l'état de conscience (Score de Glasgow < 15)",
+            "Pression artérielle systolique ≤ 100 mmHg",
+            "Température corporelle > 39 °C"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le score qSOFA comprend 3 items : FR ≥ 22/min, GCS < 15, et PAS ≤ 100 mmHg. Un score ≥ 2 identifie un patient suspect de sepsis grave."
+    },
+    {
+        id: 13,
+        question: "Quelle est la définition clinique du purpura ?",
+        options: [
+            "Une tache érythémateuse cutanée qui ne s'efface pas à la vitropression",
+            "Une vésicule à contenu clair qui éclate spontanément",
+            "Une lésion maculeuse qui disparaît entièrement lorsqu'on appuie dessus avec un verre",
+            "Un œdème prenant le godet aux chevilles"
+        ],
+        correct: [0],
+        rationale: "Le purpura correspond à une extravasation d'hématies dans le derme : la lésion ne s'efface pas à la vitropression."
+    },
+    {
+        id: 14,
+        question: "Quelles caractéristiques cliniques définissent le Purpura Fulminans ?",
+        options: [
+            "Un purpura extensif ou ecchymotique d'évolution rapide",
+            "Un purpura avec éléments nécrotiques ou touchant les extrémités (acral)",
+            "Un purpura associé à une atteinte muqueuse ou des signes hémorragiques",
+            "Une éruption maculeuse prurigineuse uniquement localisée au dos"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le purpura fulminans est une urgence vitale caractérisée par son caractère extensif, ecchymotique, nécrotique, acral ou muqueux associé à un sepsis sévère."
+    },
+    {
+        id: 15,
+        question: "Face à un patient suspect de méningite fébrile qui présente au moins un élément purpurique nécrotique extensif, quelle est la conduite à tenir immédiate ?",
+        options: [
+            "Administrer immédiatement un antibiotique adapté (C3G type Ceftriaxone) par voie IV ou IM avant tout autre geste",
+            "Effectuer immédiatement une ponction lombaire avant d'injecter le moindre antibiotique",
+            "Programmer un scanner cérébral pour le lendemain",
+            "Attendre le résultat des hémocultures avant de perfuser"
+        ],
+        correct: [0],
+        rationale: "Urgence vitale absolue : le purpura fulminans impose l'injection immédiate d'une C3G (Ceftriaxone) sans attendre ni retarder la prise en charge pour une ponction lombaire."
+    },
+    {
+        id: 16,
+        question: "À quel niveau anatomique de l'échelle de Glasgow définit-on classiquement le coma profond imposant une protection des voies aériennes ?",
+        options: [
+            "Score de Glasgow ≤ 8",
+            "Score de Glasgow = 14",
+            "Score de Glasgow = 11",
+            "Score de Glasgow = 15"
+        ],
+        correct: [0],
+        rationale: "Un score de Glasgow ≤ 8 caractérise l'état comateux sévère et impose une intubation trachéale pour protéger les voies aériennes."
+    },
+    {
+        id: 17,
+        question: "Lors de l'évaluation du score de Glasgow chez l'adulte, quelle cotation motrice correspond à une décortication cérébrale (flexion anormale des membres à la douleur) ?",
+        options: [
+            "Réponse motrice cotée à 3",
+            "Réponse motrice cotée à 5",
+            "Réponse motrice cotée à 1",
+            "Réponse motrice cotée à 6"
+        ],
+        correct: [0],
+        rationale: "Sur la réponse motrice de Glasgow : 6 = aux ordres, 5 = localise, 4 = retrait, 3 = flexion anormale (décortication), 2 = extension anormale (décérébration), 1 = aucune."
+    },
+    {
+        id: 18,
+        question: "Quelles sont les contre-indications formelles à la réalisation immédiate d'une ponction lombaire ?",
+        options: [
+            "Une instabilité hémodynamique majeure (choc)",
+            "Un purpura fulminans / extensif",
+            "Des signes d'engagement cérébral cliniques ou radiologiques",
+            "Un trouble grave de la coagulation ou prise d'anticoagulant"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La PL est contre-indiquée en cas d'instabilité hémodynamique, de purpura fulminans (urgence à l'ATB), de risque d'engagement cérébral, d'anomalie de l'hémostase ou d'infection cutanée au point de ponction."
+    },
+    {
+        id: 19,
+        question: "Pourquoi est-il formellement contre-indiqué de pratiquer une ponction lombaire chez un patient présentant des signes d'engagement cérébral ?",
+        options: [
+            "La dépression lombaire risque de provoquer une hernie du tissu cérébral à travers le trou occipital et d'écraser le tronc cérébral",
+            "Le LCR risque de devenir immédiatement hémorragique par rupture artérielle fémorale",
+            "Cela empêche la culture bactérienne de pousser",
+            "Cela provoque une cécité irréversible immédiate"
+        ],
+        correct: [0],
+        rationale: "Créer une fuite de LCR en bas alors qu'il existe une surpression intracrânienne majeure entraîne la descente des structures encéphaliques (engagement) et l'arrêt respiratoire fatal."
+    },
+    {
+        id: 20,
+        question: "Entre quels repères vertébraux réalise-t-on habituellement la ponction lombaire chez l'adulte ?",
+        options: [
+            "Entre L4 et L5 (ou L3-L4)",
+            "Entre C1 et C2",
+            "Entre T5 et T6",
+            "Entre L1 et L2"
+        ],
+        correct: [0],
+        rationale: "On pique dans l'espace L4-L5 ou L3-L4 pour cibler le cul-de-sac dural sans risquer de léser la moelle épinière qui s'arrête en L1-L2."
+    },
+    {
+        id: 21,
+        question: "À quel niveau anatomique se termine la moelle épinière chez l'adulte ?",
+        options: [
+            "En regard de L1 - L2",
+            "Au niveau du sacrum S2",
+            "En regard de T10 - T11",
+            "Au niveau du coccyx"
+        ],
+        correct: [0],
+        rationale: "La moelle épinière se termine en cône terminal au niveau de la première ou deuxième vertèbre lombaire (L1-L2)."
+    },
+    {
+        id: 22,
+        question: "Quelle position du patient permet d'élargir au maximum les espaces intervertébraux lors d'une ponction lombaire ?",
+        options: [
+            "Patient assis, dos courbé en avant ('faire le dos rond')",
+            "Patient en décubitus latéral, cuisses fléchies et tête fléchie en avant",
+            "Patient debout cambré en hyperextension",
+            "Patient en décubitus ventral strict"
+        ],
+        correct: [0, 1],
+        rationale: "L'enroulement du dos (assis penché ou couché en chien de fusil) écarte les épineuses vertébrales et ouvre l'accès intervertébral."
+    },
+    {
+        id: 23,
+        question: "Quel matériel spécifique est recommandé pour réaliser la ponction lombaire afin de réduire le risque de céphalées post-PL ?",
+        options: [
+            "Des aiguilles atraumatiques (à pointe mousse de type crayon)",
+            "Un cathéter veineux de calibre 14G",
+            "Une aiguille de ponction d'ascite de large diamètre",
+            "Une seringue de 50 mL montée sur trocart coupant"
+        ],
+        correct: [0],
+        rationale: "Les aiguilles atraumatiques écartent les fibres de la dure-mère sans les trancher, ce qui limite la persistance de la brèche méningée."
+    },
+    {
+        id: 24,
+        question: "Concernant l'acheminement des tubes de LCR après une ponction lombaire, quelle règle s'applique ?",
+        options: [
+            "Le prélèvement doit être transporté immédiatement au laboratoire à température ambiante",
+            "Le prélèvement doit être congelé à -20 °C avant analyse",
+            "Le prélèvement doit être laissé 12h à la lumière pour inactiver les virus",
+            "Le prélèvement est stocké dans le réfrigérateur du service jusqu'au passage des coursiers le lendemain"
+        ],
+        correct: [0],
+        rationale: "Le LCR est un prélèvement précieux et fragile qui doit être acheminé sans délai au laboratoire à température ambiante pour examen cytobactériologique d'urgence."
+    },
+    {
+        id: 25,
+        question: "À l'état physiologique normal, quel est l'aspect macroscopique du LCR ?",
+        options: [
+            "Eau de roche (liquide parfaitement limpide et incolore)",
+            "Jaune citrin transparent",
+            "Trouble et opalescent",
+            "Franchement lactescent ou purulent"
+        ],
+        correct: [0],
+        rationale: "Le LCR normal est limpide, incolore, décrit classiquement comme de l'« eau de roche »."
+    },
+    {
+        id: 26,
+        question: "Quelles anomalies biochimiques et cytologiques caractérisent le LCR d'une méningite bactérienne purulente aiguë ?",
+        options: [
+            "Hypercellularité avec prédominance de polynucléaires neutrophiles",
+            "Protéinorachie élevée (> 1 g/L)",
+            "Hypoglycorachie (glycorachie effondrée par rapport à la glycémie)",
+            "Élévation des lactates dans le LCR"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Une méningite bactérienne se traduit par un afflux de polynucléaires neutrophiles, une hyperprotéinorachie > 1 g/L, une hypoglycorachie (consommation du glucose par les bactéries) et une hausse des lactates."
+    },
+    {
+        id: 27,
+        question: "Pourquoi la glycorachie est-elle basse dans une méningite bactérienne ?",
+        options: [
+            "Les bactéries et les polynucléaires neutrophiles consomment activement le glucose",
+            "Le glucose est transformé en hormones thyroïdiennes dans les méninges",
+            "La boîte crânienne empêche toute entrée de glucides",
+            "Le pancréas arrête brutalement de sécréter de l'insuline"
+        ],
+        correct: [0],
+        rationale: "L'hypoglycorachie résulte de la consommation massive du glucose par les germes bactériens et les leucocytes activés, associée à un blocage du transport transmembranaire."
+    },
+    {
+        id: 28,
+        question: "Quel est le signe cardinal du syndrome post-ponction lombaire ?",
+        options: [
+            "Une céphalée typiquement orthostatique (survenant debout et soulagée par la position allongée)",
+            "Une paraplégie flasque permanente",
+            "Une éruption vésiculeuse péribuccale",
+            "Une dyspnée expiratoire aiguë"
+        ],
+        correct: [0],
+        rationale: "Le syndrome post-PL est dû à une fuite de LCR par la brèche durale créant une hypotension intracrânienne : les céphalées apparaissent debout et disparaissent couché."
+    },
+    {
+        id: 29,
+        question: "Quels symptômes peuvent accompagner les céphalées orthostatiques du syndrome post-PL ?",
+        options: [
+            "Acouphènes ou distorsion sonore",
+            "Nausées et vomissements",
+            "Vision floue ou diplopie",
+            "Érythème noueux des chevilles"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'hypotension intracrânienne tire sur les nerfs crâniens et les méninges, provoquant acouphènes, baisse d'audition, nausées et flou visuel."
+    },
+    {
+        id: 30,
+        question: "En cas d'échec du traitement médical (repos, hydratation, caféine), quelle technique d'anesthésie permet de colmater la brèche méningée ?",
+        options: [
+            "Le blood-patch (injection de sang autologue dans l'espace péridural)",
+            "Une lobectomie chirurgicale d'urgence",
+            "Une ponction sous-durale bilatérale",
+            "Une injection intrathécale de corticoïdes purs"
+        ],
+        correct: [0],
+        rationale: "Le blood-patch consiste à injecter quelques millilitres de sang du patient au contact de la brèche pour former un caillot qui bouche la fuite de LCR."
+    },
+    {
+        id: 31,
+        question: "Dans quel délai l'antibiothérapie intraveineuse doit-elle être débutée face à une suspicion forte de méningite bactérienne à l'hôpital ?",
+        options: [
+            "Dans l'heure qui suit l'arrivée du patient",
+            "Dans les 24 à 48 heures après la confirmation de l'antibiogramme",
+            "Uniquement après 5 jours d'observation clinique",
+            "Après un jeûne strict de 12 heures"
+        ],
+        correct: [0],
+        rationale: "L'antibiothérapie est une urgence thérapeutique absolue qui doit être instaurée dans l'heure suivant l'admission."
+    },
+    {
+        id: 32,
+        question: "Quelle molécule antibiotique injectable est recommandée en première intention dans le traitement probabiliste de la méningite bactérienne de l'adulte ?",
+        options: [
+            "Ceftriaxone ou Céfotaxime (C3G injectable à forte posologie)",
+            "Gentamicine en monothérapie",
+            "Métronidazole per os",
+            "Doxycycline en aérosol"
+        ],
+        correct: [0],
+        rationale: "Les Céphalosporines de 3e génération (Ceftriaxone, Céfotaxime) à forte dose ont une excellente pénétration méningée et couvrent les germes clés (méningocoque, pneumocoque)."
+    },
+    {
+        id: 33,
+        question: "Quelle mesure d'isolement et de précautions complémentaires s'impose dès la suspicion d'une méningite à méningocoque ?",
+        options: [
+            "Précautions complémentaires 'Gouttelettes'",
+            "Précautions complémentaires 'Air' avec chambre en pression négative",
+            "Précautions 'Contact' exclusives sans port de masque",
+            "Aucune précaution particulière au-delà des règles d'hôtellerie"
+        ],
+        correct: [0],
+        rationale: "Le méningocoque se transmet par les gouttelettes de salive et de sécrétions respiratoires : l'isolement 'Gouttelettes' en chambre individuelle est indispensable."
+    },
+    {
+        id: 34,
+        question: "Quelles sont les modalités pratiques de l'isolement gouttelettes pour une méningite à méningocoque ?",
+        options: [
+            "Chambre individuelle obligatoire",
+            "Port d'un masque chirurgical par toute personne pénétrant dans la chambre",
+            "Maintien des mesures pendant 24 heures après le début d'une antibiothérapie efficace",
+            "Interdiction formelle de désinfecter les mains avec de la SHA"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'isolement gouttelettes exige chambre seule, port d'un masque chirurgical et doit être maintenu pendant 24h après le début d'un traitement antibiotique efficace (qui stérilise le nasopharynx)."
+    },
+    {
+        id: 35,
+        question: "Quelle conduite s'applique vis-à-vis des personnes contacts proches ayant partagé l'entourage immédiat d'un patient atteint de méningite à méningocoque ?",
+        options: [
+            "Mise en place d'une antibioprophylaxie préventive (ex : Rifampicine)",
+            "Hospitalisation systématique en réanimation pour tous les contacts",
+            "Isolement de 6 mois sans traitement",
+            "Réalisation d'une ponction lombaire de dépistage chez tous les proches"
+        ],
+        correct: [0],
+        rationale: "L'entourage proche (contact intime en face-à-face dans les 10 jours) doit recevoir une chimioprophylaxie par antibiothérapie (Rifampicine) pour éradiquer le portage."
+    },
+    {
+        id: 36,
+        question: "Quelles vaccinations préventives obligatoires ou recommandées permettent de lutter efficacement contre les méningites bactériennes aiguës ?",
+        options: [
+            "Vaccin contre le Pneumocoque",
+            "Vaccins contre le Méningocoque (sérogroupe B et sérogroupes ACYW)",
+            "Vaccin contre Haemophilus influenzae de type b",
+            "Vaccin contre le tétanos uniquement"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les trois vaccins cardinaux protégeant contre les méningites bactériennes purulentes sont le Pneumocoque, le Méningocoque (B et ACYW) et l'Haemophilus influenzae b."
+    },
+    {
+        id: 37,
+        question: "Devant une suspicion clinique d'encéphalite herpétique (HSV), quelle attitude thérapeutique s'impose sans délai ?",
+        options: [
+            "Instauration immédiate d'un traitement antiviral par Aciclovir par voie intraveineuse",
+            "Attente des résultats de la PCR virale dans 5 jours avant d'agir",
+            "Prescription d'aspirine à forte dose",
+            "Mise en place d'un plâtre cervical"
+        ],
+        correct: [0],
+        rationale: "L'encéphalite herpétique est une urgence neurologique redoutable avec risque de nécrose temporale : l'Aciclovir IV doit être débuté immédiatement dès la suspicion."
+    },
+    {
+        id: 38,
+        question: "Qu'est-ce qu'un abcès cérébral sur le plan anatomopathologique ?",
+        options: [
+            "Une collection de pus collectée et circonscrite au sein du parenchyme cérébral",
+            "Une hémorragie méningée sous la pie-mère",
+            "Une infection virale superficielle de la peau du crâne",
+            "Un dysfonctionnement génétique des granulations arachnoïdiennes"
+        ],
+        correct: [0],
+        rationale: "L'abcès cérébral correspond à une formation de pus enkystée/circonscrite à l'intérieur même du parenchyme du cerveau."
+    },
+    {
+        id: 39,
+        question: "Quels sont les chiffres pronostiques clés des méningites bactériennes soulignés dans le cours du Dr Brebant ?",
+        options: [
+            "Décès chez environ 1 personne sur 10",
+            "Séquelles graves chez environ 1 personne sur 5",
+            "100 % de guérison sans aucune séquelle chez tous les malades",
+            "Mortalité nulle en cas de purpura fulminans non traité"
+        ],
+        correct: [0, 1],
+        rationale: "Le cours rappelle la gravité des méningites bactériennes : 1 décès sur 10 cas et 1 patient sur 5 gardant des séquelles sévères (surdité, retard, amputations)."
+    },
+    {
+        id: 40,
+        question: "Devant tout patient présentant une confusion mentale ou un trouble aigu du comportement aux urgences ou en service de soins, quel geste infirmier immédiat est indispensable ?",
+        options: [
+            "Prendre systématiquement la température corporelle et les constantes vitales complètes",
+            "Isoler le patient en contention sans prise de constantes",
+            "Lui donner immédiatement à boire de l'eau glacée",
+            "L'endormir avec des sédatifs avant tout examen"
+        ],
+        correct: [0],
+        rationale: "Tout trouble du comportement ou confusion d'apparition brutale impose la prise immédiate de la température et des paramètres vitaux pour éliminer un sepsis ou une méningo-encéphalite."
+    }
+];
+
+let currentIndex = 0;
+let userAnswers = {};
+let reviewMode = false;
+let displayedQuestions = [...questions];
+
+function init() {
+    renderGrid();
+    loadQuestion(currentIndex);
+    updateStats();
+}
+
+function getErrorQuestions() {
+    return questions.filter(q => {
+        const userAns = userAnswers[q.id];
+        if (!userAns) return false;
+        const sortedUser = [...userAns].sort().join(',');
+        const sortedCorr = [...q.correct].sort().join(',');
+        return sortedUser !== sortedCorr;
+    });
+}
+
+function renderGrid() {
+    const grid = document.getElementById('question-grid');
+    grid.innerHTML = '';
+    displayedQuestions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.textContent = q.id;
+        if (idx === currentIndex) item.classList.add('active');
+
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) {
+                item.classList.add('correct');
+            } else {
+                item.classList.add('incorrect');
+            }
+        }
+
+        item.onclick = () => {
+            currentIndex = idx;
+            loadQuestion(currentIndex);
+        };
+        grid.appendChild(item);
+    });
+}
+
+function loadQuestion(index) {
+    if (displayedQuestions.length === 0) {
+        document.getElementById('q-label').textContent = "Terminé";
+        document.getElementById('q-text').textContent = "Aucune erreur enregistrée ! Toutes vos réponses sont exactes.";
+        document.getElementById('options-container').innerHTML = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('validate-btn').disabled = true;
+        return;
+    }
+
+    const q = displayedQuestions[index];
+    document.getElementById('q-label').textContent = `Question ${q.id} sur 40 ${reviewMode ? '(Mode Erreurs)' : ''}`;
+    document.getElementById('q-text').textContent = q.question;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentSelections = userAnswers[q.id] || [];
+    const isAnswered = userAnswers[q.id] !== undefined;
+
+    q.options.forEach((optText, optIdx) => {
+        const optDiv = document.createElement('option-item');
+        optDiv.className = 'option-item';
+        if (currentSelections.includes(optIdx)) optDiv.classList.add('selected');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = currentSelections.includes(optIdx);
+
+        const label = document.createElement('span');
+        label.innerHTML = `<span class="opt-letter">${letters[optIdx]}.</span> ${optText}`;
+
+        optDiv.appendChild(chk);
+        optDiv.appendChild(label);
+
+        if (!isAnswered) {
+            optDiv.onclick = () => {
+                chk.checked = !chk.checked;
+                if (chk.checked) {
+                    optDiv.classList.add('selected');
+                } else {
+                    optDiv.classList.remove('selected');
+                }
+            };
+        } else {
+            optDiv.style.cursor = 'default';
+        }
+
+        optContainer.appendChild(optDiv);
+    });
+
+    const feedback = document.getElementById('feedback');
+    if (isAnswered) {
+        showFeedbackUI(q);
+        document.getElementById('validate-btn').disabled = true;
+    } else {
+        feedback.style.display = 'none';
+        feedback.className = 'feedback-box';
+        document.getElementById('validate-btn').disabled = false;
+    }
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').disabled = (index === displayedQuestions.length - 1);
+
+    renderGrid();
+}
+
+function validateCurrent() {
+    const q = displayedQuestions[currentIndex];
+    const optContainer = document.getElementById('options-container');
+    const checkboxes = optContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = [];
+    checkboxes.forEach((cb, idx) => {
+        if (cb.checked) selected.push(idx);
+    });
+
+    if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une proposition.");
+        return;
+    }
+
+    userAnswers[q.id] = selected;
+    showFeedbackUI(q);
+    document.getElementById('validate-btn').disabled = true;
+    updateStats();
+    renderGrid();
+}
+
+function showFeedbackUI(q) {
+    const feedback = document.getElementById('feedback');
+    const letters = ['A', 'B', 'C', 'D'];
+    const sortedUser = [...(userAnswers[q.id] || [])].sort().join(',');
+    const sortedCorr = [...q.correct].sort().join(',');
+    const isCorrect = (sortedUser === sortedCorr);
+
+    const corrLetters = q.correct.map(i => letters[i]).join(', ');
+
+    feedback.style.display = 'block';
+    if (isCorrect) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>Exact !</strong> (Réponse : ${corrLetters})<br>${q.rationale}`;
+    } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>Inexact ou incomplet.</strong> Bonne(s) réponse(s) : <strong>${corrLetters}</strong><br>${q.rationale}
+        <div class="feynman-tip">💡 <strong>Astuce Feynman :</strong> Reformulez en une phrase simple la raison clinique pour laquelle ${corrLetters} est la seule conduite valable.</div>`;
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion(currentIndex);
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < displayedQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+}
+
+function updateStats() {
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    document.getElementById('progress-indicator').textContent = `Question ${currentIndex + 1} / ${displayedQuestions.length}`;
+    document.getElementById('score-indicator').textContent = `Score : ${score} / ${totalAnswered} validées`;
+}
+
+function toggleFilterErrors() {
+    const btn = document.getElementById('filter-btn');
+    if (!reviewMode) {
+        const errors = getErrorQuestions();
+        if (errors.length === 0) {
+            alert("Aucune erreur détectée pour le moment ! Continuez l'épreuve.");
+            return;
+        }
+        reviewMode = true;
+        displayedQuestions = errors;
+        currentIndex = 0;
+        btn.textContent = "Retour épreuve";
+        btn.style.background = "var(--warning)";
+    } else {
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        btn.textContent = "Mode normal";
+        btn.style.background = "var(--primary)";
+    }
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function showResultsModal() {
+    const modal = document.getElementById('results-modal');
+    const circle = document.getElementById('modal-score-circle');
+    const title = document.getElementById('modal-title');
+    const text = document.getElementById('modal-feedback-text');
+
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    const percent = Math.round((score / questions.length) * 100);
+    circle.textContent = `${score} / 40`;
+
+    if (score >= 32) {
+        circle.className = 'score-circle score-pass';
+        title.textContent = "Excellent Niveau d'Acquisition (Niveau A)";
+        text.textContent = `Félicitations ! Vous validez ${percent} % du CM4. Les mécanismes méningés, les alertes de sepsis et la démarche d'urgence sont parfaitement acquis.`;
+    } else {
+        circle.className = 'score-circle score-fail';
+        title.textContent = "Risque d'Ajournement (Niveau B/C)";
+        text.textContent = `Score actuel : ${score}/40 (${percent} %). Des notions prioritaires (contre-indications de la PL, purpura fulminans, analyse du LCR ou isolement gouttelettes) doivent être impérativement consolidées.`;
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeResultsModal() {
+    document.getElementById('results-modal').style.display = 'none';
+}
+
+function startErrorReview() {
+    closeResultsModal();
+    const errors = getErrorQuestions();
+    if (errors.length === 0) {
+        alert("Félicitations, vous n'avez aucune erreur à réviser !");
+        return;
+    }
+    reviewMode = true;
+    displayedQuestions = errors;
+    currentIndex = 0;
+    document.getElementById('filter-btn').textContent = "Retour épreuve";
+    document.getElementById('filter-btn').style.background = "var(--warning)";
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function restartQuiz() {
+    if (confirm("Voulez-vous réinitialiser toutes vos réponses et recommencer ?")) {
+        userAnswers = {};
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        document.getElementById('filter-btn').textContent = "Mode normal";
+        document.getElementById('filter-btn').style.background = "var(--primary)";
+        closeResultsModal();
+        updateStats();
+        loadQuestion(0);
+        renderGrid();
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
