@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM UE 2.5 - Tuberculose (CM5 - Dre Goupil)</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .sub-header {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .grid-toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .grid-toggle-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .grid-item.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.08);
+            background: #e0f2fe;
+        }
+
+        .grid-item.correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border-color: #86efac;
+        }
+
+        .grid-item.incorrect {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-color: #fca5a5;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 0.85rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            pointer-events: none;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        button.action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        button.action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        button.secondary-btn:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        button.secondary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-bg);
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .feynman-tip {
+            margin-top: 0.6rem;
+            font-style: italic;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            padding-top: 0.6rem;
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2.2rem;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2rem auto;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-pass {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 4px solid var(--success);
+        }
+
+        .score-fail {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 4px solid var(--danger);
+        }
+
+        .filter-error-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IFSI S3 : UE 2.5 Processus Infectieux (CM5 - Dre Jeanne Goupil)</h1>
+        <div class="sub-header">La Tuberculose • Diagnostic, Quadrithérapie, Effets Indésirables, Isolement & Prévention (40 QCM)</div>
+        <div class="stats-bar">
+            <span id="progress-indicator">Question 1 / 40</span>
+            <span id="score-indicator">Score : 0 / 0</span>
+            <button class="grid-toggle-btn" onclick="toggleFilterErrors()" id="filter-btn">Mode normal</button>
+        </div>
+    </header>
+
+    <div class="question-grid" id="question-grid"></div>
+
+    <main class="card" id="quiz-card">
+        <div class="q-number" id="q-label">Question 1</div>
+        <div class="q-text" id="q-text">Chargement...</div>
+
+        <div class="options-list" id="options-container"></div>
+
+        <div class="btn-group">
+            <button class="action-btn" id="validate-btn" onclick="validateCurrent()">Valider ma réponse</button>
+            <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button class="secondary-btn" id="next-btn" onclick="nextQuestion()" disabled>Suivant</button>
+            <button class="secondary-btn" style="margin-left:auto" onclick="showResultsModal()">Bilan</button>
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+    </main>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-card">
+        <h2 id="modal-title">Bilan de l'Épreuve</h2>
+        <div class="score-circle" id="modal-score-circle">--</div>
+        <p id="modal-feedback-text" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <button class="filter-error-btn" id="modal-retry-errors" onclick="startErrorReview()">Travailler uniquement mes erreurs</button>
+            <button class="action-btn" onclick="restartQuiz()">Recommencer l'épreuve complète</button>
+            <button class="secondary-btn" onclick="closeResultsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        id: 1,
+        question: "Concernant l'agent pathogène responsable de la tuberculose humaine, quelles propositions sont exactes ?",
+        options: [
+            "Il appartient au complexe Mycobacterium tuberculosis",
+            "L'espèce très largement prédominante chez l'homme est Mycobacterium tuberculosis (bacille de Koch)",
+            "Mycobacterium bovis et Mycobacterium africanum peuvent plus rarement être responsables de la maladie",
+            "C'est une bactérie anaérobie stricte à division ultra-rapide (division toutes les 20 minutes)"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le bacille de Koch (Mycobacterium tuberculosis, rarement M. bovis ou M. africanum) est une mycobactérie à croissance lente et capacité de dormance, et non à division rapide."
+    },
+    {
+        id: 2,
+        question: "Quelles sont les caractéristiques microbiologiques propres aux mycobactéries du complexe tuberculosis ?",
+        options: [
+            "Ce sont des Bacilles Acido-Alcoolo-Résistants (BAAR)",
+            "Elles sont visualisées au microscope grâce à la coloration spécifique de Ziehl-Neelsen",
+            "Elles présentent une croissance lente en culture (plusieurs semaines en milieu solide)",
+            "Elles possèdent une capacité de dormance permettant une persistance prolongée dans l'organisme"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces caractéristiques sont fondamentales : BAAR colorés par Ziehl-Neelsen, temps de division très long (environ 20 heures), culture lente et persistance dormante."
+    },
+    {
+        id: 3,
+        question: "Concernant l'épidémiologie mondiale de la tuberculose selon le rapport OMS 2024 présenté dans le cours, quelles affirmations sont exactes ?",
+        options: [
+            "Environ un tiers (1/3) de l'humanité a déjà été en contact avec le bacille tuberculeux",
+            "En 2023, la tuberculose a causé environ 1,25 million de décès dans le monde",
+            "Sans traitement antibiotique adapté, la tuberculose maladie entraîne environ 50 % de décès",
+            "56 % des cas mondiaux sont concentrés dans 5 pays (Inde, Indonésie, Chine, Philippines, Pakistan)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces données épidémiologiques majeures sont issues du rapport OMS 2024 souligné par la Dre Goupil."
+    },
+    {
+        id: 4,
+        question: "Quel est le mode exclusif de transmission interhumaine de la tuberculose ?",
+        options: [
+            "La transmission aérienne par inhalation de microgouttelettes expectorées par un patient bacillifère",
+            "La transmission manuportée par contact cutané direct avec la sueur",
+            "La transmission vectorielle par piqûre de moustique Culex",
+            "La transmission alimentaire par l'eau du robinet chlorée"
+        ],
+        correct: [0],
+        rationale: "La tuberculose se transmet quasi exclusivement par voie aérienne par inhalation de microgouttelettes infectantes émises lors de la toux, de la parole ou des expectorations."
+    },
+    {
+        id: 5,
+        question: "De quels facteurs dépend principalement le risque de transmission de Mycobacterium tuberculosis lors d'un contact ?",
+        options: [
+            "De la concentration en bacilles dans les expectorations (risque maximal chez les patients bacillifères)",
+            "De la durée du contact en milieu confiné",
+            "De la proximité physique avec le sujet source",
+            "Du groupe sanguin ABO du sujet exposé"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La contagiosité dépend de la charge bacillaire (présence de BAAR à l'examen direct), de la durée d'exposition cumulée, du confinement et du manque d'aération."
+    },
+    {
+        id: 6,
+        question: "Quelles sont les 3 entités cliniques distinctes qui rythment l'histoire naturelle de la tuberculose humaine ?",
+        options: [
+            "La Primo-infection tuberculeuse",
+            "L'Infection Tuberculeuse Latente (ITL)",
+            "La Tuberculose Maladie",
+            "La phase d'éradication spontanée foudroyante"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'histoire naturelle se divise en 3 entités : Primo-infection (le premier contact), Infection Tuberculeuse Latente (portage quiescent sans symptôme ni contagiosité) et Tuberculose Maladie."
+    },
+    {
+        id: 7,
+        question: "Lors d'un contact infectant initial (primo-infection), quel est le devenir de la majorité des sujets exposés ?",
+        options: [
+            "Environ 2/3 des personnes exposées ne s'infectent pas",
+            "Environ 1/3 des personnes exposées développent une infection (primo-infection)",
+            "100 % des personnes en contact développent immédiatement une tuberculose maladie cavitaire",
+            "Tous les sujets infectés meurent en moins de 15 jours"
+        ],
+        correct: [0, 1],
+        rationale: "Seul 1/3 des sujets en contact s'infecte. Parmi eux, la vaste majorité contrôle l'infection et passe au stade d'Infection Tuberculeuse Latente (ITL) ; seuls 5 à 10 % évoluent vers la maladie."
+    },
+    {
+        id: 8,
+        question: "Concernant la Primo-Infection Tuberculeuse (PIT), quelles affirmations sont exactes ?",
+        options: [
+            "Elle est asymptomatique dans l'immense majorité des cas",
+            "Elle peut parfois se manifester par une fièvre modérée et une altération modérée de l'état général",
+            "Elle peut exceptionnellement s'accompagner d'un érythème noueux ou d'une pleurésie séro-fibrineuse",
+            "Elle est caractérisée radiologiquement à long terme par le 'complexe primaire' (adénopathie calcifiée + nodule pulmonaire calcifié)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La PIT est le plus souvent silencieuse. Ses formes symptomatiques rares donnent fièvre, érythème noueux et laissent la cicatrice radiologique du complexe primaire calcifié."
+    },
+    {
+        id: 9,
+        question: "Quels sont les facteurs de risque majeurs favorisant le passage d'une Infection Tuberculeuse Latente (ITL) à une Tuberculose Maladie active ?",
+        options: [
+            "L'immunodépression acquise (infection par le VIH/SIDA +++, biothérapies type anti-TNF-alpha)",
+            "La dénutrition",
+            "La précarité et les conditions socio-économiques défavorables (ex: sans-abri, milieu carcéral)",
+            "Être une personne migrante en provenance d'une zone de forte endémie tuberculeuse"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Tous ces facteurs favorisent la réactivation endogène du bacille dormant par rupture des défenses cellulaires à médiation T."
+    },
+    {
+        id: 10,
+        question: "Quelle est la proportion respective entre les formes pulmonaires et les formes extra-pulmonaires de la tuberculose maladie ?",
+        options: [
+            "Tuberculose pulmonaire : environ 80 % des cas",
+            "Tuberculose extra-pulmonaire : environ 20 % des cas",
+            "Tuberculose pulmonaire : moins de 5 % des cas",
+            "Toutes les tuberculoses sont obligatoirement pulmonaires et osseuses associées"
+        ],
+        correct: [0, 1],
+        rationale: "La forme pulmonaire représente environ 80 % des tuberculoses maladies, et les localisations extra-pulmonaires environ 20 %."
+    },
+    {
+        id: 11,
+        question: "Face à un patient présentant une localisation de tuberculose extra-pulmonaire, quel geste diagnostique réflexe est impératif ?",
+        options: [
+            "Rechercher systématiquement une atteinte pulmonaire associée (BK crachats + scanner thoracique)",
+            "Isoler le patient sans faire de radiographie",
+            "Considérer que les poumons sont obligatoirement indemnes",
+            "Réaliser une ablation chirurgicale immédiate de la rate"
+        ],
+        correct: [0],
+        rationale: "Toute forme extra-pulmonaire impose de rechercher une atteinte pulmonaire sous-jacente méconnue (BK crachats et TDM thoracique) car c'est elle qui conditionne la contagiosité."
+    },
+    {
+        id: 12,
+        question: "Quelles sont les localisations extra-pulmonaires possibles de la tuberculose maladie listées dans le cours ?",
+        options: [
+            "Ganglionnaire (adénite tuberculeuse / écrouelles)",
+            "Osseuse et ostéo-articulaire (ex: Mal de Pott)",
+            "Pleurale et péricardique",
+            "Neuroméningée, génito-urinaire et digestive"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le bacille de Koch peut disséminer par voie hématogène ou lymphatique vers les ganglions, les os, la plèvre, le péricarde, les méninges, les reins et le tube digestif."
+    },
+    {
+        id: 13,
+        question: "Qu'est-ce que le 'Mal de Pott' sur le plan anatomoclinique ?",
+        options: [
+            "Une spondylodiscite tuberculeuse (infection du disque intervertébral et des vertèbres adjacentes)",
+            "Une arthrite aiguë purulente de la cheville à staphylocoque doré",
+            "Une pneumonie lobaire foudroyante",
+            "Une parasitose hépatique bilatérale"
+        ],
+        correct: [0],
+        rationale: "Le mal de Pott est la spondylodiscite tuberculeuse (typiquement dorsale ou lombaire), pouvant entraîner des déformations rachidiennes et des compressions médullaires graves."
+    },
+    {
+        id: 14,
+        question: "Comment se dissémine une miliaire tuberculeuse dans l'organisme ?",
+        options: [
+            "Par dissémination hématogène massive (passage du bacille dans la circulation sanguine)",
+            "Par voie transcutanée exclusive",
+            "Par contiguïté salivaire superficielle",
+            "Par absorption exclusive d'aliments lactés pasteurisés"
+        ],
+        correct: [0],
+        rationale: "La miliaire tuberculeuse résulte d'un essaimage hématogène diffus du bacille de Koch, créant des micronodules disséminés de la taille d'un grain de mil dans les deux poumons et divers organes."
+    },
+    {
+        id: 15,
+        question: "Quels sont les signes cliniques cardinaux de la tuberculose pulmonaire commune de l'adulte ?",
+        options: [
+            "Toux chronique persistante et expectorations parfois hémoptoïques (hémoptysie)",
+            "Altération de l'état général avec amaigrissement franc et asthénie",
+            "Fièvre à prédominance vespérale (en fin de journée)",
+            "Sueurs nocturnes abondantes obligeant à changer de vêtements"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le tableau classique de tuberculose pulmonaire associe toux traînante, crachats hémoptoïques, AEG avec perte de poids, fébricule vespéral et sueurs nocturnes caractéristiques."
+    },
+    {
+        id: 16,
+        question: "Quelles anomalies radiologiques thoraciques (radiographie ou scanner) sont hautement évocatrices d'une tuberculose pulmonaire active ?",
+        options: [
+            "Lésions siégeant préférentiellement aux sommets pulmonaires (lobes supérieurs)",
+            "Présence de cavernes tuberculeuses (cavités excavées à paroi épaisse)",
+            "Infiltrats alvéolo-interstitiels et nodules micronodulaires",
+            "Absence totale d'image pulmonaire chez un patient pourtant très bacillifère"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La tuberculose pulmonaire affectionne les sommets (zones riches en oxygène pour ce bacille aérobie strict), formant des infiltrats, des nodules et des excavations caractéristiques (cavernes)."
+    },
+    {
+        id: 17,
+        question: "Comment est affirmé le diagnostic de certitude de la tuberculose maladie ?",
+        options: [
+            "Par la preuve bactériologique isolant Mycobacterium tuberculosis (examen direct et/ou culture)",
+            "Uniquement sur une simple numération formule sanguine montrant des plaquettes normales",
+            "Sur une radiographie pulmonaire normale sans aucun prélèvement",
+            "Par un interrogatoire téléphonique"
+        ],
+        correct: [0],
+        rationale: "Le diagnostic de certitude repose sur l'identification bactériologique du bacille de Koch (mise en évidence directe de BAAR et culture positive)."
+    },
+    {
+        id: 18,
+        question: "Quelles sont les modalités pratiques recommandées pour le recueil des expectorations (BK crachats) selon les recommandations 2025 SPILF-SPLF ?",
+        options: [
+            "Réalisation de 2 prélèvements d'expectorations le même jour",
+            "Volume minimal de 3 mL d'expectoration profonde (non salivaire)",
+            "Recueil lors d'un effort de toux le matin au réveil après rinçage bucco-dentaire",
+            "En cas d'impossibilité d'expectorer : expectorations induites par aérosol de sérum salé hypertonique avec kinésithérapeute"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Les recos 2025 préconisent 2 prélèvements de crachats profonds (≥ 3 mL) le même jour, au réveil ou après aérosol hypertonique induit."
+    },
+    {
+        id: 19,
+        question: "Si le patient est incapable d'expectorer malgré les aérosols induits, quels gestes invasifs permettent d'obtenir un prélèvement bronchique ?",
+        options: [
+            "Fibroscopie bronchique avec aspiration bronchique ou lavage broncho-alvéolaire (LBA)",
+            "Réalisation d'un BK crachat post-fibroscopie (souvent très riche en bacilles décollés)",
+            "Tubage gastrique matinal à jeun au lit du malade",
+            "Ponction lombaire systématique"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La fibroscopie bronchique avec aspiration/LBA et le recueil des sécrétions post-endoscopie (ou le tubage gastrique chez le patient incapable de cracher qui déglutit ses glaires) sont les alternatives de choix."
+    },
+    {
+        id: 20,
+        question: "Concernant les examens de laboratoire réalisés sur les prélèvements respiratoires de BK, quelles affirmations sont exactes ?",
+        options: [
+            "Examen microscopique direct avec coloration de Ziehl-Neelsen (ou fluorescence à l'auramine) pour rechercher des BAAR",
+            "Mise en culture systématique sur milieu solide (Löwenstein-Jensen) et milieu liquide pour mycobactéries",
+            "Test d'amplification génique par PCR rapide recommandé si l'examen direct est positif (permet confirmation et recherche précoce de résistance)",
+            "L'examen direct négatif élimine définitivement la tuberculose sans attendre la culture"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La culture reste le 'gold standard' car l'examen direct peut être faussement négatif si la charge bacillaire est modérée. La PCR apporte un diagnostic rapide et détecte la résistance à la rifampicine."
+    },
+    {
+        id: 21,
+        question: "Quelle est la composition de la quadrithérapie standard de première intention (attaque) de la tuberculose maladie ?",
+        options: [
+            "Isoniazide + Rifampicine + Éthambutol + Pyrazinamide (acronyme IREP ou RIPE)",
+            "Amoxicilline + Gentamicine + Métronidazole + Érythromycine",
+            "Ceftriaxone + Ciprofloxacine + Vancomycine + Fluconazole",
+            "Doxycycline + Azithromycine + Sulfaméthoxazole + Triméthoprime"
+        ],
+        correct: [0],
+        rationale: "Le traitement de base est la quadrithérapie associant Isoniazide (INH), Rifampicine (RIF), Éthambutol (EMB) et Pyrazinamide (PZA)."
+    },
+    {
+        id: 22,
+        question: "Quelles sont les posologies usuelles en mg/kg/j des quatre antituberculeux de première ligne chez l'adulte ?",
+        options: [
+            "Isoniazide : 5 mg/kg/j (associé à de la Vitamine B6)",
+            "Rifampicine : 10 mg/kg/j",
+            "Éthambutol : 20 mg/kg/j",
+            "Pyrazinamide : 25 mg/kg/j"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Les posologies standards en mg/kg/j sont : Isoniazide (5), Rifampicine (10), Éthambutol (20) et Pyrazinamide (25)."
+    },
+    {
+        id: 23,
+        question: "Quelle est la règle horaire impérative pour la prise des antituberculeux per os ?",
+        options: [
+            "Prise quotidienne le matin À JEUN en une seule prise (1 heure avant le repas ou 2 heures après)",
+            "Prise fractionnée au milieu de chaque repas gras",
+            "Prise uniquement au coucher avec un grand verre de jus de pamplemousse",
+            "Prise une seule fois par semaine"
+        ],
+        correct: [0],
+        rationale: "Les antituberculeux doivent être absorbés en une prise unique quotidienne le matin à jeun strict (au moins 1h avant ou 2h après le repas) pour garantir une biodisponibilité sanguine maximale."
+    },
+    {
+        id: 24,
+        question: "Quelle est la durée respective des deux phases du traitement standard de 6 mois de la tuberculose maladie sensible ?",
+        options: [
+            "Phase d'attaque (quadrithérapie IREP) pendant 2 mois, suivie d'une phase d'entretien (bithérapie IR) pendant 4 mois",
+            "Phase d'attaque de 1 semaine puis arrêt complet",
+            "Phase d'attaque de 5 mois puis entretien de 1 mois",
+            "Bithérapie exclusive pendant 24 mois"
+        ],
+        correct: [0],
+        rationale: "Le protocole classique de 6 mois comporte 2 mois de quadrithérapie (IREP) puis 4 mois de bithérapie Isoniazide + Rifampicine (IR)."
+    },
+    {
+        id: 25,
+        question: "Pourquoi est-il indispensable de traiter la tuberculose active pendant une durée totale minimale de 6 mois avec plusieurs molécules associées ?",
+        options: [
+            "La phase d'attaque de 2 mois vise à stériliser les lésions, obtenir la négativation des cultures et empêcher la sélection de mutants résistants",
+            "La phase d'entretien de 4 mois élimine les bacilles dormants persistants intracellulaires pour éviter les rechutes",
+            "L'utilisation d'une seule molécule (monothérapie) conduirait inévitablement à l'émergence d'une résistance bactérienne",
+            "Pour détruire la flore commensale de l'intestin"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La polychimiothérapie évite les mutants résistants dans une population bactérienne immense, et la longue durée élimine les bacilles à métabolisme ralenti protégés dans le caséum."
+    },
+    {
+        id: 26,
+        question: "Concernant la Rifampicine, quels sont ses effets indésirables majeurs et son conseil d'éducation soignante indispensable ?",
+        options: [
+            "Coloration orangée à rouge des liquides biologiques (urines, sueur, larmes, salive) totalement bénigne mais à prévenir",
+            "Puissant inducteur enzymatique hépatique : nombreuses interactions médicamenteuses majeures (inactivation des pilules contraceptives, anticoagulants, etc.)",
+            "Hépatotoxicité (surveillance des transaminases)",
+            "Réactions d'hypersensibilité (syndrome pseudogrippal, éosinophilie, insuffisance rénale)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La coloration orange des urines/larmes est la signature de la Rifampicine. Elle est très inductrice enzymatique (inefficacité des contraceptifs oraux) et hépatotoxique."
+    },
+    {
+        id: 27,
+        question: "Concernant l'Isoniazide (INH), quels sont ses effets indésirables principaux et comment prévient-on sa neurotoxicité ?",
+        options: [
+            "Risque d'hépatite médicamenteuse",
+            "Neuropathie périphérique (paresthésies des membres)",
+            "Supplémentation systématique en Vitamine B6 (pyridoxine) pour prévenir les atteintes nerveuses",
+            "Insuffisance coronarienne aiguë chez 100 % des malades"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'Isoniazide est hépatotoxique et neurotoxique par interférence avec le métabolisme de la pyridoxine : on lui associe systématiquement de la Vitamine B6."
+    },
+    {
+        id: 28,
+        question: "Quel effet indésirable biologique quasi constant du Pyrazinamide (PZA) peut servir de marqueur indirect de l'observance du traitement ?",
+        options: [
+            "L'hyperuricémie (élévation de l'acide urique dans le sang)",
+            "L'hypoglycémie sévère",
+            "L'hypercalcémie maligne",
+            "L'effondrement des globules rouges"
+        ],
+        correct: [0],
+        rationale: "Le Pyrazinamide bloque l'excrétion rénale de l'acide urique, provoquant une hyperuricémie quasi constante (parfois des crises de goutte) dont la présence témoigne de la bonne prise du médicament."
+    },
+    {
+        id: 29,
+        question: "Quel organe est la cible de la toxicité spécifique de l'Éthambutol et quel suivi impose-t-il ?",
+        options: [
+            "Atteinte ophtalmologique : Névrite Optique Rétrobulbaire (NORB)",
+            "Altération précoce de la vision des couleurs (dyschromatopsie rouge-vert) et rétrécissement du champ visuel",
+            "Consultation d'ophtalmologie initiale (J0) puis de contrôle (2e mois)",
+            "Surveillance exclusive par audiogramme hebdomadaire"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'Éthambutol est toxique pour le nerf optique (NORB), débutant par une perte de vision des couleurs et une baisse d'acuité visuelle, imposant un bilan ophtalmologique régulier."
+    },
+    {
+        id: 30,
+        question: "Quels examens biologiques hépatiques doivent être surveillés régulièrement chez un patient sous antituberculeux en raison de l'hépatotoxicité conjointe de la Rifampicine, de l'Isoniazide et du Pyrazinamide ?",
+        options: [
+            "Transaminases sériques (ALAT et ASAT) à J0, J15, J30 puis tous les mois",
+            "Créatininémie et NFS-plaquettes",
+            "Troponine Tc toutes les 4 heures",
+            "Amylasémie quotidienne"
+        ],
+        correct: [0, 1],
+        rationale: "La triple hépatotoxicité (INH + RIF + PZA) impose un suivi strict des transaminases (ALAT/ASAT) et de la fonction rénale à J0, J15, J30, puis mensuel."
+    },
+    {
+        id: 31,
+        question: "Quels sont les réflexes médico-sociaux et légaux obligatoires dès le diagnostic d'une tuberculose maladie posé en France ?",
+        options: [
+            "Notification et Déclaration Obligatoire (DO) sans délai à l'Agence Régionale de Santé (ARS)",
+            "Demande de prise en charge à 100 % au titre de l'Affection de Longue Durée (ALD 29)",
+            "Dépistage des sérologies virales associées (VIH, VHB, VHC) et glycémie à jeun avant traitement",
+            "Amende forfaitaire adressée au domicile du patient"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La tuberculose est à Déclaration Obligatoire (ARS pour enquête sanitaire), prise en charge à 100 % (ALD 29), et nécessite le bilan pré-thérapeutique (VIH, hépatites, glycémie, bilan hépatique et rénal)."
+    },
+    {
+        id: 32,
+        question: "Quelles sont les modalités de l'isolement respiratoire 'Air' (mesures maximales/renforcées) lors de l'hospitalisation d'une tuberculose pulmonaire bacillifère (recommandations 2025) ?",
+        options: [
+            "Chambre individuelle obligatoire avec porte fermée en permanence",
+            "Le soignant et les visiteurs portent un appareil de protection respiratoire de type masque FFP2 (mis avant d'entrer, retiré après la sortie)",
+            "Le patient porte un masque chirurgical (à usage médical) dès que quelqu'un entre dans sa chambre, et un masque FFP2 ou chirurgical s'il doit sortir",
+            "Renouvellement horaire d'air d'au moins 6 volumes/heure sans recyclage (chambre à pression négative en théorie) et aération régulière"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces mesures strictes d'isolement 'Air' protègent contre la dissémination des micro-aérosols de bacilles tuberculeux."
+    },
+    {
+        id: 33,
+        question: "Quand peut-on envisager la levée des mesures d'isolement respiratoire chez un patient traité pour une tuberculose pulmonaire bacillifère ?",
+        options: [
+            "Après au moins 15 jours de quadrithérapie bien conduite",
+            "Amélioration clinique franche (disparition de la fièvre et régression de la toux)",
+            "Preuve de négativation des frottis respiratoires (examen direct des crachats sans BAAR)",
+            "Dès la prise du premier comprimé le premier soir"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La contagiosité s'effondre en 15 jours de traitement efficace, mais la levée de l'isolement nécessite la confirmation de la négativation microscopique des crachats et l'absence de toux."
+    },
+    {
+        id: 34,
+        question: "Concernant les tuberculoses multirésistantes (MDR-TB), quelles anomalies génétiques bactériennes confèrent la résistance aux molécules majeures ?",
+        options: [
+            "Mutation du gène rpoB conférant la résistance à la RIFAMPICINE",
+            "Mutations des gènes katG ou inhA conférant la résistance à l'ISONIAZIDE",
+            "Mutation du récepteur à l'insuline du patient",
+            "Présence d'un virus à ARN dans la salive"
+        ],
+        correct: [0, 1],
+        rationale: "La résistance à la Rifampicine est codée par le gène rpoB, et la résistance à l'Isoniazide par les gènes katG/inhA, détectables en quelques heures par PCR génotypique."
+    },
+    {
+        id: 35,
+        question: "Quel nouveau protocole de deuxième ligne par voie orale (schéma BPaL) est désormais utilisé dans les formes de tuberculoses résistantes ?",
+        options: [
+            "Bédaquiline + Prétomanide + Linézolide",
+            "Pénicilline G + Ampicilline + Amoxicilline",
+            "Paracétamol + Ibuprofène + Aspirine",
+            "Trithérapie par Ténofovir + Emtricitabine"
+        ],
+        correct: [0],
+        rationale: "Le schéma oral moderne BPaL révolutionne la prise en charge des souches multirésistantes : Bédaquiline, Prétomanide et Linézolide."
+    },
+    {
+        id: 36,
+        question: "Dans le cadre de l'enquête autour d'un cas de tuberculose maladie, quelle structure sanitaire publique est chargée du dépistage et du suivi de l'entourage ?",
+        options: [
+            "Les Centres de Lutte AntiTuberculeuse (CLAT)",
+            "Les centres de transfusion sanguine",
+            "Le service des urgences psychiatriques",
+            "La chambre de commerce et d'industrie"
+        ],
+        correct: [0],
+        rationale: "Le CLAT est l'organisme pivot chargé de l'enquête de contact, du dépistage gratuit des sujets contacts et du traitement préventif des infections latentes."
+    },
+    {
+        id: 37,
+        question: "Comment se déroule le dépistage des sujets contacts proches ayant partagé l'air d'un patient atteint de tuberculose pulmonaire bacillifère ?",
+        options: [
+            "Réalisation immédiate d'une radiographie de thorax (pour éliminer d'emblée une tuberculose maladie méconnue)",
+            "Si la radiographie est normale : réalisation d'un test immunologique (Quantiféron® ou IDR) 8 semaines plus tard (délai de séroconversion immunitaire)",
+            "Prescription d'une chimiothérapie anticancéreuse immédiate",
+            "Aucune surveillance nécessaire si le contact a duré moins de 10 ans"
+        ],
+        correct: [0, 1],
+        rationale: "On élimine d'abord la maladie active (Radio thorax). Si normale, on recherche une infection latente par un test immunitaire 8 à 12 semaines après le dernier contage pour respecter le délai de réponse immunologique."
+    },
+    {
+        id: 38,
+        question: "Quels outils diagnostiques immunologiques permettent d'authentifier une Infection Tuberculeuse Latente (ITL) ?",
+        options: [
+            "L'Intra-Dermo-Réaction à la tuberculine (IDR)",
+            "Les tests sanguins de libération d'interféron gamma (IGRA : QuantiFERON-TB® ou T-SPOT.TB®)",
+            "La mise en culture d'un prélèvement de gorge sur boîte de Pétri standard en 24h",
+            "La mesure de la saturation pulsée en oxygène"
+        ],
+        correct: [0, 1],
+        rationale: "L'ITL se dépiste par l'IDR (mesure de l'induration cutanée en millimètres à 72h) ou par test sanguin IGRA (QuantiFERON, T-SPOT), qui mesurent la mémoire immune cellulaire dirigée contre les antigènes mycobactériens."
+    },
+    {
+        id: 39,
+        question: "Quelle est la limite diagnostique majeure des tests immunologiques (IDR et QuantiFERON®) ?",
+        options: [
+            "Leur sensibilité est diminuée en cas d'immunodépression sévère",
+            "Ils indiquent seulement que la personne a eu un contage préalable, sans préciser l'ancienneté ni l'évolutivité de l'infection",
+            "Ils n'ont AUCUN intérêt pour affirmer ou éliminer une tuberculose maladie active",
+            "Ils deviennent positifs en cas de simple consommation de sel de table"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Un QuantiFERON ou une IDR positif signe seulement un contact passé avec le bacille : il ne fait pas la différence entre une infection latente ancienne et une maladie évolutive."
+    },
+    {
+        id: 40,
+        question: "Concernant le vaccin antituberculeux BCG (Bacille de Calmette et Guérin), quelles affirmations sont exactes selon le cours ?",
+        options: [
+            "C'est un vaccin vivant atténué préparé à partir d'une souche de Mycobacterium bovis",
+            "Il est administré par voie intra-dermique stricte à la face postéro-externe du bras",
+            "Son efficacité est de 75 à 80 % pour protéger contre les formes graves et mortelles de l'enfant (méningites tuberculeuses et miliaires)",
+            "La vaccination est ciblée dès la première année de vie chez les enfants à risque élevé de tuberculose (Île-de-France, Guyane, Mayotte)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le BCG (vivant atténué, injection intradermique) protège efficacement le nourrisson contre les méningites tuberculeuses et les miliaires mortelles dans les zones de haute prévalence comme l'Île-de-France."
+    }
+];
+
+let currentIndex = 0;
+let userAnswers = {};
+let reviewMode = false;
+let displayedQuestions = [...questions];
+
+function init() {
+    renderGrid();
+    loadQuestion(currentIndex);
+    updateStats();
+}
+
+function getErrorQuestions() {
+    return questions.filter(q => {
+        const userAns = userAnswers[q.id];
+        if (!userAns) return false;
+        const sortedUser = [...userAns].sort().join(',');
+        const sortedCorr = [...q.correct].sort().join(',');
+        return sortedUser !== sortedCorr;
+    });
+}
+
+function renderGrid() {
+    const grid = document.getElementById('question-grid');
+    grid.innerHTML = '';
+    displayedQuestions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.textContent = q.id;
+        if (idx === currentIndex) item.classList.add('active');
+
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) {
+                item.classList.add('correct');
+            } else {
+                item.classList.add('incorrect');
+            }
+        }
+
+        item.onclick = () => {
+            currentIndex = idx;
+            loadQuestion(currentIndex);
+        };
+        grid.appendChild(item);
+    });
+}
+
+function loadQuestion(index) {
+    if (displayedQuestions.length === 0) {
+        document.getElementById('q-label').textContent = "Terminé";
+        document.getElementById('q-text').textContent = "Aucune erreur enregistrée ! Toutes vos réponses sont exactes.";
+        document.getElementById('options-container').innerHTML = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('validate-btn').disabled = true;
+        return;
+    }
+
+    const q = displayedQuestions[index];
+    document.getElementById('q-label').textContent = `Question ${q.id} sur 40 ${reviewMode ? '(Mode Erreurs)' : ''}`;
+    document.getElementById('q-text').textContent = q.question;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentSelections = userAnswers[q.id] || [];
+    const isAnswered = userAnswers[q.id] !== undefined;
+
+    q.options.forEach((optText, optIdx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'option-item';
+        if (currentSelections.includes(optIdx)) optDiv.classList.add('selected');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = currentSelections.includes(optIdx);
+
+        const label = document.createElement('span');
+        label.innerHTML = `<span class="opt-letter">${letters[optIdx]}.</span> ${optText}`;
+
+        optDiv.appendChild(chk);
+        optDiv.appendChild(label);
+
+        if (!isAnswered) {
+            optDiv.onclick = () => {
+                chk.checked = !chk.checked;
+                if (chk.checked) {
+                    optDiv.classList.add('selected');
+                } else {
+                    optDiv.classList.remove('selected');
+                }
+            };
+        } else {
+            optDiv.style.cursor = 'default';
+        }
+
+        optContainer.appendChild(optDiv);
+    });
+
+    const feedback = document.getElementById('feedback');
+    if (isAnswered) {
+        showFeedbackUI(q);
+        document.getElementById('validate-btn').disabled = true;
+    } else {
+        feedback.style.display = 'none';
+        feedback.className = 'feedback-box';
+        document.getElementById('validate-btn').disabled = false;
+    }
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').disabled = (index === displayedQuestions.length - 1);
+
+    renderGrid();
+}
+
+function validateCurrent() {
+    const q = displayedQuestions[currentIndex];
+    const optContainer = document.getElementById('options-container');
+    const checkboxes = optContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = [];
+    checkboxes.forEach((cb, idx) => {
+        if (cb.checked) selected.push(idx);
+    });
+
+    if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une proposition.");
+        return;
+    }
+
+    userAnswers[q.id] = selected;
+    showFeedbackUI(q);
+    document.getElementById('validate-btn').disabled = true;
+    updateStats();
+    renderGrid();
+}
+
+function showFeedbackUI(q) {
+    const feedback = document.getElementById('feedback');
+    const letters = ['A', 'B', 'C', 'D'];
+    const sortedUser = [...(userAnswers[q.id] || [])].sort().join(',');
+    const sortedCorr = [...q.correct].sort().join(',');
+    const isCorrect = (sortedUser === sortedCorr);
+
+    const corrLetters = q.correct.map(i => letters[i]).join(', ');
+
+    feedback.style.display = 'block';
+    if (isCorrect) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>Exact !</strong> (Réponse : ${corrLetters})<br>${q.rationale}`;
+    } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>Inexact ou incomplet.</strong> Bonne(s) réponse(s) : <strong>${corrLetters}</strong><br>${q.rationale}
+        <div class="feynman-tip">💡 <strong>Astuce Feynman :</strong> Expliquez simplement pourquoi ${corrLetters} est la seule conduite ou règle thérapeutique exacte.</div>`;
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion(currentIndex);
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < displayedQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+}
+
+function updateStats() {
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    document.getElementById('progress-indicator').textContent = `Question ${currentIndex + 1} / ${displayedQuestions.length}`;
+    document.getElementById('score-indicator').textContent = `Score : ${score} / ${totalAnswered} validées`;
+}
+
+function toggleFilterErrors() {
+    const btn = document.getElementById('filter-btn');
+    if (!reviewMode) {
+        const errors = getErrorQuestions();
+        if (errors.length === 0) {
+            alert("Aucune erreur détectée pour le moment ! Continuez l'épreuve.");
+            return;
+        }
+        reviewMode = true;
+        displayedQuestions = errors;
+        currentIndex = 0;
+        btn.textContent = "Retour épreuve";
+        btn.style.background = "var(--warning)";
+    } else {
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        btn.textContent = "Mode normal";
+        btn.style.background = "var(--primary)";
+    }
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function showResultsModal() {
+    const modal = document.getElementById('results-modal');
+    const circle = document.getElementById('modal-score-circle');
+    const title = document.getElementById('modal-title');
+    const text = document.getElementById('modal-feedback-text');
+
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    const percent = Math.round((score / questions.length) * 100);
+    circle.textContent = `${score} / 40`;
+
+    if (score >= 32) {
+        circle.className = 'score-circle score-pass';
+        title.textContent = "Validation Réussie (Niveau A)";
+        text.textContent = `Félicitations ! Vous validez ${percent} % du CM5 Tuberculose. Les règles de la quadrithérapie, les effets secondaires (coloration des urines, NORB, hépatotoxicité), l'isolement Air et les protocoles de dépistage sont parfaitement maîtrisés.`;
+    } else {
+        circle.className = 'score-circle score-fail';
+        title.textContent = "Risque d'Ajournement (Niveau B/C)";
+        text.textContent = `Score actuel : ${score}/40 (${percent} %). Des notions prioritaires (posologies en mg/kg/j, surveillance ophtalmo sous Éthambutol, bilan pré-thérapeutique obligatoire, ou enquête CLAT) doivent être impérativement consolidées.`;
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeResultsModal() {
+    document.getElementById('results-modal').style.display = 'none';
+}
+
+function startErrorReview() {
+    closeResultsModal();
+    const errors = getErrorQuestions();
+    if (errors.length === 0) {
+        alert("Félicitations, vous n'avez aucune erreur à réviser !");
+        return;
+    }
+    reviewMode = true;
+    displayedQuestions = errors;
+    currentIndex = 0;
+    document.getElementById('filter-btn').textContent = "Retour épreuve";
+    document.getElementById('filter-btn').style.background = "var(--warning)";
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function restartQuiz() {
+    if (confirm("Voulez-vous réinitialiser toutes vos réponses et recommencer ?")) {
+        userAnswers = {};
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        document.getElementById('filter-btn').textContent = "Mode normal";
+        document.getElementById('filter-btn').style.background = "var(--primary)";
+        closeResultsModal();
+        updateStats();
+        loadQuestion(0);
+        renderGrid();
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
