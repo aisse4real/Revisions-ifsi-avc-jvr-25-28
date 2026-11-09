@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM UE 2.5 - Infections ORL et Respiratoires (CM5 - Dre Goupil)</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .sub-header {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .grid-toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .grid-toggle-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .grid-item.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.08);
+            background: #e0f2fe;
+        }
+
+        .grid-item.correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border-color: #86efac;
+        }
+
+        .grid-item.incorrect {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-color: #fca5a5;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 0.85rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            pointer-events: none;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        button.action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        button.action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        button.secondary-btn:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        button.secondary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-bg);
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .feynman-tip {
+            margin-top: 0.6rem;
+            font-style: italic;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            padding-top: 0.6rem;
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2.2rem;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2rem auto;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-pass {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 4px solid var(--success);
+        }
+
+        .score-fail {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 4px solid var(--danger);
+        }
+
+        .filter-error-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IFSI S3 : UE 2.5 Processus Infectieux (CM5 - Dre Jeanne Goupil)</h1>
+        <div class="sub-header">Infections ORL & Respiratoires • Diagnostic, Bactériologie, Scores, Traitement & Prévention (40 QCM)</div>
+        <div class="stats-bar">
+            <span id="progress-indicator">Question 1 / 40</span>
+            <span id="score-indicator">Score : 0 / 0</span>
+            <button class="grid-toggle-btn" onclick="toggleFilterErrors()" id="filter-btn">Mode normal</button>
+        </div>
+    </header>
+
+    <div class="question-grid" id="question-grid"></div>
+
+    <main class="card" id="quiz-card">
+        <div class="q-number" id="q-label">Question 1</div>
+        <div class="q-text" id="q-text">Chargement...</div>
+
+        <div class="options-list" id="options-container"></div>
+
+        <div class="btn-group">
+            <button class="action-btn" id="validate-btn" onclick="validateCurrent()">Valider ma réponse</button>
+            <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button class="secondary-btn" id="next-btn" onclick="nextQuestion()" disabled>Suivant</button>
+            <button class="secondary-btn" style="margin-left:auto" onclick="showResultsModal()">Bilan</button>
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+    </main>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-card">
+        <h2 id="modal-title">Bilan de l'Épreuve</h2>
+        <div class="score-circle" id="modal-score-circle">--</div>
+        <p id="modal-feedback-text" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <button class="filter-error-btn" id="modal-retry-errors" onclick="startErrorReview()">Travailler uniquement mes erreurs</button>
+            <button class="action-btn" onclick="restartQuiz()">Recommencer l'épreuve complète</button>
+            <button class="secondary-btn" onclick="closeResultsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        id: 1,
+        question: "Sur le plan anatomique, quelle structure sert de frontière délimitant les infections respiratoires hautes des infections respiratoires basses ?",
+        options: [
+            "La glotte",
+            "La carène trachéale",
+            "Le diaphragme",
+            "Les amygdales palatines"
+        ],
+        correct: [0],
+        rationale: "La glotte sépare les voies aériennes supérieures (infections respiratoires hautes sus-glottiques) des voies aériennes inférieures (infections sous-glottiques et pulmonaires)."
+    },
+    {
+        id: 2,
+        question: "Quelles pathologies infectieuses appartiennent aux infections respiratoires hautes selon le cours ?",
+        options: [
+            "Angines et rhinopharyngites",
+            "Sinusites et otites",
+            "Laryngites et trachéites",
+            "Bronchiolites et pneumopathies franches lobaires aiguës"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les infections hautes comprennent les angines, sinusites, otites, rhinopharyngites, laryngites et trachéites. Bronchiolites et pneumopathies sont des infections respiratoires basses."
+    },
+    {
+        id: 3,
+        question: "Concernant l'étiologie générale des angines aiguës, quelles propositions sont exactes ?",
+        options: [
+            "L'origine est virale dans environ 80 % des cas",
+            "La principale bactérie en cause est le Streptocoque bêta-hémolytique du groupe A (SBHA)",
+            "L'angine à SBHA touche principalement les enfants de 5 à 15 ans",
+            "L'angine à SBHA est très fréquente chez le nourrisson de moins de 1 an"
+        ],
+        correct: [0, 1, 2],
+        rationale: "80 % des angines sont virales. La bactérie reine est le SBHA (Streptococcus pyogenes), typique des 5-15 ans. Il n'y a PAS d'infection à SBHA avant l'âge de 3 ans."
+    },
+    {
+        id: 4,
+        question: "Quels sont les 4 grands aspects cliniques d'angines décrits dans le cours ?",
+        options: [
+            "Angines érythémateuses ou érythémato-pultacées",
+            "Angines pseudomembraneuses",
+            "Angines vésiculeuses",
+            "Angines ulcéreuses et ulcéro-nécrotiques"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Les 4 formes cliniques sont : érythémato-pultacées (~80 %), pseudomembraneuses (MNI, diphtérie), vésiculeuses (herpès, coxsackie) et ulcéro-nécrotiques (Vincent, chancre)."
+    },
+    {
+        id: 5,
+        question: "Devant une angine pseudomembraneuse avec enduit nacré ou grisâtre sur les amygdales, quelles étiologies infectieuses doivent être évoquées ?",
+        options: [
+            "Mononucléose Infectieuse (MNI / virus EBV)",
+            "Diphtérie (Corynebacterium diphtheriae)",
+            "Angine de Vincent",
+            "Rhinovirus"
+        ],
+        correct: [0, 1],
+        rationale: "L'angine pseudomembraneuse évoque la MNI (Epstein-Barr Virus) ou la diphtérie (Corynebacterium diphtheriae, prévenue par le vaccin DTPolio)."
+    },
+    {
+        id: 6,
+        question: "Quelles sont les caractéristiques d'une angine vésiculeuse ?",
+        options: [
+            "Elle est causée par le virus Coxsackie (herpangine) ou les virus Herpes Simplex",
+            "Présence de petites vésicules pharyngées multiples",
+            "Lésions particulièrement douloureuses à la déglutition",
+            "Indication formelle à une antibiothérapie par Amoxicilline 14 jours"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'angine vésiculeuse (herpangine/herpès) est d'origine virale, parsemée de vésicules très algiques. Elle ne nécessite aucun antibiotique."
+    },
+    {
+        id: 7,
+        question: "Concernant les angines ulcéreuses et ulcéro-nécrotiques, quelles caractéristiques correspondent à l'angine de Vincent et au chancre syphilitique ?",
+        options: [
+            "L'angine de Vincent associe Fusobacterium necrophorum et Borrelia vincentii",
+            "L'angine de Vincent est favorisée par un mauvais état bucco-dentaire",
+            "Le chancre syphilitique de l'amygdale est typiquement INDOLORE",
+            "L'angine de Vincent est toujours strictement bilatérale et symétrique sans haleine fétide"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'angine de Vincent (anaérobies + spirochète) survient sur terrain bucco-dentaire dégradé. Le chancre d'inoculation syphilitique est caractéristique par son indolence."
+    },
+    {
+        id: 8,
+        question: "Quels critères cliniques composent le score de Mac Isaac pour orienter la recherche d'une angine à Streptocoque ?",
+        options: [
+            "Fièvre > 38 °C (+1 point)",
+            "Absence de toux (+1 point)",
+            "Adénopathies cervicales antérieures sensibles (+1 point)",
+            "Atteinte amygdalienne avec exsudat ou hypertrophie (+1 point) et modulation par l'âge (15-44 ans = 0 pt, ≥ 45 ans = -1 pt)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Score de Mac Isaac : Fièvre > 38°C (+1), Pas de toux (+1), Adénopathies sensibles (+1), Exsudat/grosse amygdale (+1), Âge : 15-44 ans (0 pt), ≥ 45 ans (-1 pt)."
+    },
+    {
+        id: 9,
+        question: "Chez l'adulte et chez l'enfant, quelles sont les indications de réalisation du Test de Diagnostic Rapide (TDR / Streptotest®) de l'angine ?",
+        options: [
+            "Chez l'enfant de plus de 3 ans de manière systématique",
+            "Chez l'adulte uniquement si le score de Mac Isaac est ≥ 2",
+            "Chez le nourrisson de moins de 3 ans de façon systématique",
+            "Chez tout patient adulte avec toux productive sans fièvre"
+        ],
+        correct: [0, 1],
+        rationale: "Le TDR se fait chez l'enfant dès 3 ans (pas de SBHA avant 3 ans) et chez l'adulte seulement si le score de Mac Isaac est ≥ 2."
+    },
+    {
+        id: 10,
+        question: "Quel est l'intérêt médical et épidémiologique majeur du TDR du streptocoque ?",
+        options: [
+            "Excellente Valeur Prédictive Négative (élimine une cause streptococcique dans 95 % des cas)",
+            "Évite les prescriptions inutiles d'antibiotiques en cas d'angine virale",
+            "Diminue l'émergence des résistances bactériennes et les coûts de santé",
+            "Permet d'isoler le virus de la grippe par culture cellulaire immédiate"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Avec 95 % de VPN, un TDR négatif exclut le streptocoque et évite les antibiotiques inutiles, préservant l'écosystème microbien."
+    },
+    {
+        id: 11,
+        question: "Quel est le traitement antibiotique de première intention d'une angine à Streptocoque bêta-hémolytique du groupe A (SBHA) ?",
+        options: [
+            "AMOXICILLINE pendant une durée de 6 jours",
+            "Ciprofloxacine pendant 14 jours",
+            "Gentamicine intraveineuse pendant 3 semaines",
+            "Association Amoxicilline + AINS à forte dose"
+        ],
+        correct: [0],
+        rationale: "Le traitement de référence de l'angine à SBHA est l'Amoxicilline orale pendant 6 jours."
+    },
+    {
+        id: 12,
+        question: "Quelle contre-indication médicamenteuse formelle est soulignée dans le cours lors de la prise en charge d'une angine ?",
+        options: [
+            "PAS D'AINS (Anti-Inflammatoires Non Stéroïdiens) et PAS DE CORTICOÏDES",
+            "Interdiction formelle de prescrire du paracétamol",
+            "Interdiction formelle de boire de l'eau tiède",
+            "Contre-indication absolue à toute vitaminothérapie"
+        ],
+        correct: [0],
+        rationale: "Règle capitale : PAS D'AINS ni de corticoïdes dans l'angine, car ils favorisent l'extension suppurée grave (phlegmon péri-amygdalien, cellulite cervicale extensive)."
+    },
+    {
+        id: 13,
+        question: "Quelles complications locales et générales peuvent survenir au décours d'une angine à SBHA non traitée ?",
+        options: [
+            "Complications locales : Phlegmon péri-amygdalien, abcès rétropharyngé, cellulite cervicale",
+            "Complications toxiniques : Scarlatine et choc toxinique streptococcique",
+            "Complications post-streptococciques immunitaires : Rhumatisme Articulaire Aigu (RAA) et Glomérulonéphrite aiguë (GNA)",
+            "Ulcère gastroduodénal hémorragique immédiat"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le SBHA peut entraîner des suppurations locales (phlegmon), des manifestations toxiniques (scarlatine) et des séquelles auto-immunes graves (RAA, glomérulonéphrite post-streptococcique)."
+    },
+    {
+        id: 14,
+        question: "Concernant la rhinopharyngite aiguë (rhume banal), quelles affirmations sont exactes ?",
+        options: [
+            "Elle est d'origine exclusivement VIRALE",
+            "Elle touche particulièrement l'enfant entre 6 mois et 7 ans (structure son système immunitaire)",
+            "Elle guérit spontanément sous traitement symptomatique seul (lavages de nez au sérum phy, antipyrétiques)",
+            "Elle impose une antibiothérapie par Amoxicilline dès le 1er jour pour éviter les complications"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La rhinopharyngite est strictement virale et bénigne. Le traitement repose uniquement sur la désobstruction rhinopharyngée et les antipyrétiques. Aucun antibiotique."
+    },
+    {
+        id: 15,
+        question: "Quelles sont les deux complications bactériennes surajoutées les plus fréquentes de la rhinopharyngite chez l'enfant ?",
+        options: [
+            "Otite Moyenne Aiguë (OMA) purulente chez le jeune enfant",
+            "Rhinosinusite maxillaire chez l'enfant de plus de 3 ans",
+            "Abcès du foie",
+            "Pleurésie purulente bilatérale immédiate"
+        ],
+        correct: [0, 1],
+        rationale: "Dans environ 10 % des cas, la rhinopharyngite se complique d'une surinfection bactérienne : OMA purulente chez le nourrisson ou sinusite maxillaire après 3 ans."
+    },
+    {
+        id: 16,
+        question: "Quels sont les 4 groupes de sinus de la face entourant la cavité nasale ?",
+        options: [
+            "Sinus maxillaires et frontaux",
+            "Sinus ethmoïdaux et sphénoïdaux",
+            "Sinus caverneux et coronaires",
+            "Sinus occipitaux et temporaux"
+        ],
+        correct: [0, 1],
+        rationale: "Les cavités sinusiennes paires sont : maxillaires, frontales, ethmoïdales et sphénoïdales."
+    },
+    {
+        id: 17,
+        question: "Quels arguments cliniques orientent vers une origine bactérienne au cours d'une sinusite maxillaire aiguë chez l'adulte ?",
+        options: [
+            "Persistance ou augmentation unilatérale des douleurs au-delà de 48 heures",
+            "Douleur infra-orbitaire unilatérale majorée par l'antéflexion (tête penchée en avant)",
+            "Pic de douleur en fin d'après-midi ou la nuit",
+            "Augmentation de la rhinorrhée et de sa purulence"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La sinusite maxillaire bactérienne (pneumocoque, haemophilus) se caractérise par une douleur sous-orbitaire unilatérale, pulsatile, augmentée tête en bas, avec rhinorrhée purulente persistante > 48h."
+    },
+    {
+        id: 18,
+        question: "En cas de confirmation d'une sinusite maxillaire aiguë bactérienne nécessitant des antibiotiques, quelle est la molécule et la durée recommandée ?",
+        options: [
+            "AMOXICILLINE pendant 7 jours",
+            "Gentamicine pendant 21 jours",
+            "Rifampicine pendant 6 mois",
+            "Doxycycline en dose unique"
+        ],
+        correct: [0],
+        rationale: "L'antibiothérapie de référence d'une sinusite maxillaire bactérienne est l'Amoxicilline à la dose usuelle pendant 7 jours."
+    },
+    {
+        id: 19,
+        question: "Quelles caractéristiques cliniques alertent sur une sinusite sphénoïdale ou une sinusite frontale ?",
+        options: [
+            "Sinusite sphénoïdale : céphalées rétro-orbitaires profondes, mouchage postérieur (vertébro-pharyngé) et risque de diffusion méningée/neurologique",
+            "Sinusite frontale : douleur sus-orbitaire unilatérale irradiant vers le crâne avec rhinorrhée purulente",
+            "Sinusite ethmoïdale chez l'enfant : œdème palpébral de l'angle interne de l'œil et céphalées rétro-orbitaires",
+            "Toutes les sinusites sphénoïdales guérissent sans danger en 24h sans aucun suivi"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les sinusites non maxillaires (sphénoïdale, frontale, ethmoïdale) sont des urgences en raison de la proximité immédiate de la dure-mère et du cerveau (risque d'empyème et de méningite)."
+    },
+    {
+        id: 20,
+        question: "Concernant l'anatomie de l'oreille, quels éléments composent l'oreille moyenne ?",
+        options: [
+            "Le tympan",
+            "La chaîne des trois osselets : marteau (malleus), enclume (incus) et étrier (stapes)",
+            "La trompe d'Eustache et les deux muscles (stapédien et du tympan)",
+            "La cochlée, le vestibule et les canaux semi-circulaires"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'oreille moyenne comprend la caisse tympanique, le tympan, les osselets (marteau, enclume, étrier) et la trompe d'Eustache. La cochlée et le vestibule forment l'oreille interne."
+    },
+    {
+        id: 21,
+        question: "À l'otoscopie d'un tympan normal, quel repère lumineux caractéristique doit être visualisé ?",
+        options: [
+            "Le triangle lumineux (situé dans le quadrant antéro-inférieur, vers 4h ou 5h sur le tympan droit)",
+            "Une opacité blanchâtre circulaire totale",
+            "Un écoulement de pus vert sous pression",
+            "Une perforation centrale battante"
+        ],
+        correct: [0],
+        rationale: "Le tympan normal est translucide, gris perle, avec visualisation du manche du marteau et du triangle lumineux dans le quadrant antéro-inférieur."
+    },
+    {
+        id: 22,
+        question: "Quelles bactéries sont les principales responsables d'Otite Moyenne Aiguë (OMA) purulente de l'enfant ?",
+        options: [
+            "Haemophilus influenzae",
+            "Streptococcus pneumoniae (pneumocoque, associé à plus de risque de complications)",
+            "Branhamella (Moraxella) catarrhalis",
+            "Mycobacterium leprae"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le trio bactérien de l'OMA est : Haemophilus influenzae (souvent associé à une conjonctivite), Pneumocoque (fièvre et douleurs intenses) et Moraxella catarrhalis."
+    },
+    {
+        id: 23,
+        question: "Quelle est la différence fondamentale entre une OMA congestive et une OMA purulente à l'examen otoscopique ?",
+        options: [
+            "OMA congestive : simple rougeur du tympan avec conservation du triangle lumineux et AUCUN bombement (pas d'antibiotique)",
+            "OMA purulente : épanchement rétro-tympanique avec opacité, disparition des reliefs et bombement tympanique",
+            "L'OMA congestive impose une paracentèse chirurgicale en urgence",
+            "L'OMA purulente ne donne jamais de douleur ni de fièvre"
+        ],
+        correct: [0, 1],
+        rationale: "L'OMA congestive est une rougeur sans pus (pas d'antibiotique). L'OMA purulente présente un épanchement avec disparition du triangle lumineux et bombement."
+    },
+    {
+        id: 24,
+        question: "Dans quelles circonstances une OMA purulente nécessite-t-elle formellement la prescription d'une antibiothérapie ?",
+        options: [
+            "Chez tout enfant âgé de moins de 2 ans (≤ 2 ans)",
+            "Chez l'enfant de plus de 2 ans présentant une symptomatologie bruyante (fièvre élevée, otalgie vive)",
+            "Dans tous les cas d'OMA congestive pure sans fièvre",
+            "Chez l'adulte sain présentant une simple rougeur tympanique sans douleur"
+        ],
+        correct: [0, 1],
+        rationale: "L'antibiothérapie de l'OMA purulente est obligatoire chez l'enfant ≤ 2 ans, et réservée aux formes bruyantes ou après réévaluation à 48h chez le plus de 2 ans."
+    },
+    {
+        id: 25,
+        question: "Quel est le traitement antibiotique de première intention d'une OMA purulente, et que faire en cas de syndrome otite-conjonctivite associé ?",
+        options: [
+            "Première intention : AMOXICILLINE (8 jours chez l'enfant < 2 ans, 5 jours après 2 ans)",
+            "En cas d'échec ou de conjonctivite purulente associée (évoquant Haemophilus sécréteur de bêta-lactamase) : AMOXICILLINE + ACIDE CLAVULANIQUE",
+            "En cas d'allergie vraie : C3G orale (Cefpodoxime)",
+            "Gouttes auriculaires antibiotiques systématiques sur un tympan fermé non perforé"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Amoxicilline en 1re intention. Si conjonctivite associée, on suspecte Haemophilus producteur de pénicillinase : Augmentin. Pas de gouttes auriculaires si le tympan n'est pas perforé."
+    },
+    {
+        id: 26,
+        question: "Quelles sont les complications graves redoutées d'une OMA purulente bactérienne ?",
+        options: [
+            "Mastoïdite aiguë (inflammation avec tuméfaction rétro-auriculaire et décollement du pavillon)",
+            "Méningite purulente",
+            "Passage à l'otite chronique avec hypoacousie",
+            "Cirrhose hépatique atrophique"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'infection de l'oreille moyenne peut fuser vers l'os mastoïde (mastoïdite), franchir les méninges (méningite) ou détruire les osselets (otite chronique)."
+    },
+    {
+        id: 27,
+        question: "Concernant l'otite externe, quelles caractéristiques la distinguent de l'otite moyenne aiguë ?",
+        options: [
+            "C'est une infection du conduit auditif externe, favorisée par l'eau (baignade), l'eczéma ou les corps étrangers (coton-tige)",
+            "Elle est provoquée par Pseudomonas aeruginosa ou Staphylococcus aureus",
+            "Elle associe une otalgie très vive (douleur à la traction du pavillon et à la pression du tragus) SANS fièvre (apyrexie)",
+            "À l'otoscopie : conduit inflammatoire très rétréci, mais tympan normal visible"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "L'otite externe est une dermo-épidermite du conduit (pyo, staph) liée aux baignades. Elle est apyrétique, hyperalgique au tragus, et le tympan est intact."
+    },
+    {
+        id: 28,
+        question: "Qu'est-ce que l'otite externe maligne (nécrosante) et sur quel terrain particulier survient-elle ?",
+        options: [
+            "Une ostéite grave de la base du crâne provoquée par Pseudomonas aeruginosa",
+            "Elle survient chez le patient âgé, diabétique déséquilibré ou immunodéprimé",
+            "Elle peut se compliquer de paralysie faciale périphérique",
+            "Elle guérit en 48 heures avec un simple lavage d'oreille à l'eau du robinet"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'otite externe maligne est une infection nécrosante à pyo chez le diabétique âgé, diffusant à l'os temporal avec risque d'atteinte du nerf facial (VII) ; elle impose une antibiothérapie IV prolongée."
+    },
+    {
+        id: 29,
+        question: "Concernant l'épiglottite aiguë chez le jeune enfant (3 à 7 ans), pourquoi s'agit-il d'une urgence vitale absolue ?",
+        options: [
+            "Elle réalise la forme la plus grave de dyspnée laryngée avec risque d'asphyxie brutale par obstruction",
+            "Elle se manifeste par une fièvre élevée, une détresse respiratoire et une hypersialorrhée (l'enfant ne peut plus avaler sa salive)",
+            "Historiquement due à Haemophilus influenzae de type b (devenue rare grâce au vaccin Hib)",
+            "Prise en charge impérative en réanimation pédiatrique avec antibiothérapie C3G IV"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "L'épiglottite aiguë (fièvre, position assise penchée en avant, bave/hypersialorrhée, stridor) est une urgence d'asphyxie. Il est formellement interdit d'allonger l'enfant ou de lui mettre un abaisse-langue."
+    },
+    {
+        id: 30,
+        question: "Concernant la bronchiolite aiguë du nourrisson (1 mois à 2 ans), quelles sont les données fondamentales du cours ?",
+        options: [
+            "Infection virale épidémique hivernale à transmission aérienne causée par le Virus Respiratoire Syncytial (VRS)",
+            "Inflammation et obstruction de la lumière des bronchioles",
+            "Les critères de gravité et d'hospitalisation comprennent : l'âge très jeune, la prématurité, la détresse respiratoire, les apnées et la perte de poids / difficultés alimentaires",
+            "Indication formelle à une antibiothérapie systématique par Amoxicilline"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La bronchiolite à VRS est virale (pas d'antibiotique). La gravité repose sur le terrain (âge < 2-3 mois, prématurité), la détresse respiratoire et le retentissement nutritionnel."
+    },
+    {
+        id: 31,
+        question: "Quelles innovations préventives permettent aujourd'hui de protéger les nourrissons contre les formes graves de bronchiolite à VRS ?",
+        options: [
+            "L'immunisation passive du nouveau-né/nourrisson par anticorps monoclonal anti-VRS (Beyfortus® / Nirsévimab)",
+            "La vaccination de la femme enceinte au cours de la grossesse par le vaccin Abrysvo® (protection indirecte par transfert d'anticorps maternels)",
+            "L'éviction du tabagisme passif et les mesures barrières (lavage des mains, aération, masque en cas de rhume)",
+            "La prise quotidienne d'antibiotiques par la mère pendant l'allaitement"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La prévention du VRS repose sur l'immunisation passive par Beyfortus (anticorps monoclonal) ou la vaccination maternelle (Abrysvo), combinée aux 7 gestes barrières."
+    },
+    {
+        id: 32,
+        question: "Quelle est la conduite thérapeutique à tenir devant une bronchite aiguë simple chez un adulte sain sans comorbidité ?",
+        options: [
+            "Traitement purement symptomatique, AUCUN antibiotique",
+            "Une expectoration purulente ne signe absolument pas une infection bactérienne",
+            "Une toux persistant au-delà de 1 mois impose des explorations complémentaires",
+            "Prescription systématique d'Augmentin pendant 10 jours dès l'apparition de crachats épais"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La bronchite aiguë est virale à 90-95 %. La purulence des crachats reflète la nécrose de l'épithélium bronchique et non une surinfection bactérienne. Pas d'antibiotique."
+    },
+    {
+        id: 33,
+        question: "Concernant la Broncho-Pneumopathie Chronique Obstructive (BPCO) et ses exacerbations, quelles affirmations sont exactes ?",
+        options: [
+            "La BPCO est définie par des symptômes chroniques (toux, expectorations, dyspnée) et un Trouble Ventilatoire Obstructif (TVO) permanent à l'EFR",
+            "Une exacerbation est une aggravation aiguë des symptômes (dyspnée, toux, crachats) sur moins de 14 jours",
+            "Les surinfections bactériennes ne représentent qu'environ 50 % des exacerbations de BPCO",
+            "Les antitussifs et les neurosédatifs sont formellement contre-indiqués chez le patient BPCO"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La BPCO est définie par le TVO persistant. Les exacerbations sont infectieuses dans 50 % des cas. Les antitussifs et sédatifs sont dangereux car ils bloquent le réflexe de drainage et dépriment la commande respiratoire."
+    },
+    {
+        id: 34,
+        question: "Concernant la Pneumopathie Franche Lobaire Aiguë (PFLA) à Pneumocoque, quels sont ses signes cardinaux ?",
+        options: [
+            "Début brutal avec frissons solennels, fièvre élevée (> 39 °C) et point de côté thoracique unilatéral",
+            "Toux avec expectorations parfois purulentes ou rouillées (hémoptoïques)",
+            "À l'auscultation : foyer de râles crépitants unilatéraux",
+            "À la radiographie de thorax : opacité alvéolaire systématisée dense et homogène à limite lobaire"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La PFLA à pneumocoque est le tableau typique : début foudroyant, frissons, douleur thoracique, crépitants et foyer alvéolaire lobaire triangulaire à la radio."
+    },
+    {
+        id: 35,
+        question: "Quel est le traitement antibiotique de référence d'une Pneumopathie Aiguë Communautaire (PAC) suspecte de pneumocoque chez un patient sans signe de gravité ?",
+        options: [
+            "AMOXICILLINE per os",
+            "Gentamicine en aérosol",
+            "Métronidazole",
+            "Ciprofloxacine en monothérapie"
+        ],
+        correct: [0],
+        rationale: "Le pneumocoque est très sensible à l'Amoxicilline qui représente l'antibiothérapie probabiliste de choix de la PAC ambulatoire ou hospitalisée non sévère."
+    },
+    {
+        id: 36,
+        question: "Concernant les pneumopathies à germes atypiques (Mycoplasma pneumoniae, Chlamydophila pneumoniae) et la pneumopathie à Legionella pneumophila, quelles distinctions thérapeutiques retenir ?",
+        options: [
+            "Les bactéries atypiques et Legionella sont insensibles aux bêtalactamines standard car ce sont des germes intracellulaires sans paroi classique",
+            "Le traitement repose sur la famille des MACROLIDES (ou fluoroquinolones pour la légionelle)",
+            "La légionellose s'attrape par inhalation d'aérosols d'eau douce tiède colonisée (douches, tours aéroréfrigérées, spas)",
+            "La légionellose associe fièvre élevée à 40 °C, signes respiratoires, troubles digestifs (diarrhée) et confusion neurologique"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Germes atypiques et Légionelle exigent des molécules à pénétration intracellulaire : Macrolides en priorité. La légionellose (eaux tièdes polluées) associe atteinte pulmonaire, digestive et confusion."
+    },
+    {
+        id: 37,
+        question: "Quels examens microbiologiques non invasifs permettent d'identifier rapidement un pneumocoque ou une légionelle lors d'une pneumopathie hospitalisée ?",
+        options: [
+            "La recherche d'Antigénurie Pneumocoque et Antigénurie Légionelle dans les urines",
+            "Les hémocultures prélevées au pic thermique",
+            "Une radiographie des membres inférieurs",
+            "Un prélèvement de cuticule unguéale"
+        ],
+        correct: [0, 1],
+        rationale: "Les antigénuries urinaires (Légionelle sérogroupe 1 et Pneumocoque) fournissent un résultat en 15 minutes même après le début des antibiotiques, complétées par les hémocultures."
+    },
+    {
+        id: 38,
+        question: "Concernant la Coqueluche (Bordetella pertussis), quelles sont les notions cliniques et de prévention indispensables ?",
+        options: [
+            "Maladie bactérienne hautement contagieuse à transmission aérienne, potentiellement mortelle chez le nourrisson de moins de 6 mois",
+            "Les anticorps maternels ne protègent pas le nourrisson",
+            "La phase d'état se caractérise par des quintes de toux épuisantes sans fièvre",
+            "Le traitement curatif précoce repose sur les MACROLIDES, associé à l'éviction de collectivité et l'antibioprophylaxie des contacts"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La coqueluche est gravissime chez le petit nourrisson non vacciné. Elle se traite par macrolides et se prévient par la vaccination précoce (2 mois), la vaccination de la femme enceinte et le cocooning."
+    },
+    {
+        id: 39,
+        question: "Concernant la Grippe saisonnière (Myxovirus influenzae A, B, C), quelles affirmations sont issues du cours ?",
+        options: [
+            "Transmission par gouttelettes, incubation courte de 1 à 3 jours avec contagiosité majeure",
+            "Toute toux fébrile de novembre à février en Europe est une grippe jusqu'à preuve du contraire",
+            "Traitement antiviral par inhibiteur de la neuraminidase (Oseltamivir / Tamiflu®) efficace s'il est débuté dans les 48h chez les sujets à risque",
+            "La grippe maligne se caractérise par un SDRA avec pneumopathie alvéolo-interstitielle bilatérale sévère"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La grippe hivernale associe frissons, fièvre, myalgies intenses et toux. L'oseltamivir se donne dans les 48h chez le sujet fragile. La grippe maligne est une détresse respiratoire aiguë mortelle."
+    },
+    {
+        id: 40,
+        question: "Concernant l'infection par le SARS-CoV-2 (Covid-19), quelles caractéristiques cliniques et de prise en charge sont enseignées ?",
+        options: [
+            "Infection à tropisme respiratoire haut et bas, avec risque d'aggravation respiratoire retardée vers le 8e jour (J8)",
+            "Caractère hautement pro-thrombogène imposant une anticoagulation préventive dans les formes sévères hospitalisées",
+            "Dans les formes graves avec hypoxémie : indication formelle à la Dexaméthasone (corticoïde) et oxygénothérapie",
+            "Traitement antiviral oral précoce (Nirmatrelvir/ritonavir - Paxlovid®) pour les patients à haut risque d'évolution sévère"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le Covid-19 se complique typiquement vers J8 d'un orage cytokinique hypoxémiant et d'un état hypercoagulable (thromboses), traité par Dexaméthasone, oxygène et anticoagulation préventive."
+    }
+];
+
+let currentIndex = 0;
+let userAnswers = {};
+let reviewMode = false;
+let displayedQuestions = [...questions];
+
+function init() {
+    renderGrid();
+    loadQuestion(currentIndex);
+    updateStats();
+}
+
+function getErrorQuestions() {
+    return questions.filter(q => {
+        const userAns = userAnswers[q.id];
+        if (!userAns) return false;
+        const sortedUser = [...userAns].sort().join(',');
+        const sortedCorr = [...q.correct].sort().join(',');
+        return sortedUser !== sortedCorr;
+    });
+}
+
+function renderGrid() {
+    const grid = document.getElementById('question-grid');
+    grid.innerHTML = '';
+    displayedQuestions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.textContent = q.id;
+        if (idx === currentIndex) item.classList.add('active');
+
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) {
+                item.classList.add('correct');
+            } else {
+                item.classList.add('incorrect');
+            }
+        }
+
+        item.onclick = () => {
+            currentIndex = idx;
+            loadQuestion(currentIndex);
+        };
+        grid.appendChild(item);
+    });
+}
+
+function loadQuestion(index) {
+    if (displayedQuestions.length === 0) {
+        document.getElementById('q-label').textContent = "Terminé";
+        document.getElementById('q-text').textContent = "Aucune erreur enregistrée ! Toutes vos réponses sont exactes.";
+        document.getElementById('options-container').innerHTML = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('validate-btn').disabled = true;
+        return;
+    }
+
+    const q = displayedQuestions[index];
+    document.getElementById('q-label').textContent = `Question ${q.id} sur 40 ${reviewMode ? '(Mode Erreurs)' : ''}`;
+    document.getElementById('q-text').textContent = q.question;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentSelections = userAnswers[q.id] || [];
+    const isAnswered = userAnswers[q.id] !== undefined;
+
+    q.options.forEach((optText, optIdx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'option-item';
+        if (currentSelections.includes(optIdx)) optDiv.classList.add('selected');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = currentSelections.includes(optIdx);
+
+        const label = document.createElement('span');
+        label.innerHTML = `<span class="opt-letter">${letters[optIdx]}.</span> ${optText}`;
+
+        optDiv.appendChild(chk);
+        optDiv.appendChild(label);
+
+        if (!isAnswered) {
+            optDiv.onclick = () => {
+                chk.checked = !chk.checked;
+                if (chk.checked) {
+                    optDiv.classList.add('selected');
+                } else {
+                    optDiv.classList.remove('selected');
+                }
+            };
+        } else {
+            optDiv.style.cursor = 'default';
+        }
+
+        optContainer.appendChild(optDiv);
+    });
+
+    const feedback = document.getElementById('feedback');
+    if (isAnswered) {
+        showFeedbackUI(q);
+        document.getElementById('validate-btn').disabled = true;
+    } else {
+        feedback.style.display = 'none';
+        feedback.className = 'feedback-box';
+        document.getElementById('validate-btn').disabled = false;
+    }
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').disabled = (index === displayedQuestions.length - 1);
+
+    renderGrid();
+}
+
+function validateCurrent() {
+    const q = displayedQuestions[currentIndex];
+    const optContainer = document.getElementById('options-container');
+    const checkboxes = optContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = [];
+    checkboxes.forEach((cb, idx) => {
+        if (cb.checked) selected.push(idx);
+    });
+
+    if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une proposition.");
+        return;
+    }
+
+    userAnswers[q.id] = selected;
+    showFeedbackUI(q);
+    document.getElementById('validate-btn').disabled = true;
+    updateStats();
+    renderGrid();
+}
+
+function showFeedbackUI(q) {
+    const feedback = document.getElementById('feedback');
+    const letters = ['A', 'B', 'C', 'D'];
+    const sortedUser = [...(userAnswers[q.id] || [])].sort().join(',');
+    const sortedCorr = [...q.correct].sort().join(',');
+    const isCorrect = (sortedUser === sortedCorr);
+
+    const corrLetters = q.correct.map(i => letters[i]).join(', ');
+
+    feedback.style.display = 'block';
+    if (isCorrect) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>Exact !</strong> (Réponse : ${corrLetters})<br>${q.rationale}`;
+    } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>Inexact ou incomplet.</strong> Bonne(s) réponse(s) : <strong>${corrLetters}</strong><br>${q.rationale}
+        <div class="feynman-tip">💡 <strong>Astuce Feynman :</strong> Expliquez simplement pourquoi ${corrLetters} est la seule conduite ou donnée clinique exacte.</div>`;
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion(currentIndex);
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < displayedQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+}
+
+function updateStats() {
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    document.getElementById('progress-indicator').textContent = `Question ${currentIndex + 1} / ${displayedQuestions.length}`;
+    document.getElementById('score-indicator').textContent = `Score : ${score} / ${totalAnswered} validées`;
+}
+
+function toggleFilterErrors() {
+    const btn = document.getElementById('filter-btn');
+    if (!reviewMode) {
+        const errors = getErrorQuestions();
+        if (errors.length === 0) {
+            alert("Aucune erreur détectée pour le moment ! Continuez l'épreuve.");
+            return;
+        }
+        reviewMode = true;
+        displayedQuestions = errors;
+        currentIndex = 0;
+        btn.textContent = "Retour épreuve";
+        btn.style.background = "var(--warning)";
+    } else {
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        btn.textContent = "Mode normal";
+        btn.style.background = "var(--primary)";
+    }
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function showResultsModal() {
+    const modal = document.getElementById('results-modal');
+    const circle = document.getElementById('modal-score-circle');
+    const title = document.getElementById('modal-title');
+    const text = document.getElementById('modal-feedback-text');
+
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    const percent = Math.round((score / questions.length) * 100);
+    circle.textContent = `${score} / 40`;
+
+    if (score >= 32) {
+        circle.className = 'score-circle score-pass';
+        title.textContent = "Validation Réussie (Niveau A)";
+        text.textContent = `Félicitations ! Vous validez ${percent} % du CM5 Infections ORL et Respiratoires. Les critères de Mac Isaac, la conduite devant une OMA, la PFLA, la bronchiolite, la coqueluche et le Covid-19 sont parfaitement maîtrisés.`;
+    } else {
+        circle.className = 'score-circle score-fail';
+        title.textContent = "Risque d'Ajournement (Niveau B/C)";
+        text.textContent = `Score actuel : ${score}/40 (${percent} %). Des notions prioritaires (PAS d'AINS dans l'angine, critères antibiotiques de l'OMA, prise en charge de l'épiglottite ou choix des ATB respiratoires) doivent être impérativement consolidées.`;
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeResultsModal() {
+    document.getElementById('results-modal').style.display = 'none';
+}
+
+function startErrorReview() {
+    closeResultsModal();
+    const errors = getErrorQuestions();
+    if (errors.length === 0) {
+        alert("Félicitations, vous n'avez aucune erreur à réviser !");
+        return;
+    }
+    reviewMode = true;
+    displayedQuestions = errors;
+    currentIndex = 0;
+    document.getElementById('filter-btn').textContent = "Retour épreuve";
+    document.getElementById('filter-btn').style.background = "var(--warning)";
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function restartQuiz() {
+    if (confirm("Voulez-vous réinitialiser toutes vos réponses et recommencer ?")) {
+        userAnswers = {};
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        document.getElementById('filter-btn').textContent = "Mode normal";
+        document.getElementById('filter-btn').style.background = "var(--primary)";
+        closeResultsModal();
+        updateStats();
+        loadQuestion(0);
+        renderGrid();
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
