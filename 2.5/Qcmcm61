@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM UE 2.5 - Infections Urinaires (CM6 - Dre de Monteynard)</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .sub-header {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .grid-toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .grid-toggle-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .grid-item.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.08);
+            background: #e0f2fe;
+        }
+
+        .grid-item.correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border-color: #86efac;
+        }
+
+        .grid-item.incorrect {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-color: #fca5a5;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 0.85rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            pointer-events: none;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        button.action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        button.action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        button.secondary-btn:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        button.secondary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-bg);
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .feynman-tip {
+            margin-top: 0.6rem;
+            font-style: italic;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            padding-top: 0.6rem;
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2.2rem;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2rem auto;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-pass {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 4px solid var(--success);
+        }
+
+        .score-fail {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 4px solid var(--danger);
+        }
+
+        .filter-error-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IFSI S3 : UE 2.5 Processus Infectieux (CM6 - Dre de Monteynard)</h1>
+        <div class="sub-header">Infections Urinaires • Diagnostic, ECBU, Gravité & Thérapeutique (40 QCM)</div>
+        <div class="stats-bar">
+            <span id="progress-indicator">Question 1 / 40</span>
+            <span id="score-indicator">Score : 0 / 0</span>
+            <button class="grid-toggle-btn" onclick="toggleFilterErrors()" id="filter-btn">Mode normal</button>
+        </div>
+    </header>
+
+    <div class="question-grid" id="question-grid"></div>
+
+    <main class="card" id="quiz-card">
+        <div class="q-number" id="q-label">Question 1</div>
+        <div class="q-text" id="q-text">Chargement...</div>
+
+        <div class="options-list" id="options-container"></div>
+
+        <div class="btn-group">
+            <button class="action-btn" id="validate-btn" onclick="validateCurrent()">Valider ma réponse</button>
+            <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button class="secondary-btn" id="next-btn" onclick="nextQuestion()" disabled>Suivant</button>
+            <button class="secondary-btn" style="margin-left:auto" onclick="showResultsModal()">Bilan</button>
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+    </main>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-card">
+        <h2 id="modal-title">Bilan de l'Épreuve</h2>
+        <div class="score-circle" id="modal-score-circle">--</div>
+        <p id="modal-feedback-text" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <button class="filter-error-btn" id="modal-retry-errors" onclick="startErrorReview()">Travailler uniquement mes erreurs</button>
+            <button class="action-btn" onclick="restartQuiz()">Recommencer l'épreuve complète</button>
+            <button class="secondary-btn" onclick="closeResultsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        id: 1,
+        question: "Concernant la stérilité physiologique de l'appareil urinaire, quelle proposition est exacte ?",
+        options: [
+            "L'arbre urinaire est entièrement stérile, à l'exception de l'extrémité distale de l'urètre",
+            "La vessie abrite physiologiquement une flore commensale de plus de 10^6 bactéries/mL",
+            "Les bassinets et uretères contiennent des anaérobies stricts protecteurs",
+            "L'urine vésicale n'est jamais stérile chez le sujet sain"
+        ],
+        correct: [0],
+        rationale: "L'arbre urinaire et l'urine sont physiologiquement stériles, seule l'extrémité distale de l'urètre est colonisée par des bactéries cutanéo-muqueuses."
+    },
+    {
+        id: 2,
+        question: "Quelle est la définition exacte de la colonisation urinaire (bactériurie asymptomatique) ?",
+        options: [
+            "Présence de germes dans les urines sans aucun signe clinique ou symptôme urinaire",
+            "Infection de la vessie avec brûlures mictionnelles intenses et apyrexie",
+            "Infection du parenchyme rénal avec fièvre et lombalgie",
+            "Présence de leucocytes abondants sans aucune bactérie"
+        ],
+        correct: [0],
+        rationale: "La colonisation urinaire correspond à la présence de bactéries à taux significatif dans l'urine, sans réaction inflammatoire tissulaire ni symptôme clinique."
+    },
+    {
+        id: 3,
+        question: "Quels signes cliniques peuvent révéler une infection urinaire symptomatique selon le cours ?",
+        options: [
+            "Brûlures mictionnelles ou pollakiurie",
+            "Impériosité mictionnelle (urgenturie) ou douleur sus-pubienne",
+            "Fièvre ou douleur lombaire unilatérale",
+            "Toux grasse productive"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'infection urinaire associe des symptômes fonctionnels urinaires (brûlures, pollakiurie, impériosité, pesanteur sus-pubienne) ou généraux/hauts (fièvre, lombalgie) avec une uroculture positive."
+    },
+    {
+        id: 4,
+        question: "Concernant la physiopathologie et la voie de contamination des infections urinaires, quelles affirmations sont vraies ?",
+        options: [
+            "Le réservoir principal des bactéries est le tube digestif ou la sphère vaginale",
+            "La contamination se fait de façon ascendante depuis le méat urétral vers la vessie puis les reins",
+            "Chez l'homme, la plus grande longueur de l'urètre constitue un obstacle anatomique limitant la migration bactérienne",
+            "La voie hématogène descendante représente plus de 95 % des cystites de la femme"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les bactéries proviennent du réservoir digestif (périnéal) ou vaginal et remontent par voie ascendante le long de l'urètre. L'urètre masculin, plus long, protège l'homme des infections ascendantes simples."
+    },
+    {
+        id: 5,
+        question: "Quelles sont les quatre questions fondamentales que le soignant doit systématiquement se poser face à une suspicion d'infection urinaire ?",
+        options: [
+            "Quel organe est concerné (Cystite, Pyélonéphrite, Prostatite) ?",
+            "Existe-t-il des signes de gravité (Sepsis, Choc septique, geste urologique) ?",
+            "S'agit-il d'un épisode simple ou à risque de complication ?",
+            "S'agit-il d'une infection communautaire ou associée aux soins ?"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Ce sont les 4 piliers d'évaluation clinique définis par la Dre de Monteynard pour guider le diagnostic, les examens et le traitement."
+    },
+    {
+        id: 6,
+        question: "Quels signes cliniques ou contextuels définissent une infection urinaire grave selon le cours ?",
+        options: [
+            "Présence d'un sepsis (score Quick SOFA ≥ 2)",
+            "Choc septique (oligurie, marbrures, hypotension artérielle, extrémités froides)",
+            "Nécessité d'un geste urologique en urgence (hors sondage simple, ex: dérivation d'obstacle)",
+            "Une simple pollakiurie sans fièvre chez une jeune femme"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les 3 critères de gravité absolue sont : Sepsis sévère (qSOFA ≥ 2), Choc septique et nécessité d'un geste urologique de désobstruction chirurgicale."
+    },
+    {
+        id: 7,
+        question: "Quels critères constituent le score de tri rapide Quick SOFA (acronyme mnémotechnique 'HAT') ?",
+        options: [
+            "Hypotension : Pression Artérielle Systolique (PAS) < 100 mmHg",
+            "Altered mental state : Altération de la conscience / confusion",
+            "Tachypnea : Fréquence Respiratoire (FR) ≥ 22 /min",
+            "Tachycardie : Fréquence Cardiaque > 150 bpm"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le score qSOFA (HAT) comprend : Hypotension (PAS < 100 mmHg), Altered mental state (confusion) et Tachypnea (FR ≥ 22/min). Un score ≥ 2 prédit une mortalité > 10 %."
+    },
+    {
+        id: 8,
+        question: "Quelles situations cliniques définissent un terrain 'à risque de complication' lors d'une infection urinaire ?",
+        options: [
+            "Toute anomalie organique ou fonctionnelle de l'arbre urinaire (lithiase, reflux, vessie neurologique)",
+            "Le sexe masculin",
+            "La grossesse chez la femme",
+            "L'insuffisance rénale chronique sévère (clairance < 30 mL/min) ou immunodépression grave"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Sont à risque de complication : toute uropathie sous-jacente, le sexe masculin (prostate), la grossesse, l'immunodépression grave, l'insuffisance rénale sévère et le grand âge."
+    },
+    {
+        id: 9,
+        question: "Chez le sujet âgé, quels critères définissent un terrain à risque de complication d'infection urinaire ?",
+        options: [
+            "Patient âgé de plus de 75 ans",
+            "Patient de plus de 65 ans présentant au moins 3 critères de fragilité (critères de Fried)",
+            "Tout sujet de 60 ans actif sans comorbidité",
+            "Uniquement les personnes âgées grabataires en réanimation"
+        ],
+        correct: [0, 1],
+        rationale: "Le terrain à risque chez la personne âgée concerne soit les patients de > 75 ans, soit les patients de > 65 ans avec au moins 3 critères de fragilité de Fried."
+    },
+    {
+        id: 10,
+        question: "Quels sont les facteurs de risque d'infection urinaire à Entérobactérie Sécrétrice de Bêta-Lactamase à Spectre Élargi (E-BLSE) ?",
+        options: [
+            "Antécédent de colonisation ou d'infection urinaire à E-BLSE dans les 6 derniers mois",
+            "Prise récente (< 6 mois) d'Augmentin, de Céphalosporines (C2G/C3G) ou de Fluoroquinolones",
+            "Voyage récent en zone d'endémie d'E-BLSE ou hospitalisation < 3 mois",
+            "Vie en institution de long séjour (EHPAD)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "L'émergence d'E-BLSE est favorisée par les ATB récents (< 6 mois), l'hospitalisation récente (< 3 mois), la vie en EHPAD, les voyages en zone d'endémie et un ATCD d'E-BLSE < 6 mois."
+    },
+    {
+        id: 11,
+        question: "Concernant les infections urinaires associées aux soins (nosocomiales), quelles affirmations sont exactes ?",
+        options: [
+            "Elles représentent environ 30 % de l'ensemble des infections nosocomiales",
+            "Environ 80 % d'entre elles sont directement liées à un sondage urinaire",
+            "Elles sont définies par une infection survenant ≥ 48h après un geste urinaire (avec matériel) ou ≤ 7 jours après son retrait",
+            "Chez le patient sondé, la leucocyturie est un critère diagnostique d'une excellente fiabilité"
+        ],
+        correct: [0, 1, 2],
+        rationale: "30 % des infections nosocomiales sont urinaires, dont 80 % sur sonde (définies ≥ 48h après pose ou ≤ 7j après retrait). Chez le sondé, la leucocyturie n'est PAS interprétable (irritation mécanique)."
+    },
+    {
+        id: 12,
+        question: "Chez un patient porteur d'une sonde urinaire à demeure, quel est le seuil de bactériurie retenu pour affirmer une infection urinaire associée aux soins ?",
+        options: [
+            "Bactériurie ≥ 10^5 UFC/mL",
+            "Bactériurie ≥ 10^2 UFC/mL",
+            "Bactériurie ≥ 10 UFC/mL",
+            "Toute présence de germe même à 10^1 UFC/mL"
+        ],
+        correct: [0],
+        rationale: "Sur sonde à demeure, la sonde étant naturellement colonisée, le seuil de significativité de la bactériurie est élevé à ≥ 10^5 UFC/mL pour signer une infection."
+    },
+    {
+        id: 13,
+        question: "Quelles sont les caractéristiques épidémiologiques majeures des infections urinaires ?",
+        options: [
+            "Elles sont beaucoup plus fréquentes chez la femme en raison de la brièveté de l'urètre",
+            "Il existe deux pics de fréquence chez la femme : au début de la vie sexuelle et en post-ménopause",
+            "Chez l'homme jeune sans anomalie, elles sont très fréquentes",
+            "Chez l'homme, la fréquence augmente nettement après 50 ans du fait de la pathologie prostatique"
+        ],
+        correct: [0, 1, 3],
+        rationale: "L'infection urinaire est rare chez l'homme jeune et augmente après 50 ans (hypertrophie bénigne de prostate). Chez la femme, la brièveté de l'urètre explique les pics aux débuts de la vie sexuelle et après la ménopause."
+    },
+    {
+        id: 14,
+        question: "Quels signes fonctionnels urinaires sont classés parmi les signes dits 'irritatifs' ?",
+        options: [
+            "Pollakiurie (mictions très fréquentes en petite quantité)",
+            "Brûlures mictionnelles",
+            "Impériosité mictionnelle / urgenturie",
+            "Retard au démarrage de la miction et jet faible"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Pollakiurie, brûlures et urgenturies sont des signes irritatifs (vessie/urètre enflammés). Le jet faible et le retard au démarrage sont des signes obstructifs."
+    },
+    {
+        id: 15,
+        question: "Quels signes fonctionnels urinaires relèvent d'un mécanisme 'obstructif' sous-vésical ?",
+        options: [
+            "Retard au démarrage de la miction",
+            "Dysurie (difficulté d'évacuation) et jet urinaire faible",
+            "Gouttes retardataires en fin de miction",
+            "Brûlures urétrales intenses pendant la miction"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les signes obstructifs traduisent une gêne à l'écoulement (obstacle prostatique ou sténose) : retard au démarrage, jet affaibli, dysurie d'effort et gouttes retardataires."
+    },
+    {
+        id: 16,
+        question: "Quelle bactérie est responsable de 60 à 80 % de l'ensemble des infections urinaires communautaires ?",
+        options: [
+            "Escherichia coli",
+            "Staphylococcus aureus",
+            "Pseudomonas aeruginosa",
+            "Enterococcus faecalis"
+        ],
+        correct: [0],
+        rationale: "Escherichia coli (Bacille à Gram Négatif d'origine digestive) est le germe prédominant absolu, causant 60 à 80 % des infections urinaires."
+    },
+    {
+        id: 17,
+        question: "En dehors d'Escherichia coli, quelles autres entérobactéries peuvent être responsables d'infections urinaires ?",
+        options: [
+            "Proteus mirabilis (5 à 10 % des cas)",
+            "Klebsiella pneumoniae et Enterobacter cloacae",
+            "Serratia marcescens et Citrobacter koseri",
+            "Lactobacillus acidophilus"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Proteus mirabilis, Klebsiella pneumoniae, Enterobacter, Serratia et Citrobacter sont les autres entérobactéries uropathogènes classiques. Les lactobacilles sont commensaux protecteurs."
+    },
+    {
+        id: 18,
+        question: "Parmi les Cocci à Gram Positif, quelle bactérie est retrouvée dans 5 à 10 % des cystites aiguës de la femme jeune ?",
+        options: [
+            "Staphylococcus saprophyticus",
+            "Streptococcus pneumoniae",
+            "Neisseria gonorrhoeae",
+            "Listeria monocytogenes"
+        ],
+        correct: [0],
+        rationale: "Staphylococcus saprophyticus (cocci Gram + à coagulase négative) est un uropathogène typique de la femme jeune sexuellement active (5-10 % des cystites)."
+    },
+    {
+        id: 19,
+        question: "Concernant l'utilisation et la fiabilité de la Bandelette Urinaire (BU), quelles affirmations sont exactes ?",
+        options: [
+            "Elle présente une excellente Valeur Prédictive Négative (VPN) chez la femme (> 95 %)",
+            "Elle présente une excellente Valeur Prédictive Positive (VPP) chez l'homme",
+            "Une BU totalement négative (Leuco - et Nitrites -) élimine avec certitude une infection urinaire chez l'homme",
+            "Les nitrites sont négatifs en cas d'infection à staphylocoque ou à Pseudomonas"
+        ],
+        correct: [0, 1, 3],
+        rationale: "La BU négative n'élimine PAS l'infection chez l'homme (ECBU obligatoire). Les nitrites ne sont positifs que pour les bactéries possédant une nitrate réductase (entérobactéries), pas pour les staphs ni Pseudomonas."
+    },
+    {
+        id: 20,
+        question: "Pourquoi la Bandelette Urinaire (BU) ne permet-elle pas d'éliminer formellement une infection urinaire chez l'homme ?",
+        options: [
+            "Le risque d'atteinte prostatique (prostatite) impose un ECBU systématique même si la BU est négative",
+            "Les hommes ne sécrètent pas de leucocytes dans l'urine",
+            "La prostate détruit chimiquement les réactifs de la bandelette",
+            "Les bandelettes urinaires sont contre-indiquées chez l'homme"
+        ],
+        correct: [0],
+        rationale: "Chez l'homme, toute infection urinaire est a priori une prostatite potentielle : la BU n'a pas une assez bonne VPN pour écarter le diagnostic, l'ECBU est toujours indispensable."
+    },
+    {
+        id: 21,
+        question: "Quelles sont les conditions optimales de réalisation d'un ECBU par miction spontanée ?",
+        options: [
+            "Toilette préalable du méat et des organes génitaux externes à l'eau et au savon, puis désinfection (ex: Dakin)",
+            "Recueil au moins 4 heures après la miction précédente",
+            "Recueil impératif des urines de milieu de jet dans un flacon stérile",
+            "Recueil du tout premier jet d'urine sans toilette"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Un ECBU valide exige : toilette et désinfection du méat, délai de 4h après la miction précédente, recueil du milieu de jet (pour éliminer la flore urétrale distale) dans un pot stérile."
+    },
+    {
+        id: 22,
+        question: "Quelles sont les règles de conservation et de transport du flacon d'ECBU vers le laboratoire ?",
+        options: [
+            "Transport immédiat au laboratoire à température ambiante en moins de 2 heures",
+            "Conservation possible à +4 °C au réfrigérateur pendant moins de 24 heures en cas de transport différé",
+            "Congélation obligatoire du pot à -20 °C",
+            "Maintien impératif dans une étuve chauffée à 37 °C pendant 48 heures"
+        ],
+        correct: [0, 1],
+        rationale: "Le flacon doit être acheminé en < 2h à température ambiante, ou conservé au réfrigérateur à +4 °C pendant 24h maximum pour bloquer la prolifération bactérienne in vitro."
+    },
+    {
+        id: 23,
+        question: "Quel est le seuil de leucocyturie considéré comme significatif d'une réaction inflammatoire à l'ECBU ?",
+        options: [
+            "Leucocyturie ≥ 10^4 /mL (soit ≥ 10 /mm3)",
+            "Leucocyturie ≥ 10 /mL",
+            "Leucocyturie ≥ 10^6 /mL uniquement",
+            "Absence totale de leucocytes"
+        ],
+        correct: [0],
+        rationale: "Le seuil pathologique de leucocyturie signifiant une inflammation des voies urinaires est de ≥ 10^4 /mL (ou 10/mm3)."
+    },
+    {
+        id: 24,
+        question: "Face à une 'leucocyturie aseptique' (leucocytes ≥ 10^4/mL avec culture bactérienne standard stérile), quelles étiologies doivent être évoquées ?",
+        options: [
+            "Infection urinaire décapitée par une antibiothérapie préalable récente",
+            "Tuberculose uro-génitale",
+            "Pathologie non bactérienne : tumeur urothéliale, corps étranger, calcul, radiothérapie",
+            "Prise excessive d'eau minérale"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Une leucocyturie sans germe pousse à rechercher une prise d'antibiotique récente ayant 'décapité' la culture, une tuberculose urinaire (BK non cultivé sur milieu standard), un calcul ou une tumeur vésicale."
+    },
+    {
+        id: 25,
+        question: "À l'ECBU chez la femme, quel est le seuil de bactériurie significatif pour Escherichia coli ou Staphylococcus saprophyticus ?",
+        options: [
+            "Bactériurie ≥ 10^3 UFC/mL",
+            "Bactériurie ≥ 10^5 UFC/mL",
+            "Bactériurie ≥ 10^6 UFC/mL",
+            "Bactériurie ≥ 10^2 UFC/mL"
+        ],
+        correct: [0],
+        rationale: "Pour E. coli et S. saprophyticus chez la femme, le seuil de significativité est bas : ≥ 10^3 UFC/mL. Pour les autres entérobactéries et entérocoques chez la femme, il est de ≥ 10^4 UFC/mL."
+    },
+    {
+        id: 26,
+        question: "À l'ECBU chez l'homme, quel est le seuil de significativité de la bactériurie, quelle que soit l'espèce bactérienne en cause ?",
+        options: [
+            "Bactériurie ≥ 10^3 UFC/mL",
+            "Bactériurie ≥ 10^5 UFC/mL",
+            "Bactériurie ≥ 10^6 UFC/mL",
+            "Bactériurie ≥ 10^4 UFC/mL uniquement"
+        ],
+        correct: [0],
+        rationale: "Chez l'homme, l'arbre urinaire étant très protégé, tout seuil de bactériurie ≥ 10^3 UFC/mL est pathologique et significatif, quelle que soit la bactérie."
+    },
+    {
+        id: 27,
+        question: "Comment se définit cliniquement une cystite aiguë simple chez la femme ?",
+        options: [
+            "Infection de la vessie avec signes fonctionnels urinaires (brûlures, pollakiurie) SANS AUCUNE FIÈVRE",
+            "Infection rénale avec fièvre > 39 °C et frissons",
+            "Présence d'une douleur lombaire unilatérale aiguë irradiant vers l'aine",
+            "Bactériurie asymptomatique découverte fortuitement"
+        ],
+        correct: [0],
+        rationale: "La cystite est une infection localisée à la vessie : elle associe des signes fonctionnels urinaires mais JAMAIS de fièvre ni de douleur lombaire."
+    },
+    {
+        id: 28,
+        question: "Quel examen complémentaire est nécessaire et suffisant pour confirmer une cystite aiguë simple chez une femme jeune sans facteur de complication ?",
+        options: [
+            "La Bandelette Urinaire (BU) seule",
+            "Un ECBU avec antibiogramme systématique",
+            "Un scanner abdomino-pelvien injecté",
+            "Une échographie rénale et vésicale en urgence"
+        ],
+        correct: [0],
+        rationale: "Pour une cystite simple chez la femme, la BU positive suffit au diagnostic. L'ECBU n'est pas recommandé en première intention."
+    },
+    {
+        id: 29,
+        question: "Quel est le traitement antibiotique de première intention d'une cystite aiguë simple chez la femme ?",
+        options: [
+            "Fosfomycine-trométamol (Monuril®) 3g en dose unique",
+            "Céfotaxime par voie intraveineuse pendant 14 jours",
+            "Gentamicine intramusculaire pendant 5 jours",
+            "Amoxicilline per os pendant 21 jours"
+        ],
+        correct: [0],
+        rationale: "Le traitement de référence de la cystite simple est la Fosfomycine-trométamol 3g en sachet unique (dose minute)."
+    },
+    {
+        id: 30,
+        question: "Chez une femme présentant des brûlures mictionnelles mais dont la Bandelette Urinaire est strictement négative (Leuco - et Nitrites -), quels diagnostics différentiels évoquer ?",
+        options: [
+            "Mycose génitale (vaginite à Candida)",
+            "Urétrite infectieuse (ex : herpès, Chlamydia)",
+            "Sécheresse cutanéo-muqueuse vulvo-vaginale",
+            "Pyélonéphrite aiguë obstructive anurique"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Une BU négative chez une femme symptomatique doit faire rechercher une mycose génitale, une urétrite (IST) ou une sécheresse muqueuse."
+    },
+    {
+        id: 31,
+        question: "À partir de quelle fréquence mictionnelle définit-on une 'cystite récidivante' chez la femme ?",
+        options: [
+            "Au moins 4 épisodes par an",
+            "Au moins 1 épisode tous les 2 ans",
+            "Au moins 10 épisodes par mois",
+            "2 épisodes dans toute la vie"
+        ],
+        correct: [0],
+        rationale: "La cystite est définie comme récidivante à partir d'au moins 4 épisodes par an."
+    },
+    {
+        id: 32,
+        question: "Dans le cadre de la prévention des cystites récidivantes très fréquentes (> 12 épisodes/an), quel traitement prophylactique peut être prescrit ?",
+        options: [
+            "Bactrim (Cotrimoxazole) 400 mg/j pendant 6 mois par an",
+            "Bactrim faible 1 comprimé en prise unique post-coïtale (si cystites post-coïtales)",
+            "Ceftriaxone 1g IV tous les matins à vie",
+            "Amikacine en aérosol hebdomadaire"
+        ],
+        correct: [0, 1],
+        rationale: "En cas de cystites très récidivantes (> 12/an), on peut proposer Bactrim 400 mg/j pendant 6 mois, ou 1 comprimé post-coïtal si les rapports sont le facteur déclenchant."
+    },
+    {
+        id: 33,
+        question: "Chez l'homme présentant des signes fonctionnels urinaires sans fièvre ni douleur lombaire (cystite de l'homme), quelle est la prise en charge ?",
+        options: [
+            "Un ECBU est toujours systématique",
+            "On attend les résultats de l'antibiogramme de l'ECBU si le patient tolère les symptômes",
+            "Si le patient est très symptomatique, on peut débuter Fosfomycine (J1-J3-J5) ou pivmécillinam / nitrofurantoïne (7 jours)",
+            "On prescrit une dose unique de Monuril sans faire d'ECBU"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Nouveauté des recos : chez l'homme, ECBU toujours obligatoire. Si possible différer l'ATB à l'antibiogramme ; si trop symptomatique, Fosfomycine (J1-J3-J5) ou pivmécillinam/nitrofurantoïne 7j."
+    },
+    {
+        id: 34,
+        question: "Dans quelles situations médicales exceptionnelles doit-on obligatoirement traiter une colonisation urinaire (bactériurie asymptomatique) ?",
+        options: [
+            "Chez la femme enceinte (grossesse)",
+            "Avant une intervention chirurgicale urologique programmée",
+            "Chez tout patient âgé vivant en EHPAD",
+            "Chez tout patient porteur d'une sonde urinaire à demeure"
+        ],
+        correct: [0, 1],
+        rationale: "Règle absolue : la colonisation urinaire ne se traite JAMAIS, SAUF dans 2 cas stricts : la femme enceinte et avant un geste chirurgical urologique programmé."
+    },
+    {
+        id: 35,
+        question: "Quels sont les signes cliniques cardinaux d'une Pyélonéphrite Aiguë (PNA) chez la femme ?",
+        options: [
+            "Fièvre avec frissons",
+            "Lombalgie unilatérale spontanée ou provoquée par la percussion lombaire",
+            "Signes fonctionnels urinaires (inconstants)",
+            "Signes digestifs associés possibles (nausées, vomissements, météorisme, diarrhée)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La PNA associe fièvre/frissons, douleur lombaire unilatérale, ± SFU et fréquemment des signes digestifs trompeurs (nausées, vomissements, iléus réflexe)."
+    },
+    {
+        id: 36,
+        question: "Concernant la Pyélonéphrite Aiguë chez l'homme, quelle règle diagnostique radiologique est impérative selon le cours ?",
+        options: [
+            "Une imagerie des voies urinaires (Scanner au mieux, échographie sinon) est systématique",
+            "L'imagerie est formellement contre-indiquée",
+            "Une simple radiographie du thorax suffit",
+            "L'imagerie n'est réservée qu'aux hommes de plus de 90 ans"
+        ],
+        correct: [0],
+        rationale: "Chez l'homme, toute pyélonéphrite impose une imagerie systématique (scanner abdomino-pelvien ou échographie) pour éliminer un obstacle ou une complication prostato-rénale."
+    },
+    {
+        id: 37,
+        question: "Quelle antibiothérapie probabiliste de première intention est recommandée dans la pyélonéphrite aiguë simple et dans la pyélonéphrite grave ?",
+        options: [
+            "PNA simple : Céfotaxime IV (ou C3G) en monothérapie",
+            "PNA avec signes de gravité : Céfotaxime + Amikacine (aminoside) en association",
+            "Durée totale de traitement habituelle : 7 à 10 jours",
+            "PNA simple : Doxycycline per os pendant 30 jours"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le traitement repose sur le Céfotaxime (C3G), auquel on associe l'Amikacine en cas de gravité (choc/sepsis). La durée est de 7 à 10 jours (selon molécule et évolution)."
+    },
+    {
+        id: 38,
+        question: "Concernant la prostatite aiguë bactérienne, quelles affirmations sont exactes ?",
+        options: [
+            "Elle se manifeste par de la fièvre associée à des signes fonctionnels urinaires, SANS douleur lombaire",
+            "Un ECBU est systématiquement requis",
+            "Le traitement repose initialement sur Céfotaxime puis relais par Bactrim ou Fluoroquinolone",
+            "La durée totale d'antibiothérapie est prolongée, de 14 à 21 jours"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La prostatite aiguë donne de la fièvre et des SFU sans lombalgie. Elle nécessite un ECBU et une antibiothérapie à excellente diffusion prostatique (Bactrim, fluoroquinolones) pendant 14 à 21 jours."
+    },
+    {
+        id: 39,
+        question: "Quelles sont les caractéristiques cliniques et les germes prédominants de l'orchi-épididymite aiguë ?",
+        options: [
+            "Douleur scrotale irradiant le long du cordon spermatique, avec testicule inflammatoire soulagé par son ascension (signe de Prehn)",
+            "Le principal diagnostic différentiel d'urgence chirurgicale est la torsion du cordon spermatique",
+            "Avant 35 ans : prédominance d'infections sexuellement transmissibles (Chlamydia trachomatis 30-40 %, Gonocoque 10 %)",
+            "Après 35 ans : prédominance d'entérobactéries d'origine urinaire (E. coli 15 %)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "L'orchi-épididymite donne une grosse bourse douloureuse soulagée au soulèvement (Prehn +). Urgence = éliminer la torsion. Germes : IST chez l'homme jeune (< 35 ans), entérobactéries après 35 ans."
+    },
+    {
+        id: 40,
+        question: "À quel délai doit-on obligatoirement réévaluer l'efficacité de l'antibiothérapie d'une infection urinaire, et que rechercher en cas d'échec (persistance de la fièvre ou CRP élevée) ?",
+        options: [
+            "Réévaluation obligatoire à 48 - 72 heures",
+            "Vérifier la posologie et la sensibilité du germe sur l'antibiogramme",
+            "Rechercher un abcès rénal ou périnéphrétique (échographie des voies urinaires / avis chirurgical)",
+            "Rechercher un autre point d'appel infectieux (veinite sur cathéter, foyer pulmonaire, diarrhée)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toute antibiothérapie se réévalue à 48-72h. Si la fièvre ou la CRP persiste : vérifier l'antibiogramme, les doses, éliminer un abcès rénal/prostatique par imagerie et traquer une complication d'un autre site."
+    }
+];
+
+let currentIndex = 0;
+let userAnswers = {};
+let reviewMode = false;
+let displayedQuestions = [...questions];
+
+function init() {
+    renderGrid();
+    loadQuestion(currentIndex);
+    updateStats();
+}
+
+function getErrorQuestions() {
+    return questions.filter(q => {
+        const userAns = userAnswers[q.id];
+        if (!userAns) return false;
+        const sortedUser = [...userAns].sort().join(',');
+        const sortedCorr = [...q.correct].sort().join(',');
+        return sortedUser !== sortedCorr;
+    });
+}
+
+function renderGrid() {
+    const grid = document.getElementById('question-grid');
+    grid.innerHTML = '';
+    displayedQuestions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.textContent = q.id;
+        if (idx === currentIndex) item.classList.add('active');
+
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) {
+                item.classList.add('correct');
+            } else {
+                item.classList.add('incorrect');
+            }
+        }
+
+        item.onclick = () => {
+            currentIndex = idx;
+            loadQuestion(currentIndex);
+        };
+        grid.appendChild(item);
+    });
+}
+
+function loadQuestion(index) {
+    if (displayedQuestions.length === 0) {
+        document.getElementById('q-label').textContent = "Terminé";
+        document.getElementById('q-text').textContent = "Aucune erreur enregistrée ! Toutes vos réponses sont exactes.";
+        document.getElementById('options-container').innerHTML = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('validate-btn').disabled = true;
+        return;
+    }
+
+    const q = displayedQuestions[index];
+    document.getElementById('q-label').textContent = `Question ${q.id} sur 40 ${reviewMode ? '(Mode Erreurs)' : ''}`;
+    document.getElementById('q-text').textContent = q.question;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentSelections = userAnswers[q.id] || [];
+    const isAnswered = userAnswers[q.id] !== undefined;
+
+    q.options.forEach((optText, optIdx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'option-item';
+        if (currentSelections.includes(optIdx)) optDiv.classList.add('selected');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = currentSelections.includes(optIdx);
+
+        const label = document.createElement('span');
+        label.innerHTML = `<span class="opt-letter">${letters[optIdx]}.</span> ${optText}`;
+
+        optDiv.appendChild(chk);
+        optDiv.appendChild(label);
+
+        if (!isAnswered) {
+            optDiv.onclick = () => {
+                chk.checked = !chk.checked;
+                if (chk.checked) {
+                    optDiv.classList.add('selected');
+                } else {
+                    optDiv.classList.remove('selected');
+                }
+            };
+        } else {
+            optDiv.style.cursor = 'default';
+        }
+
+        optContainer.appendChild(optDiv);
+    });
+
+    const feedback = document.getElementById('feedback');
+    if (isAnswered) {
+        showFeedbackUI(q);
+        document.getElementById('validate-btn').disabled = true;
+    } else {
+        feedback.style.display = 'none';
+        feedback.className = 'feedback-box';
+        document.getElementById('validate-btn').disabled = false;
+    }
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').disabled = (index === displayedQuestions.length - 1);
+
+    renderGrid();
+}
+
+function validateCurrent() {
+    const q = displayedQuestions[currentIndex];
+    const optContainer = document.getElementById('options-container');
+    const checkboxes = optContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = [];
+    checkboxes.forEach((cb, idx) => {
+        if (cb.checked) selected.push(idx);
+    });
+
+    if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une proposition.");
+        return;
+    }
+
+    userAnswers[q.id] = selected;
+    showFeedbackUI(q);
+    document.getElementById('validate-btn').disabled = true;
+    updateStats();
+    renderGrid();
+}
+
+function showFeedbackUI(q) {
+    const feedback = document.getElementById('feedback');
+    const letters = ['A', 'B', 'C', 'D'];
+    const sortedUser = [...(userAnswers[q.id] || [])].sort().join(',');
+    const sortedCorr = [...q.correct].sort().join(',');
+    const isCorrect = (sortedUser === sortedCorr);
+
+    const corrLetters = q.correct.map(i => letters[i]).join(', ');
+
+    feedback.style.display = 'block';
+    if (isCorrect) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>Exact !</strong> (Réponse : ${corrLetters})<br>${q.rationale}`;
+    } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>Inexact ou incomplet.</strong> Bonne(s) réponse(s) : <strong>${corrLetters}</strong><br>${q.rationale}
+        <div class="feynman-tip">💡 <strong>Astuce Feynman :</strong> Reformulez en une phrase simple la raison clinique pour laquelle ${corrLetters} est la seule conduite valable.</div>`;
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion(currentIndex);
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < displayedQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+}
+
+function updateStats() {
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    document.getElementById('progress-indicator').textContent = `Question ${currentIndex + 1} / ${displayedQuestions.length}`;
+    document.getElementById('score-indicator').textContent = `Score : ${score} / ${totalAnswered} validées`;
+}
+
+function toggleFilterErrors() {
+    const btn = document.getElementById('filter-btn');
+    if (!reviewMode) {
+        const errors = getErrorQuestions();
+        if (errors.length === 0) {
+            alert("Aucune erreur détectée pour le moment ! Continuez l'épreuve.");
+            return;
+        }
+        reviewMode = true;
+        displayedQuestions = errors;
+        currentIndex = 0;
+        btn.textContent = "Retour épreuve";
+        btn.style.background = "var(--warning)";
+    } else {
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        btn.textContent = "Mode normal";
+        btn.style.background = "var(--primary)";
+    }
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function showResultsModal() {
+    const modal = document.getElementById('results-modal');
+    const circle = document.getElementById('modal-score-circle');
+    const title = document.getElementById('modal-title');
+    const text = document.getElementById('modal-feedback-text');
+
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    const percent = Math.round((score / questions.length) * 100);
+    circle.textContent = `${score} / 40`;
+
+    if (score >= 32) {
+        circle.className = 'score-circle score-pass';
+        title.textContent = "Validation Réussie (Niveau A)";
+        text.textContent = `Félicitations ! Vous validez ${percent} % du CM6. Les distinctions cystite / pyélonéphrite / prostatite, les seuils d'ECBU et la prise en charge des urgences sont parfaitement maîtrisés.`;
+    } else {
+        circle.className = 'score-circle score-fail';
+        title.textContent = "Risque d'Ajournement (Niveau B/C)";
+        text.textContent = `Score actuel : ${score}/40 (${percent} %). Des notions prioritaires (seuils d'ECBU homme/femme, facteurs d'E-BLSE, colonisation urinaire ou traitement des formes graves) doivent être impérativement consolidées.`;
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeResultsModal() {
+    document.getElementById('results-modal').style.display = 'none';
+}
+
+function startErrorReview() {
+    closeResultsModal();
+    const errors = getErrorQuestions();
+    if (errors.length === 0) {
+        alert("Félicitations, vous n'avez aucune erreur à réviser !");
+        return;
+    }
+    reviewMode = true;
+    displayedQuestions = errors;
+    currentIndex = 0;
+    document.getElementById('filter-btn').textContent = "Retour épreuve";
+    document.getElementById('filter-btn').style.background = "var(--warning)";
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function restartQuiz() {
+    if (confirm("Voulez-vous réinitialiser toutes vos réponses et recommencer ?")) {
+        userAnswers = {};
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        document.getElementById('filter-btn').textContent = "Mode normal";
+        document.getElementById('filter-btn').style.background = "var(--primary)";
+        closeResultsModal();
+        updateStats();
+        loadQuestion(0);
+        renderGrid();
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
