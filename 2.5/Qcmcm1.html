@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM UE 2.5 - Module CM1 (Vaccins, Voyages, Paludisme & Gastro-entérite)</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .sub-header {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .grid-toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .grid-toggle-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .grid-item.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.08);
+            background: #e0f2fe;
+        }
+
+        .grid-item.correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border-color: #86efac;
+        }
+
+        .grid-item.incorrect {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-color: #fca5a5;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 0.85rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            pointer-events: none;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        button.action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        button.action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        button.secondary-btn:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        button.secondary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-bg);
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .feynman-tip {
+            margin-top: 0.6rem;
+            font-style: italic;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            padding-top: 0.6rem;
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2.2rem;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2rem auto;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-pass {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 4px solid var(--success);
+        }
+
+        .score-fail {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 4px solid var(--danger);
+        }
+
+        .filter-error-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IFSI S3 : UE 2.5 Processus Infectieux (Module CM1)</h1>
+        <div class="sub-header">Vaccinations, Pathologies du Voyageur, Paludisme & Gastro-entérite du Nourrisson (40 QCM)</div>
+        <div class="stats-bar">
+            <span id="progress-indicator">Question 1 / 40</span>
+            <span id="score-indicator">Score : 0 / 0</span>
+            <button class="grid-toggle-btn" onclick="toggleFilterErrors()" id="filter-btn">Mode normal</button>
+        </div>
+    </header>
+
+    <div class="question-grid" id="question-grid"></div>
+
+    <main class="card" id="quiz-card">
+        <div class="q-number" id="q-label">Question 1</div>
+        <div class="q-text" id="q-text">Chargement...</div>
+
+        <div class="options-list" id="options-container"></div>
+
+        <div class="btn-group">
+            <button class="action-btn" id="validate-btn" onclick="validateCurrent()">Valider ma réponse</button>
+            <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button class="secondary-btn" id="next-btn" onclick="nextQuestion()" disabled>Suivant</button>
+            <button class="secondary-btn" style="margin-left:auto" onclick="showResultsModal()">Bilan</button>
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+    </main>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-card">
+        <h2 id="modal-title">Bilan de l'Épreuve</h2>
+        <div class="score-circle" id="modal-score-circle">--</div>
+        <p id="modal-feedback-text" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <button class="filter-error-btn" id="modal-retry-errors" onclick="startErrorReview()">Travailler uniquement mes erreurs</button>
+            <button class="action-btn" onclick="restartQuiz()">Recommencer l'épreuve complète</button>
+            <button class="secondary-btn" onclick="closeResultsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        id: 1,
+        question: "Concernant la législation vaccinale en France, depuis quelle date et combien de vaccinations sont devenues obligatoires pour les enfants de moins de 2 ans ?",
+        options: [
+            "Depuis le 1er janvier 2018, 11 vaccinations sont obligatoires",
+            "Depuis 2020, 3 vaccinations sont obligatoires",
+            "Depuis 1995, 8 vaccinations sont obligatoires",
+            "Toutes les vaccinations sans exception sont strictement facultatives en France"
+        ],
+        correct: [0],
+        rationale: "Depuis le 1er janvier 2018, 11 vaccins sont devenus obligatoires pour tous les nourrissons nés à partir de cette date en France."
+    },
+    {
+        id: 2,
+        question: "Quels vaccins appartiennent à la catégorie des Vaccins Vivants Atténués (VVA) ?",
+        options: [
+            "Rougeole, Oreillons, Rubéole (ROR)",
+            "Fièvre jaune et BCG",
+            "Rotavirus",
+            "Tétanos, Diphtérie et Poliomyélite"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les VVA contiennent un microorganisme vivant dont la virulence est atténuée : ROR, fièvre jaune, BCG, rotavirus et varicelle. Tétanos, diphtérie et polio sont des vaccins inactivés ou anatoxines."
+    },
+    {
+        id: 3,
+        question: "Quelles sont les deux contre-indications absolues et universelles à l'administration d'un Vaccin Vivant Atténué (VVA) ?",
+        options: [
+            "L'immunodépression sévère (greffe, chimiothérapie, déficit immunitaire, corticothérapie forte, VIH avec CD4 < 200/mm3)",
+            "La grossesse (femme enceinte)",
+            "L'allaitement maternel",
+            "L'exercice d'une profession médicale"
+        ],
+        correct: [0, 1],
+        rationale: "Les VVA sont formellement contre-indiqués chez la femme enceinte (risque tératogène/foetal) et l'immunodéprimé (risque de maladie vaccinale disséminée mortelle)."
+    },
+    {
+        id: 4,
+        question: "Concernant les voies et sites d'administration anatomiques des vaccins, quelles affirmations sont exactes ?",
+        options: [
+            "La voie intramusculaire (IM) se fait dans le deltoïde chez l'adulte et grand enfant",
+            "Chez le nourrisson avant l'âge de la marche, l'IM se fait dans la face antéro-latérale de la cuisse (vaste externe)",
+            "L'injection IM dans le muscle fessier est déconseillée en raison d'une moins bonne immunogénicité et du risque lésionnel",
+            "Le BCG s'administre obligatoirement par voie sous-cutanée profonde"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'IM se fait dans le vaste externe de la cuisse chez le nourrisson et le deltoïde chez l'adulte (jamais la fesse). Le BCG s'injecte par voie intra-dermique stricte."
+    },
+    {
+        id: 5,
+        question: "Combien de vaccins différents peuvent être administrés de façon simultanée (sur des sites anatomiques distincts) lors de la même séance selon les recommandations ?",
+        options: [
+            "Jusqu'à 4 vaccins simultanés le même jour",
+            "Un seul vaccin par mois au maximum",
+            "Strictement 2 vaccins, jamais plus",
+            "Il faut impérativement attendre 6 mois entre chaque vaccin inactivé"
+        ],
+        correct: [0],
+        rationale: "Selon la HAS et la SPILF, jusqu'à 4 vaccins peuvent être administrés le même jour sur des sites séparés."
+    },
+    {
+        id: 6,
+        question: "Parmi les propositions suivantes, lesquelles constituent de FAUSSES contre-indications à la vaccination ?",
+        options: [
+            "Un épisode infectieux fébrile modéré ou banal (rhume, rhinopharyngite)",
+            "L'eczéma ou une dermatose cutanée stable",
+            "La prématurité ou l'allaitement",
+            "Une maladie neurologique stable et suivie telle que la sclérose en plaques"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces situations sont de fausses contre-indications qui ne doivent pas différer une vaccination nécessaire."
+    },
+    {
+        id: 7,
+        question: "Depuis l'arrêté d'août 2023, quelles sont les compétences vaccinales élargies de l'Infirmier Diplômé d'État (IDE) formé ?",
+        options: [
+            "L'IDE peut prescrire et administrer l'ensemble des vaccins du calendrier vaccinal aux personnes de 11 ans et plus (hors VVA chez l'immunodéprimé)",
+            "L'IDE peut administrer sans prescription médicale préalable le vaccin antigrippal dès 11 ans",
+            "L'IDE peut vacciner tout patient de tout âge sous prescription médicale",
+            "L'IDE a l'interdiction totale d'injecter le moindre vaccin en l'absence physique d'un médecin à ses côtés"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Depuis août 2023, après formation de 10h30, l'IDE peut prescrire et administrer les vaccins dès 11 ans (inertes et VVA chez l'immunocompétent). Sous prescription médicale, l'IDE administre à tout âge."
+    },
+    {
+        id: 8,
+        question: "Quelles sont les vaccinations obligatoires pour les étudiants et professionnels de santé en établissement de soins selon le calendrier vaccinal ?",
+        options: [
+            "DTPolio (mise à jour décennale ou tous les 20 ans selon l'âge)",
+            "Hépatite B (immunisation prouvée)",
+            "Fièvre typhoïde (personnels de laboratoire manipulant des selles/germes)",
+            "Rage pour tout le personnel administratif de l'hôpital"
+        ],
+        correct: [0, 1, 2],
+        rationale: "DTPolio et Hépatite B sont obligatoires pour les soignants (et la typhoïde pour les personnels de laboratoire exposés). La rage n'est requise que pour les laboratoires spécialisés."
+    },
+    {
+        id: 9,
+        question: "Selon l'arrêté du 2 août 2013, à partir de quel taux d'anticorps anti-HBs un professionnel de santé est-il considéré comme définitivement immunisé contre l'hépatite B ?",
+        options: [
+            "Taux d'anticorps anti-HBs > 100 UI/L",
+            "Taux d'anticorps anti-HBs > 10 UI/L en présence d'un schéma vaccinal complet documenté",
+            "Taux d'anticorps anti-HBs = 0 UI/L",
+            "Uniquement si l'antigène HBs est positif"
+        ],
+        correct: [0, 1],
+        rationale: "Un titre d'Ac anti-HBs > 100 UI/L confère l'immunité définitive sans preuve vaccinale exigée. Un titre ≥ 10 UI/L avec 3 doses documentées suffit également."
+    },
+    {
+        id: 10,
+        question: "Si un soignant vacciné contre l'hépatite B présente des Ac anti-HBs < 10 UI/L après ses 3 premières injections (sans Ac anti-HBc)",
+        options: [
+            "Administrer 1 à 3 injections supplémentaires avec dosage des Ac anti-HBs 1 à 2 mois après chaque dose",
+            "Si les Ac anti-HBs restent < 10 UI/L après un total cumulé de 6 injections, il est déclaré 'non-répondeur'",
+            "L'exclure définitivement de toute profession médicale sans recours",
+            "Lui faire une chimiothérapie par interféron"
+        ],
+        correct: [0, 1],
+        rationale: "On injecte jusqu'à 3 doses supplémentaires (max 6 doses au total). Si les anti-HBs restent < 10 UI/L, le professionnel est déclaré non-répondeur et maintenu sous surveillance annuelle."
+    },
+    {
+        id: 11,
+        question: "Concernant la vaccination contre la coqueluche chez les soignants et dans l'entourage des nourrissons, quelle est la stratégie préconisée ?",
+        options: [
+            "La stratégie du cocooning (vacciner l'entourage et les soignants pour protéger les nouveau-nés trop jeunes pour être vaccinés)",
+            "Rappel coqueluche à l'âge adulte (25 ans) et mise à jour si le dernier rappel date de plus de 10 ans en cas de projet parental ou contact avec des nourrissons",
+            "Un nourrisson est parfaitement protégé par les anticorps de sa mère dès la naissance sans vaccin",
+            "La coqueluche ne se transmet jamais en milieu hospitalier"
+        ],
+        correct: [0, 1],
+        rationale: "Les anticorps maternels ne protègent pas le nourrisson. Le cocooning protège le bébé < 6 mois via l'immunisation de ses parents, proches et des soignants de pédiatrie."
+    },
+    {
+        id: 12,
+        question: "Quelles vaccinations sont recommandées chez la femme enceinte au cours de sa grossesse ?",
+        options: [
+            "Le vaccin contre la coqueluche (dTcaP) dès le 2e trimestre (entre 20 et 36 SA) à chaque grossesse",
+            "Le vaccin contre la grippe saisonnière (pendant la campagne automnale, quel que soit le trimestre)",
+            "Le vaccin contre le Covid-19",
+            "Le vaccin ROR (Rougeole-Oreillons-Rubéole)"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Grippe, Covid-19, Coqueluche (dès le 2e trimestre) et vaccin VRS sont recommandés chez la femme enceinte. Le ROR est un VVA strictement contre-indiqué."
+    },
+    {
+        id: 13,
+        question: "Quelles sont les nouvelles recommandations vaccinales contre les infections invasives à méningocoque (IIM) ?",
+        options: [
+            "Vaccination tétravalente ACWY recommandée chez les adolescents de 11 à 14 ans (1 dose)",
+            "Vaccination contre le méningocoque B et ACWY rendue obligatoire chez les nourrissons",
+            "En France, le sérogroupe B représente historiquement la majorité des cas d'IIM",
+            "Le sérogroupe C est le seul existant en Afrique sahélienne"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le méningocoque B prédomine en France (avec poussée de W et Y). La vaccination B et ACWY s'étend désormais aux nourrissons et le rappel ACWY aux 11-14 ans."
+    },
+    {
+        id: 14,
+        question: "Concernant la vaccination contre les Papillomavirus humains (HPV) en France, quelles sont les recommandations ?",
+        options: [
+            "Vaccination recommandée chez les filles et les garçons de 11 à 14 ans (schéma à 2 doses)",
+            "Rattrapage vaccinal possible jusqu'à 19 ans pour tous, et jusqu'à 26 ans chez les HSH",
+            "Utilisation du vaccin nonavalent Gardasil 9®",
+            "Le vaccin HPV n'a aucun effet protecteur contre le cancer du col de l'utérus"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le vaccin HPV (Gardasil 9) cible filles et garçons de 11 à 14 ans (rattrapage 19 ans, 26 ans HSH) pour prévenir les cancers anogénitaux, oropharyngés et verrues."
+    },
+    {
+        id: 15,
+        question: "Pour quels patients la vaccination contre le Virus Respiratoire Syncytial (VRS) chez l'adulte est-elle recommandée par la HAS ?",
+        options: [
+            "Tous les adultes âgés de 75 ans et plus",
+            "Les adultes âgés de 65 ans et plus présentant des comorbidités respiratoires (BPCO) ou cardiaques (insuffisance cardiaque)",
+            "Tous les adolescents scolarisés au collège",
+            "Uniquement les personnes ayant déjà eu 5 épisodes de bronchiolite"
+        ],
+        correct: [0, 1],
+        rationale: "La HAS recommande la vaccination saisonnière VRS pour tous les sujets de 75 ans et +, ainsi que dès 65 ans en cas de cardiopathie ou pneumopathie chronique (BPCO)."
+    },
+    {
+        id: 16,
+        question: "Qu'est-ce que le Beyfortus® (Nirsévimab) utilisé chez le nouveau-né et le nourrisson ?",
+        options: [
+            "Un anticorps monoclonal protecteur à longue durée d'action (environ 5 mois) conférant une immunisation passive immédiate contre le VRS",
+            "Un vaccin vivant atténué oral",
+            "Un antibiotique de la famille des macrolides",
+            "Un sirop antitussif sédatif"
+        ],
+        correct: [0],
+        rationale: "Le Beyfortus n'est pas un vaccin mais une immunisation passive par anticorps monoclonal injectable (IM) couvrant la première saison hivernale d'exposition au VRS."
+    },
+    {
+        id: 17,
+        question: "Concernant les pathologies du voyageur en pays tropical, quelles sont les premières causes de rapatriement sanitaire et de décès chez les voyageurs ?",
+        options: [
+            "Les traumatismes / accidents de la voie publique (AVP) et les décompensations cardiovasculaires",
+            "Le paludisme à Plasmodium falciparum",
+            "Les envenimations par morsure de serpent",
+            "Le choléra épidémique"
+        ],
+        correct: [0],
+        rationale: "Contrairement aux idées reçues, les accidents de la route (traumatologie) et les événements cardiovasculaires sont les premières causes de décès et de rapatriement, devant les maladies infectieuses."
+    },
+    {
+        id: 18,
+        question: "Quelles populations de voyageurs présentent le risque le plus élevé de contracter une pathologie infectieuse grave en milieu tropical ?",
+        options: [
+            "Les personnes ayant émigré en France retournant visiter leurs proches dans leur pays d'origine (VFR)",
+            "Les voyageurs immunodéprimés",
+            "Les adultes jeunes partant en voyage 'aventure' non organisé pendant plusieurs semaines",
+            "Les touristes résidant dans un hôtel climatisé pendant 48 heures"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les migrants retournant au pays (perte d'immunité, contacts étroits), les immunodéprimés et les routards en séjour prolongé sont les plus vulnérables."
+    },
+    {
+        id: 19,
+        question: "Quelles sont les mesures fondamentales d'hygiène alimentaire pour prévenir la turista et les maladies du péril fécal en zone tropicale ?",
+        options: [
+            "Consommation exclusive d'eau en bouteille capsulée ou rendue potable (ébullition, filtration, désinfection)",
+            "Lavage rigoureux des mains à l'eau et au savon ou friction par SHA avant les repas",
+            "Éviction formelle des glaçons, des glaces artisanales et des jus de fruits frais non industriels",
+            "Consommation d'aliments bien cuits et servis chauds, évitement des crudités et coquillages crus"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "L'adage du voyageur est : 'Fais-le bouillir, cuis-le, épluche-le ou oublie-le'. L'eau en bouteille capsulée et l'éviction des glaçons/crudités sont indispensables."
+    },
+    {
+        id: 20,
+        question: "Quelles sont les caractéristiques épidémiologiques et cliniques de la diarrhée du voyageur (Turista) ?",
+        options: [
+            "Elle survient le plus souvent au cours de la 1ère semaine du séjour",
+            "Elle est d'origine bactérienne dans plus de 50 % des cas (notamment Escherichia coli entérotoxinogène - ETEC)",
+            "L'évolution est le plus souvent spontanément favorable en 3 à 5 jours",
+            "Elle nécessite obligatoirement une antibiothérapie par voie veineuse dès la première selle liquide"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La turista (majoritairement à ETEC) est bénigne et régresse en 3-5 jours. Le traitement repose sur la réhydratation orale et un antisécrétoire (racécadotril) ; les antibiotiques sont réservés aux formes invasives dysentériques."
+    },
+    {
+        id: 21,
+        question: "Concernant le vaccin contre la fièvre jaune (Stamaril®), quelles propositions sont exactes ?",
+        options: [
+            "C'est un Vaccin Vivant Atténué",
+            "Il est exigé administrativement pour entrer dans les zones d'endémie d'Afrique intertropicale et d'Amazonie (Guyane)",
+            "Il doit obligatoirement être administré dans un Centre de Vaccinations Internationales (CVI) agréé et consigné sur un carnet jaune",
+            "Il est recommandé et sans aucun danger chez la femme enceinte au 1er trimestre"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le Stamaril (VVA) est obligatoire en zone intertropicale/Amazonie, administré exclusivement en CVI agréé. Comme tout VVA, il est contre-indiqué chez la femme enceinte et l'immunodéprimé."
+    },
+    {
+        id: 22,
+        question: "Quels vaccins spécifiques sont classiquement recommandés chez les voyageurs se rendant dans des pays à bas niveau d'hygiène ?",
+        options: [
+            "Hépatite A (dès l'âge de 1 an)",
+            "Fièvre typhoïde (Typhim Vi®, dès 2 ans, durée 3 ans, notamment pour le sous-continent indien)",
+            "Rage en pré-exposition (recommandée chez les jeunes enfants ou séjour prolongé)",
+            "Vaccin contre la varicelle chez tous les adultes ayant déjà eu la varicelle"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Hépatite A, typhoïde, rage pré-exposition et méningite tétravalente (ceinture de la méningite ou pèlerinage à La Mecque) sont les vaccins phares du voyageur."
+    },
+    {
+        id: 23,
+        question: "Quels comportements à risque et mesures d'éviction permettent de prévenir les parasitoses en milieu tropical ?",
+        options: [
+            "Ne jamais se baigner en eau douce stagnante (prévention des bilharzioses / schistosomoses)",
+            "Ne pas marcher pieds nus sur le sol ou la boue (prévention de l'anguillulose, ankylostome et larva migrans)",
+            "Ne pas s'allonger directement sur le sable (larva migrans cutanée aux Antilles/tropiques)",
+            "Repasser le linge séché à l'extérieur avec un fer chaud (prévention de la myiase à mouche tumbu)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Ces 4 règles hygiéniques préviennent la pénétration transcutanée des furcocercaires (bilharziose), des larves de nématodes et la ponte de larves de mouches dans le linge."
+    },
+    {
+        id: 24,
+        question: "Quelle est la règle d'or diagnostique absolue devant TOUTE fièvre survenant au retour d'un pays tropical ?",
+        options: [
+            "Toute fièvre survenant dans les mois suivant le retour d'une zone d'endémie est un PALUDISME jusqu'à preuve du contraire",
+            "C'est obligatoirement une réaction au décalage horaire",
+            "La fièvre ne peut être d'origine palustre que si elle s'accompagne d'un ictère cutané franc",
+            "Il faut attendre 15 jours d'évolution avant de réaliser des examens sanguins"
+        ],
+        correct: [0],
+        rationale: "Règle absolue d'infectiologie : toute fièvre au retour des tropiques (jusqu'à 2-3 mois après) est une urgence diagnostique et doit être considérée comme un paludisme à Plasmodium falciparum."
+    },
+    {
+        id: 25,
+        question: "Quelles sont les arboviroses émergentes transmises par les moustiques Aedes (moustique tigre) en zone tropicale et tempérée ?",
+        options: [
+            "Dengue (2e cause de fièvre au retour des tropiques)",
+            "Chikungunya",
+            "Zika",
+            "Tétanos"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Dengue, Chikungunya et Zika sont des arboviroses transmises le jour par les moustiques du genre Aedes. La dengue est la 2e cause de fièvre du retour après le paludisme."
+    },
+    {
+        id: 26,
+        question: "Concernant le vecteur du paludisme, quelles sont ses caractéristiques biologiques ?",
+        options: [
+            "Moustique du genre Anophèle (Anopheles)",
+            "Seule la femelle est hématophage et transmet le parasite",
+            "Les piqûres ont lieu principalement la nuit (activité maximale entre 23h et 6h)",
+            "Il pique exclusivement en plein soleil à midi"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'anophèle femelle est le vecteur exclusif du paludisme, avec une activité piqueuse vespérale et nocturne (d'où l'importance capitale de la moustiquaire de lit)."
+    },
+    {
+        id: 27,
+        question: "Parmi les 5 espèces de Plasmodium pathogènes pour l'homme, laquelle est responsable de la majorité des formes graves et des décès ?",
+        options: [
+            "Plasmodium falciparum",
+            "Plasmodium vivax",
+            "Plasmodium ovale",
+            "Plasmodium malariae"
+        ],
+        correct: [0],
+        rationale: "Plasmodium falciparum est l'espèce la plus répandue et la seule responsable du neuropaludisme mortel et de l'accès pernicieux grave."
+    },
+    {
+        id: 28,
+        question: "Quelles espèces de Plasmodium sont capables de former des 'hypnozoïtes' intrahépatiques dormants, responsables de rechutes tardives plusieurs années après ?",
+        options: [
+            "Plasmodium vivax et Plasmodium ovale",
+            "Plasmodium falciparum",
+            "Plasmodium malariae",
+            "Plasmodium knowlesi"
+        ],
+        correct: [0],
+        rationale: "Seuls P. vivax et P. ovale forment des hypnozoïtes quiescents dans les hépatocytes, nécessitant un traitement radical par Primaquine pour éliminer les rechutes."
+    },
+    {
+        id: 29,
+        question: "Quel type de périodicité fébrile classique observe-t-on au cours d'un paludisme à Plasmodium malariae ?",
+        options: [
+            "Fièvre quarte (accès fébrile survenant toutes les 72 heures)",
+            "Fièvre tierce (accès toutes les 48 heures)",
+            "Fièvre continue sans rémission",
+            "Fièvre survenant toutes les 12 heures"
+        ],
+        correct: [0],
+        rationale: "P. malariae donne une fièvre quarte (cycle érythrocytaire de 72h). P. falciparum, vivax et ovale donnent une fièvre tierce (cycle de 48h)."
+    },
+    {
+        id: 30,
+        question: "Quels critères cliniques et biologiques définissent l'accès palustre grave à Plasmodium falciparum selon la SPILF ?",
+        options: [
+            "Défaillance neurologique (Glasgow < 11, obnubilation, confusion, convulsions)",
+            "Défaillance respiratoire (détresse respiratoire, SpO2 < 92 % en air ambiant)",
+            "Défaillance hémodynamique (PAS < 80 mmHg, marbrures, lactates > 2 mmol/L)",
+            "Hyperparasitémie > 4 %, anémie sévère (Hb < 7 g/dL), acidose métabolique ou insuffisance rénale"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "L'accès grave (urgence de réanimation) se définit par l'atteinte neurologique, respiratoire, circulatoire, rénale, hémorragique, métabolique (acidose/hypoglycémie) ou parasitémie > 4 %."
+    },
+    {
+        id: 31,
+        question: "Quels examens parasitologiques de laboratoire permettent de poser le diagnostic de certitude du paludisme en urgence (délai de rendu < 2 heures) ?",
+        options: [
+            "Frottis sanguin mince (identification d'espèce et mesure de la parasitémie en %)",
+            "Goutte épaisse (technique de concentration très sensible avec seuil de détection à 10 parasites/µL)",
+            "Test de Diagnostic Rapide (TDR détectant l'antigène HRP2 de P. falciparum)",
+            "Coproculture standard sur gélose lactosée"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le couple frottis mince + goutte épaisse (ou frottis + TDR) est le standard d'urgence à réaliser immédiatement avec rendu impératif en moins de 2 heures."
+    },
+    {
+        id: 32,
+        question: "Quel est le traitement de première intention recommandé pour un accès palustre simple à Plasmodium falciparum chez l'adulte ?",
+        options: [
+            "Une combinaison thérapeutique à base de dérivés de l'artémisinine (ACT) par voie orale : Eurartésim® ou Riamet®",
+            "Atovaquone-proguanil (Malarone®) en 2e intention",
+            "Arséniate de soude en injection sous-cutanée",
+            "Aspirine à forte dose"
+        ],
+        correct: [0, 1],
+        rationale: "Les ACT oraux (Arténimol-Pipéraquine ou Artéméther-Luméfantrine) sont le traitement de choix en 1re intention de l'accès simple, suivis de la Malarone en 2e intention."
+    },
+    {
+        id: 33,
+        question: "Quel est le traitement d'urgence vitale de première intention d'un accès palustre GRAVE à Plasmodium falciparum ?",
+        options: [
+            "ARTÉSUNATE par voie intraveineuse (Malacef®) en réanimation / soins continus",
+            "Quinine intraveineuse en 2e intention",
+            "Comprimés de chloroquine broyés dans de l'eau",
+            "Antibiothérapie par amoxicilline orale seule"
+        ],
+        correct: [0, 1],
+        rationale: "L'Artésunate IV a révolutionné la prise en charge du paludisme grave en réduisant significativement la mortalité par rapport à la Quinine IV historique."
+    },
+    {
+        id: 34,
+        question: "Quel risque hématologique retardé impose une surveillance par NFS à J7, J14, J21 et J28 après un traitement par Artésunate IV ?",
+        options: [
+            "Le risque d'anémie hémolytique retardée induite par l'artésunate (PADH)",
+            "Le risque d'aplasie médullaire définitive",
+            "Une polyglobulie majeure",
+            "Une hyperleucocytose à 100 000 /mm3"
+        ],
+        correct: [0],
+        rationale: "L'artésunate peut induire une hémolyse retardée post-artémisinine (PADH) survenant 1 à 3 semaines après le traitement, imposant la surveillance de l'hémoglobine jusqu'à J28."
+    },
+    {
+        id: 35,
+        question: "Quelles molécules sont utilisées en chimioprophylaxie préventive du paludisme chez le voyageur en zone d'endémie ?",
+        options: [
+            "Atovaquone-Proguanil (Malarone®)",
+            "Doxycycline (Doxypalu®)",
+            "Méfloquine (Lariam®)",
+            "Pénicilline V"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Malarone (adaptée aux séjours courts, arrêt 7j après retour), Doxycycline (économique) et Méfloquine (prise hebdomadaire pour long séjour) sont les antipaludiques préventifs."
+    },
+    {
+        id: 36,
+        question: "Concernant la Protection Personnelle Anti-Vectorielle (PPAV) contre les moustiques, quelles mesures sont réellement efficaces ?",
+        options: [
+            "Moustiquaire de lit imprégnée d'insecticide (pyréthrinoïdes)",
+            "Répulsifs cutanés sur les zones de peau découvertes (DEET, IR3535)",
+            "Port de vêtements longs, couvrants et de couleur claire",
+            "Bracelets anti-moustiques, ultrasons et huiles essentielles"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Moustiquaires imprégnées, répulsifs et vêtements longs sont prouvés efficaces. Bracelets, ultrasons et huiles essentielles sont inefficaces et dangereux par fausse réassurance."
+    },
+    {
+        id: 37,
+        question: "Concernant les vaccins antipaludiques pédiatriques récemment recommandés par l'OMS en zone d'endémie africaine, quelles sont les deux molécules validées ?",
+        options: [
+            "Le vaccin RTS,S / AS01 (Mosquirix®)",
+            "Le vaccin R21 / Matrix-M (adjuvanté par Matrix-M)",
+            "Le vaccin Stamaril",
+            "Le vaccin Engerix B"
+        ],
+        correct: [0, 1],
+        rationale: "L'OMS recommande désormais deux vaccins préventifs chez l'enfant en zone d'endémie : le RTS,S (Mosquirix) et le R21/Matrix-M."
+    },
+    {
+        id: 38,
+        question: "Quelle est la cause virale très largement prédominante de gastro-entérite aiguë chez le nourrisson et le jeune enfant de moins de 5 ans ?",
+        options: [
+            "Le Rotavirus",
+            "Le virus de la rage",
+            "Le cytomégalovirus",
+            "Le virus de l'hépatite C"
+        ],
+        correct: [0],
+        rationale: "Le rotavirus est le virus universel responsable des épidémies hivernales de gastro-entérite aiguë sévère chez l'enfant de moins de 5 ans."
+    },
+    {
+        id: 39,
+        question: "Quel est le risque vital majeur de la gastro-entérite aiguë du nourrisson justifiant une prise en charge urgente ?",
+        options: [
+            "La déshydratation aiguë rapide (perte hydro-électrolytique)",
+            "L'insuffisance hépatique fulminante immédiate",
+            "L'arrêt cardiaque par hypothermie primitive",
+            "L'asphyxie laryngée"
+        ],
+        correct: [0],
+        rationale: "La perte brutale d'eau et d'ions par les vomissements et la diarrhée expose le nourrisson à une déshydratation aiguë sévère mettant rapidement en jeu le pronostic vital."
+    },
+    {
+        id: 40,
+        question: "Quel est le pilier thérapeutique absolu et prioritaire de la gastro-entérite du nourrisson ?",
+        options: [
+            "La réhydratation précoce par Soluté de Réhydratation Orale (SRO) administré en petites quantités répétées (fractionnées)",
+            "L'administration de médicaments ralentisseurs du transit intestinal (antidiarrhéiques)",
+            "L'antibiothérapie systématique à large spectre par voie intraveineuse",
+            "La diète hydrique totale sans aucun apport pendant 48 heures"
+        ],
+        correct: [0],
+        rationale: "La règle d'or est la réhydratation orale immédiate au SRO par petites gorgées fractionnées. Les antidiarrhéiques sont contre-indiqués chez le petit enfant."
+    }
+];
+
+let currentIndex = 0;
+let userAnswers = {};
+let reviewMode = false;
+let displayedQuestions = [...questions];
+
+function init() {
+    renderGrid();
+    loadQuestion(currentIndex);
+    updateStats();
+}
+
+function getErrorQuestions() {
+    return questions.filter(q => {
+        const userAns = userAnswers[q.id];
+        if (!userAns) return false;
+        const sortedUser = [...userAns].sort().join(',');
+        const sortedCorr = [...q.correct].sort().join(',');
+        return sortedUser !== sortedCorr;
+    });
+}
+
+function renderGrid() {
+    const grid = document.getElementById('question-grid');
+    grid.innerHTML = '';
+    displayedQuestions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.textContent = q.id;
+        if (idx === currentIndex) item.classList.add('active');
+
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) {
+                item.classList.add('correct');
+            } else {
+                item.classList.add('incorrect');
+            }
+        }
+
+        item.onclick = () => {
+            currentIndex = idx;
+            loadQuestion(currentIndex);
+        };
+        grid.appendChild(item);
+    });
+}
+
+function loadQuestion(index) {
+    if (displayedQuestions.length === 0) {
+        document.getElementById('q-label').textContent = "Terminé";
+        document.getElementById('q-text').textContent = "Aucune erreur enregistrée ! Toutes vos réponses sont exactes.";
+        document.getElementById('options-container').innerHTML = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('validate-btn').disabled = true;
+        return;
+    }
+
+    const q = displayedQuestions[index];
+    document.getElementById('q-label').textContent = `Question ${q.id} sur 40 ${reviewMode ? '(Mode Erreurs)' : ''}`;
+    document.getElementById('q-text').textContent = q.question;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentSelections = userAnswers[q.id] || [];
+    const isAnswered = userAnswers[q.id] !== undefined;
+
+    q.options.forEach((optText, optIdx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'option-item';
+        if (currentSelections.includes(optIdx)) optDiv.classList.add('selected');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = currentSelections.includes(optIdx);
+
+        const label = document.createElement('span');
+        label.innerHTML = `<span class="opt-letter">${letters[optIdx]}.</span> ${optText}`;
+
+        optDiv.appendChild(chk);
+        optDiv.appendChild(label);
+
+        if (!isAnswered) {
+            optDiv.onclick = () => {
+                chk.checked = !chk.checked;
+                if (chk.checked) {
+                    optDiv.classList.add('selected');
+                } else {
+                    optDiv.classList.remove('selected');
+                }
+            };
+        } else {
+            optDiv.style.cursor = 'default';
+        }
+
+        optContainer.appendChild(optDiv);
+    });
+
+    const feedback = document.getElementById('feedback');
+    if (isAnswered) {
+        showFeedbackUI(q);
+        document.getElementById('validate-btn').disabled = true;
+    } else {
+        feedback.style.display = 'none';
+        feedback.className = 'feedback-box';
+        document.getElementById('validate-btn').disabled = false;
+    }
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').disabled = (index === displayedQuestions.length - 1);
+
+    renderGrid();
+}
+
+function validateCurrent() {
+    const q = displayedQuestions[currentIndex];
+    const optContainer = document.getElementById('options-container');
+    const checkboxes = optContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = [];
+    checkboxes.forEach((cb, idx) => {
+        if (cb.checked) selected.push(idx);
+    });
+
+    if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une proposition.");
+        return;
+    }
+
+    userAnswers[q.id] = selected;
+    showFeedbackUI(q);
+    document.getElementById('validate-btn').disabled = true;
+    updateStats();
+    renderGrid();
+}
+
+function showFeedbackUI(q) {
+    const feedback = document.getElementById('feedback');
+    const letters = ['A', 'B', 'C', 'D'];
+    const sortedUser = [...(userAnswers[q.id] || [])].sort().join(',');
+    const sortedCorr = [...q.correct].sort().join(',');
+    const isCorrect = (sortedUser === sortedCorr);
+
+    const corrLetters = q.correct.map(i => letters[i]).join(', ');
+
+    feedback.style.display = 'block';
+    if (isCorrect) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>Exact !</strong> (Réponse : ${corrLetters})<br>${q.rationale}`;
+    } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>Inexact ou incomplet.</strong> Bonne(s) réponse(s) : <strong>${corrLetters}</strong><br>${q.rationale}
+        <div class="feynman-tip">💡 <strong>Astuce Feynman :</strong> Expliquez simplement pourquoi ${corrLetters} est la seule conduite ou règle clinique exacte.</div>`;
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion(currentIndex);
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < displayedQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+}
+
+function updateStats() {
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    document.getElementById('progress-indicator').textContent = `Question ${currentIndex + 1} / ${displayedQuestions.length}`;
+    document.getElementById('score-indicator').textContent = `Score : ${score} / ${totalAnswered} validées`;
+}
+
+function toggleFilterErrors() {
+    const btn = document.getElementById('filter-btn');
+    if (!reviewMode) {
+        const errors = getErrorQuestions();
+        if (errors.length === 0) {
+            alert("Aucune erreur détectée pour le moment ! Continuez l'épreuve.");
+            return;
+        }
+        reviewMode = true;
+        displayedQuestions = errors;
+        currentIndex = 0;
+        btn.textContent = "Retour épreuve";
+        btn.style.background = "var(--warning)";
+    } else {
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        btn.textContent = "Mode normal";
+        btn.style.background = "var(--primary)";
+    }
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function showResultsModal() {
+    const modal = document.getElementById('results-modal');
+    const circle = document.getElementById('modal-score-circle');
+    const title = document.getElementById('modal-title');
+    const text = document.getElementById('modal-feedback-text');
+
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    const percent = Math.round((score / questions.length) * 100);
+    circle.textContent = `${score} / 40`;
+
+    if (score >= 32) {
+        circle.className = 'score-circle score-pass';
+        title.textContent = "Validation Réussie (Niveau A)";
+        text.textContent = `Félicitations ! Vous validez ${percent} % du Module CM1. Les vaccins obligatoires et soignants, le paludisme (critères de gravité, frottis/goutte, ACT/artésunate), les risques tropicaux et le SRO du nourrisson sont parfaitement maîtrisés.`;
+    } else {
+        circle.className = 'score-circle score-fail';
+        title.textContent = "Risque d'Ajournement (Niveau B/C)";
+        text.textContent = `Score actuel : ${score}/40 (${percent} %). Des notions prioritaires (taux d'Ac anti-HBs soignants, VVA chez l'immunodéprimé/grossesse, signes de neuropaludisme ou prise en charge de la turista) doivent être impérativement consolidées.`;
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeResultsModal() {
+    document.getElementById('results-modal').style.display = 'none';
+}
+
+function startErrorReview() {
+    closeResultsModal();
+    const errors = getErrorQuestions();
+    if (errors.length === 0) {
+        alert("Félicitations, vous n'avez aucune erreur à réviser !");
+        return;
+    }
+    reviewMode = true;
+    displayedQuestions = errors;
+    currentIndex = 0;
+    document.getElementById('filter-btn').textContent = "Retour épreuve";
+    document.getElementById('filter-btn').style.background = "var(--warning)";
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function restartQuiz() {
+    if (confirm("Voulez-vous réinitialiser toutes vos réponses et recommencer ?")) {
+        userAnswers = {};
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        document.getElementById('filter-btn').textContent = "Mode normal";
+        document.getElementById('filter-btn').style.background = "var(--primary)";
+        closeResultsModal();
+        updateStats();
+        loadQuestion(0);
+        renderGrid();
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
