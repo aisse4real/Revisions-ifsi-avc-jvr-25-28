@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCM UE 2.5 - Hépatites Virales (CM6 - Dre de Monteynard)</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --warning: #d97706;
+            --warning-bg: #fef3c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--primary);
+        }
+
+        h1 {
+            font-size: 1.35rem;
+            color: var(--primary-dark);
+            margin-bottom: 0.4rem;
+        }
+
+        .sub-header {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .grid-toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .grid-toggle-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .grid-item.active {
+            border: 2px solid var(--primary);
+            transform: scale(1.08);
+            background: #e0f2fe;
+        }
+
+        .grid-item.correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border-color: #86efac;
+        }
+
+        .grid-item.incorrect {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border-color: #fca5a5;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .q-number {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            line-height: 1.45;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+
+        .option-item:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .option-item.selected {
+            background: #eff6ff;
+            border-color: var(--primary);
+        }
+
+        .option-item input[type="checkbox"] {
+            margin-right: 0.85rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            pointer-events: none;
+        }
+
+        .opt-letter {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        button.action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        button.action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary-btn {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+
+        button.secondary-btn:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        button.secondary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback-box {
+            margin-top: 1.2rem;
+            padding: 1.2rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-box.correct {
+            display: block;
+            background: var(--success-bg);
+            border-left: 5px solid var(--success);
+            color: #064e3b;
+        }
+
+        .feedback-box.incorrect {
+            display: block;
+            background: var(--danger-bg);
+            border-left: 5px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        .feynman-tip {
+            margin-top: 0.6rem;
+            font-style: italic;
+            font-size: 0.9rem;
+            border-top: 1px dashed rgba(0,0,0,0.15);
+            padding-top: 0.6rem;
+        }
+
+        .results-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 100;
+        }
+
+        .results-card {
+            background: white;
+            padding: 2.2rem;
+            border-radius: 16px;
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.2rem auto;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .score-pass {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 4px solid var(--success);
+        }
+
+        .score-fail {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 4px solid var(--danger);
+        }
+
+        .filter-error-btn {
+            background: var(--warning);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>IFSI S3 : UE 2.5 Processus Infectieux (CM6 - Dre de Monteynard)</h1>
+        <div class="sub-header">Hépatites Virales (VHA, VHE, VHB, VHD, VHC) • Sérologies, Traitements & Prévention (40 QCM)</div>
+        <div class="stats-bar">
+            <span id="progress-indicator">Question 1 / 40</span>
+            <span id="score-indicator">Score : 0 / 0</span>
+            <button class="grid-toggle-btn" onclick="toggleFilterErrors()" id="filter-btn">Mode normal</button>
+        </div>
+    </header>
+
+    <div class="question-grid" id="question-grid"></div>
+
+    <main class="card" id="quiz-card">
+        <div class="q-number" id="q-label">Question 1</div>
+        <div class="q-text" id="q-text">Chargement...</div>
+
+        <div class="options-list" id="options-container"></div>
+
+        <div class="btn-group">
+            <button class="action-btn" id="validate-btn" onclick="validateCurrent()">Valider ma réponse</button>
+            <button class="secondary-btn" id="prev-btn" onclick="prevQuestion()" disabled>Précédent</button>
+            <button class="secondary-btn" id="next-btn" onclick="nextQuestion()" disabled>Suivant</button>
+            <button class="secondary-btn" style="margin-left:auto" onclick="showResultsModal()">Bilan</button>
+        </div>
+
+        <div class="feedback-box" id="feedback"></div>
+    </main>
+</div>
+
+<div class="results-modal" id="results-modal">
+    <div class="results-card">
+        <h2 id="modal-title">Bilan de l'Épreuve</h2>
+        <div class="score-circle" id="modal-score-circle">--</div>
+        <p id="modal-feedback-text" style="color: var(--text-muted); margin-bottom: 1.5rem;"></p>
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+            <button class="filter-error-btn" id="modal-retry-errors" onclick="startErrorReview()">Travailler uniquement mes erreurs</button>
+            <button class="action-btn" onclick="restartQuiz()">Recommencer l'épreuve complète</button>
+            <button class="secondary-btn" onclick="closeResultsModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const questions = [
+    {
+        id: 1,
+        question: "Concernant les caractéristiques virologiques et épidémiologiques du virus de l'hépatite A (VHA), quelles propositions sont exactes ?",
+        options: [
+            "Le VHA est un virus à ARN",
+            "La transmission principale se fait par voie oro-fécale (eau ou aliments souillés)",
+            "La durée d'incubation moyenne est de 2 à 6 semaines",
+            "Le VHA est un virus à ADN strictement transmis par voie parentérale sanguine"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le VHA est un virus à ARN se transmettant par voie oro-fécale (péril fécal), avec une incubation de 2 à 6 semaines."
+    },
+    {
+        id: 2,
+        question: "Concernant la clinique de l'hépatite A aiguë, quelles manifestations caractérisent la phase pré-ictérique ?",
+        options: [
+            "Nausées et syndrome grippal",
+            "Douleur de l'hypochondre droit",
+            "Urticaire parfois présente",
+            "Décoloration franche des selles et urines couleur thé foncé"
+        ],
+        correct: [0, 1, 2],
+        rationale: "La phase pré-ictérique associe nausées, syndrome pseudogrippal, douleur hépatique (hypochondre droit) et parfois urticaire. L'ictère, les selles décolorées et les urines foncées signent la phase ictérique."
+    },
+    {
+        id: 3,
+        question: "Concernant l'évolution naturelle et les complications du virus de l'hépatite A (VHA), quelles affirmations sont vraies ?",
+        options: [
+            "L'évolution est spontanément favorable en 15 jours dans l'immense majorité des cas",
+            "Il n'existe jamais de passage à l'hépatite A chronique",
+            "L'hépatite fulminante est une complication exceptionnelle, survenant plus volontiers chez le sujet âgé",
+            "Plus de 50 % des patients adultes développent une cirrhose post-hépatite A"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le VHA ne passe JAMAIS à la chronicité. L'évolution guérit en 15 jours. L'hépatite fulminante est exceptionnelle (sujet âgé)."
+    },
+    {
+        id: 4,
+        question: "Quel examen sérologique affirme formellement le diagnostic d'hépatite A aiguë récente ?",
+        options: [
+            "La détection des anticorps anti-VHA de type IgM",
+            "La présence isolée des anticorps anti-VHA de type IgG",
+            "L'antigène HBs",
+            "La charge virale plasmatique par PCR ADN"
+        ],
+        correct: [0],
+        rationale: "Les IgM anti-VHA signent l'infection aiguë récente. Les IgG anti-VHA signent une immunité ancienne (infection guérie ou vaccin) qui confère une protection à vie."
+    },
+    {
+        id: 5,
+        question: "Quelles sont les modalités de prévention et de traitement de l'hépatite A présentées dans le cours ?",
+        options: [
+            "Vaccination préventive comportant 2 doses espacées de 6 mois",
+            "Conseils aux voyageurs sur la lutte contre le péril fécal (hygiène de l'eau et des aliments)",
+            "Vérification de la présence d'anticorps protecteurs chez le sujet âgé ou originaire de zone d'endémie",
+            "Prescription systématique d'antiviraux d'action directe pendant 12 semaines"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le traitement curatif de l'hépatite A est purement symptomatique. La prévention repose sur l'hygiène de l'eau et la vaccination (2 doses à M0-M6)."
+    },
+    {
+        id: 6,
+        question: "Concernant le virus de l'hépatite E (VHE), quelles sont ses voies majeures de transmission ?",
+        options: [
+            "Transmission oro-fécale par eau contaminée par des excréments",
+            "Consommation de viande de porc ou de gibier (sangliers, cervidés) insuffisamment cuite",
+            "Transmission sanguine par produits dérivés du sang",
+            "Transmission aérienne par gouttelettes de Pflügge"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le VHE (virus à ARN) est une zoonose à transmission oro-fécale : eau polluée, ingestion de foie/viande de porc ou gibier peu cuit, et transmission sanguine."
+    },
+    {
+        id: 7,
+        question: "Concernant la clinique de l'hépatite E aiguë, quelles affirmations sont exactes ?",
+        options: [
+            "Environ 80 % des formes sont totalement asymptomatiques",
+            "Dans les formes aiguës symptomatiques : fièvre, myalgies, ictère, douleurs abdominales",
+            "Possibilité de manifestations neurologiques sévères associées comme le syndrome de Guillain-Barré",
+            "Elle est totalement bénigne sans aucun risque chez la femme enceinte"
+        ],
+        correct: [0, 1, 2],
+        rationale: "80 % des hépatites E sont asymptomatiques. Les formes symptomatiques peuvent s'accompagner de complications neurologiques (Guillain-Barré)."
+    },
+    {
+        id: 8,
+        question: "Chez quelle population spécifique l'hépatite E présente-t-elle une gravité extrême avec un risque élevé de mortalité ?",
+        options: [
+            "La femme enceinte au 3e trimestre de grossesse (T3)",
+            "Le nourrisson de moins de 6 mois",
+            "L'adulte jeune sportif sans antécédent",
+            "Le sujet présentant un rhume banal"
+        ],
+        correct: [0],
+        rationale: "Le VHE est redoutable chez la femme enceinte au 3e trimestre, entraînant un risque élevé d'hépatite fulminante et de mortalité maternelle et fœtale."
+    },
+    {
+        id: 9,
+        question: "Quels patients présentent un risque particulier de passage à l'hépatite E chronique ?",
+        options: [
+            "Les patients immunodéprimés (greffés d'organes, chimiothérapies, VIH)",
+            "Les patients porteurs d'une hépatopathie chronique sous-jacente",
+            "Les adolescents scolarisés",
+            "Les femmes allaitantes sans comorbidité"
+        ],
+        correct: [0, 1],
+        rationale: "Chez l'immunocompétent, le VHE guérit sans forme chronique. L'hépatite E chronique s'observe chez l'immunodéprimé ou le porteur d'hépatopathie préexistante."
+    },
+    {
+        id: 10,
+        question: "Quels outils diagnostiques sont utilisés pour affirmer une infection par le virus de l'hépatite E (VHE) ?",
+        options: [
+            "Sérologie VHE : recherche des IgM (positives 5-6 mois post-contamination) et IgG",
+            "PCR ARN VHE dans le sang (indispensable pour prouver l'infection active, surtout chez l'immunodéprimé)",
+            "PCR ARN VHE dans les selles (utilisée pour monitorer la réponse au traitement)",
+            "Biopsie rénale systématique"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le diagnostic repose sur la sérologie (IgM/IgG), la PCR sanguine (infection active) et la PCR dans les selles pour surveiller l'élimination du virus."
+    },
+    {
+        id: 11,
+        question: "Quel traitement antiviral peut être discuté dans l'hépatite E en cas de risque d'hépatite fulminante ou chez le patient immunodéprimé porteur d'une forme chronique ?",
+        options: [
+            "La Ribavirine",
+            "La pénicilline G à forte dose",
+            "L'Aciclovir intraveineux",
+            "La Gentamicine en perfusion de 30 minutes"
+        ],
+        correct: [0],
+        rationale: "Le traitement curatif du VHE est le plus souvent symptomatique, mais la Ribavirine est utilisée en cas de forme chronique de l'immunodéprimé ou de menace fulminante."
+    },
+    {
+        id: 12,
+        question: "Quelle est la nature du génome du virus de l'hépatite B (VHB) ?",
+        options: [
+            "C'est un virus à ADN",
+            "C'est un virus à ARN simple brin",
+            "C'est un prion",
+            "C'est une bactérie intracellulaire obligatoire"
+        ],
+        correct: [0],
+        rationale: "Le virus de l'hépatite B (VHB) est le seul des virus d'hépatites classiques (A, B, C, D, E) à posséder un génome à ADN."
+    },
+    {
+        id: 13,
+        question: "Quels sont les modes de transmission du virus de l'hépatite B (VHB) ?",
+        options: [
+            "Voie sexuelle (mode de transmission n°1 dans les pays de faible endémie)",
+            "Voie materno-fœtale / périnatale (mode n°1 dans les pays de forte endémie)",
+            "Voie sanguine (transfusions, toxicomanie IV, AES)",
+            "Voie salivaire (si présence de sang dans la salive ou contact intime)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le VHB se transmet par le sang, les rapports sexuels (n°1 en zone de basse endémie comme la France), la voie verticale mère-enfant (n°1 en forte endémie) et la salive."
+    },
+    {
+        id: 14,
+        question: "Pourquoi le VHB est-il considéré comme le virus à transmission sanguine le plus redoutable pour les soignants lors d'un Accident d'Exposition au Sang (AES) ?",
+        options: [
+            "Sa charge virale dans le sang est extrêmement élevée (jusqu'à 10^8 copies/mL)",
+            "Le virus est particulièrement résistant dans l'environnement extérieur",
+            "Il se transmet avec une efficacité 10 à 100 fois supérieure au VIH",
+            "Il est insensible aux solutions hydro-alcooliques"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le VHB a une virémie colossale (10^8 copies/mL) et résiste fortement sur les surfaces, d'où l'obligation vaccinale absolue des professionnels de santé."
+    },
+    {
+        id: 15,
+        question: "Concernant l'épidémiologie mondiale et française du VHB, quelles affirmations sont issues du cours ?",
+        options: [
+            "Il y a environ 250 millions de porteurs chroniques du VHB dans le monde",
+            "Le VHB est la 1ère cause de cancer primitif du foie (carcinome hépatocellulaire) dans le monde",
+            "En France, seulement 44,8 % des personnes porteuses de l'Ag HBs connaissent leur statut",
+            "20 % des 6 000 nouveau-nés de mère HBs+ échappent à la séro-vaccination et s'infectent chroniquement"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Toutes ces données épidémiologiques majeures sont soulignées dans le diaporama de la Dre de Monteynard."
+    },
+    {
+        id: 16,
+        question: "Lors d'une infection aiguë par le virus de l'hépatite B (VHB) chez l'adulte immunocompétent, quelle est la proportion de formes asymptomatiques et de guérison spontanée ?",
+        options: [
+            "L'hépatite aiguë est asymptomatique dans 90 % des cas (symptomatique dans seulement 10 %)",
+            "La guérison spontanée survient dans 90 à 95 % des cas",
+            "Le passage à l'infection chronique survient dans 5 à 10 % des cas",
+            "L'hépatite fulminante survient dans plus de 30 % des cas"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Chez l'adulte, l'hépatite B aiguë est asymptomatique à 90 %, guérit spontanément à 90-95 %, et ne passe à la chronicité que dans 5 à 10 % des cas (l'hépatite fulminante est < 1 %)."
+    },
+    {
+        id: 17,
+        question: "Par quel critère biologique définit-on le passage à l'état de 'portage chronique' de l'hépatite B ?",
+        options: [
+            "Persistance de l'Antigène HBs (Ag HBs) dans le sérum pendant plus de 6 mois",
+            "Présence d'anticorps anti-HBs isolés depuis plus de 2 semaines",
+            "Persistance d'un fébricule au-delà de 48 heures",
+            "Élévation isolée de la bilirubine pendant 10 jours"
+        ],
+        correct: [0],
+        rationale: "L'hépatite B chronique est définie par la persistance de l'Ag HBs au-delà de 6 mois après la primo-infection."
+    },
+    {
+        id: 18,
+        question: "Parmi les patients adultes développant une hépatite B chronique active, quel est le risque annuel d'évolution vers la cirrhose puis le carcinome hépatocellulaire (cancer du foie) ?",
+        options: [
+            "Évolution vers la cirrhose à un rythme d'environ 3 % par an",
+            "Évolution de la cirrhose vers le cancer du foie à un rythme d'environ 5 % par an",
+            "Guérison spontanée en moins de 48 heures sans surveillance",
+            "Transformation tumorale immédiate en 3 semaines chez 100 % des patients"
+        ],
+        correct: [0, 1],
+        rationale: "Dans l'hépatite active : 3 % par an évoluent vers la cirrhose, et les cirrhotiques développent un cancer du foie au rythme d'environ 5 % par an."
+    },
+    {
+        id: 19,
+        question: "Quel profil sérologique signe un sujet vacciné contre l'hépatite B n'ayant jamais contracté le virus sauvage ?",
+        options: [
+            "Ag HBs négatif, Ac anti-HBs positif, Ac anti-HBc négatif",
+            "Ag HBs positif, Ac anti-HBs négatif, Ac anti-HBc positif",
+            "Ag HBs négatif, Ac anti-HBs positif, Ac anti-HBc positif",
+            "Ag HBs négatif, Ac anti-HBs négatif, Ac anti-HBc négatif"
+        ],
+        correct: [0],
+        rationale: "Le vaccin ne contient que l'antigène de surface (Ag HBs) : le vacciné produit des Ac anti-HBs sans JAMAIS développer d'anticorps anti-nucléocapside (Ac anti-HBc négatifs)."
+    },
+    {
+        id: 20,
+        question: "Quel profil sérologique signe une hépatite B ancienne guérie ?",
+        options: [
+            "Ag HBs négatif, Ac anti-HBs positif, Ac anti-HBc positif",
+            "Ag HBs positif, Ac anti-HBs négatif, Ac anti-HBc positif",
+            "Ag HBs négatif, Ac anti-HBs positif, Ac anti-HBc négatif",
+            "Ag HBs positif, Ac anti-HBs positif, Ac anti-HBc négatif"
+        ],
+        correct: [0],
+        rationale: "L'hépatite B guérie montre la disparition de l'Ag HBs, l'apparition d'anticorps neutralisants anti-HBs et la cicatrice sérologique du contact avec le virus : les Ac anti-HBc positifs."
+    },
+    {
+        id: 21,
+        question: "Quel profil sérologique signe une hépatite B chronique active ou inactive ?",
+        options: [
+            "Ag HBs positif, Ac anti-HBs négatif, Ac anti-HBc positif",
+            "Ag HBs négatif, Ac anti-HBs positif, Ac anti-HBc négatif",
+            "Ag HBs négatif, Ac anti-HBs négatif, Ac anti-HBc négatif",
+            "Ag HBs négatif, Ac anti-HBs positif, Ac anti-HBc positif"
+        ],
+        correct: [0],
+        rationale: "Le portage chronique du VHB est caractérisé par la présence continue de l'Ag HBs, l'absence d'anticorps anti-HBs protecteurs et la présence des anticorps anti-HBc."
+    },
+    {
+        id: 22,
+        question: "Que signifie un bilan sérologique montrant : Ag HBs négatif, Ac anti-HBs négatif et Ac anti-HBc négatif ?",
+        options: [
+            "Sujet indemne : pas d'hépatite B antérieure, pas de vaccination (sujet non immunisé)",
+            "Hépatite B chronique hautement réplicative",
+            "Hépatite B guérie spontanément",
+            "Immunité vaccinale solide et définitive"
+        ],
+        correct: [0],
+        rationale: "La négativité des trois marqueurs signifie l'absence totale de contact avec le virus et l'absence de vaccin : le sujet est naïf et doit être vacciné."
+    },
+    {
+        id: 23,
+        question: "Concernant la nouvelle nomenclature de l'hépatite B chronique (EASL 2017), quelles caractéristiques correspondent au profil de 'Porteur inactif' (Infection chronique Ag HBe négative) ?",
+        options: [
+            "Ag HBs présent à titre bas, Ag HBe négatif",
+            "Charge virale ADN VHB basse (< 2 000 UI/mL)",
+            "Transaminases (ALAT) normales et lésions hépatiques absentes/minimes",
+            "Lésions de cirrhose décompensée avec ALAT très élevées"
+        ],
+        correct: [0, 1, 2],
+        rationale: "L'infection chronique inactive (porteur inactif) associe un Ag HBe négatif, un ADN VHB < 2 000 UI/mL, des ALAT strictement normales et l'absence de fibrose évolutive."
+    },
+    {
+        id: 24,
+        question: "Concernant l'évaluation non invasive de la fibrose hépatique par élastométrie impulsionnelle (FibroScan®), quelles règles et valeurs clés sont indiquées dans le cours ?",
+        options: [
+            "L'examen doit impérativement être réalisé chez un patient à jeun depuis au moins 2 heures",
+            "Une dureté du foie < 6 kPa correspond à une absence de fibrose significative (stade F0-F1)",
+            "Une élasticité > 9 kPa signe une fibrose hépatique sévère (stade F3-F4)",
+            "L'examen nécessite une anesthésie générale en salle d'opération"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Le FibroScan mesure l'élasticité en kiloPascals (kPa). Il se fait à jeun depuis 2h : < 6 kPa = pas de fibrose, > 9 kPa = fibrose sévère/cirrhose. C'est un examen indolore au lit du malade."
+    },
+    {
+        id: 25,
+        question: "Quel est le rythme de surveillance paraclinique recommandé chez un patient porteur d'une hépatite B chronique à risque accru de carcinome hépatocellulaire (CHC) ?",
+        options: [
+            "Échographie hépatique, bilan biologique et FibroScan tous les 6 mois",
+            "Un scanner tous les 5 ans uniquement",
+            "Une prise de sang tous les 10 ans",
+            "Aucune surveillance nécessaire si le patient ne boit pas d'alcool"
+        ],
+        correct: [0],
+        rationale: "Le dépistage précoce du carcinome hépatocellulaire chez le patient VHB à risque (cirrhose, fibrose avancée) repose sur une échographie hépatique tous les 6 mois."
+    },
+    {
+        id: 26,
+        question: "Concernant le traitement antiviral de l'hépatite B chronique, quelles affirmations sont exactes ?",
+        options: [
+            "Toutes les hépatites B chroniques ne doivent pas être traitées systématiquement",
+            "La décision de traiter dépend du degré d'inflammation/fibrose, de la charge virale ADN et de la rapidité d'évolution",
+            "La guérison virologique (éradication totale du virus de l'organisme) est actuellement impossible",
+            "Le traitement repose sur des inhibiteurs nucléosidiques/nucléotidiques de la polymérase (Ténofovir, Entécavir) pris à vie"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le VHB persiste sous forme de cccDNA intranucléaire : l'éradication est impossible. Le traitement (Ténofovir, Entécavir) bloque la réplication et doit être poursuivi à vie."
+    },
+    {
+        id: 27,
+        question: "Quelles molécules constituent les traitements antiviraux par voie orale de l'hépatite B chronique mentionnés dans le cours ?",
+        options: [
+            "Ténofovir",
+            "Entécavir",
+            "Lamivudine et Emtricitabine",
+            "Amoxicilline et Céfixime"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les analogues nucléosidiques/nucléotidiques actifs sur la polymérase du VHB sont le Ténofovir, l'Entécavir, la Lamivudine et l'Emtricitabine."
+    },
+    {
+        id: 28,
+        question: "Quel est le schéma vaccinal officiel contre l'hépatite B chez le nourrisson selon le calendrier vaccinal présenté ?",
+        options: [
+            "1 dose de 10 µg administrée à M2, M4 et M11 (schéma à 3 doses)",
+            "1 dose unique à la naissance sans rappel",
+            "Une injection tous les mois pendant 12 mois",
+            "1 dose de 50 µg à l'âge de 5 ans uniquement"
+        ],
+        correct: [0],
+        rationale: "Chez le nourrisson, la vaccination VHB est obligatoire et intégrée dans le vaccin hexavalent administré à 2 mois, 4 mois et rappel à 11 mois (10 µg par dose)."
+    },
+    {
+        id: 29,
+        question: "Quel est le schéma de vaccination contre l'hépatite B chez l'adulte immunocompétent ?",
+        options: [
+            "1 dose de 20 µg à M0, M1 et M6 (3 injections)",
+            "1 dose de 10 µg à M2 et M4 uniquement",
+            "1 dose annuelle à vie comme la grippe",
+            "Une prise unique orale"
+        ],
+        correct: [0],
+        rationale: "Chez l'adulte sain, le schéma classique comprend 3 injections intramusculaires de 20 µg à M0, M1 et M6."
+    },
+    {
+        id: 30,
+        question: "Quel schéma vaccinal renforcé s'applique chez l'adulte immunodéprimé (ou insuffisant rénal chronique en dialyse) ?",
+        options: [
+            "1 double dose (40 µg) administrée en 2 sites différents à M0, M1, M2 et M6 (schéma à 4 rendez-vous)",
+            "Une demi-dose unique",
+            "Le vaccin est formellement contre-indiqué chez l'immunodéprimé car il s'agit d'un vaccin vivant",
+            "Une simple dose à M0 et M12"
+        ],
+        correct: [0],
+        rationale: "Chez l'immunodéprimé, la réponse immune est faible : on utilise une double dose (40 µg sur deux sites distincts) selon un schéma renforcé à 4 injections : M0, M1, M2 et M6."
+    },
+    {
+        id: 31,
+        question: "Concernant le virus de l'hépatite Delta (VHD), quelle est sa particularité virologique absolue ?",
+        options: [
+            "C'est un virus défectif à ARN qui ne peut se multiplier qu'en utilisant l'enveloppe de l'antigène HBs du VHB",
+            "C'est un virus autonome à transmission alimentaire exclusive",
+            "Il ne touche que les patients déjà guéris de l'hépatite A",
+            "Il détruit instantanément le virus de l'hépatite B"
+        ],
+        correct: [0],
+        rationale: "Le virus Delta (VHD) est un virus défectif incomplet : il a besoin de la coque (Ag HBs) du virus de l'hépatite B pour fabriquer de nouveaux virions infectieux."
+    },
+    {
+        id: 32,
+        question: "Quelles situations cliniques peuvent résulter de l'infection conjointe par le VHB et le VHD ?",
+        options: [
+            "Co-infection simultanée VHB + VHD : risque accru d'hépatite aiguë fulminante",
+            "Surinfection à VHD chez un porteur chronique d'Ag HBs : majoration et aggravation rapide des lésions d'hépatite chronique",
+            "Disparition instantanée de toute lésion hépatique",
+            "Développement d'un diabète de type 1 sans atteinte hépatique"
+        ],
+        correct: [0, 1],
+        rationale: "La co-infection simultanée favorise l'hépatite fulminante aiguë. La surinfection du porteur chronique de VHB accélère dramatiquement l'évolution vers la cirrhose."
+    },
+    {
+        id: 33,
+        question: "Quelle mesure préventive protège à la fois contre l'hépatite B et contre l'hépatite Delta ?",
+        options: [
+            "La vaccination contre l'hépatite B",
+            "L'éviction de la consommation de viande de porc",
+            "L'ébullition de l'eau du robinet",
+            "Le port de gants stériles pour la toilette simple"
+        ],
+        correct: [0],
+        rationale: "Le virus Delta ayant obligatoirement besoin du VHB pour survivre, être vacciné et immunisé contre le VHB protège automatiquement à 100 % contre le virus Delta."
+    },
+    {
+        id: 34,
+        question: "Quel traitement antiviral peut être utilisé dans l'hépatite chronique Delta bien que son taux de réponse virologique soutenue ne soit que d'environ 25 % ?",
+        options: [
+            "L'Interféron alpha pégylé",
+            "La Fosfomycine",
+            "La Cloxacilline",
+            "L'Aciclovir"
+        ],
+        correct: [0],
+        rationale: "Le traitement historique du VHD repose sur l'interféron alpha pégylé pendant 48 semaines, avec une efficacité modeste (RVS d'environ 25 %)."
+    },
+    {
+        id: 35,
+        question: "Concernant le virus de l'hépatite C (VHC), quelles propositions caractérisent sa transmission et son épidémiologie ?",
+        options: [
+            "Le VHC est un virus à ARN comportant plusieurs génotypes",
+            "La transmission se fait principalement par voie sanguine (toxicomanie intraveineuse, transfusion avant 1990, AES)",
+            "La transmission sexuelle et périnatale est beaucoup plus faible que pour le VHB",
+            "Dans environ 30 % des cas, le mode de contamination exact demeure inconnu"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le VHC est transmis par le sang. La voie sexuelle est rare (sauf rapports traumatiques/VIH). Le mode de transmission est inconnu dans 30 % des cas."
+    },
+    {
+        id: 36,
+        question: "Quelle est l'histoire naturelle du virus de l'hépatite C (VHC) lors de la phase aiguë ?",
+        options: [
+            "L'incubation dure entre 4 et 12 semaines",
+            "L'hépatite C aiguë est le plus souvent totalement asymptomatique",
+            "Seulement 15 % des patients guérissent spontanément",
+            "85 % des patients infectés passent à la chronicité (hépatite C chronique)"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "Le VHC est redoutable car silencieux à la phase aiguë (asymptomatique), ne guérissant que dans 15 % des cas et conduisant à une infection chronique chez 85 % des malades."
+    },
+    {
+        id: 37,
+        question: "Quels sont les objectifs mondiaux fixés par l'OMS depuis 2016 pour l'élimination de l'hépatite C ?",
+        options: [
+            "Réduction de 90 % des nouveaux cas d'infection par le VHC",
+            "Réduction de 65 % des décès imputables au VHC",
+            "Traitement de 80 % des patients atteints d'hépatite C chronique éligibles",
+            "Création obligatoire d'un vaccin vivant atténué en 2018"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les cibles OMS sont : 90 % de cas en moins, 65 % de mortalité en moins et 80 % des patients éligibles traités grâce aux nouveaux Antiviraux d'Action Directe (AAD)."
+    },
+    {
+        id: 38,
+        question: "Concernant les nouveaux traitements Antiviraux d'Action Directe (AAD) de l'hépatite C, quelles associations pan-génotypiques sont présentées dans le cours ?",
+        options: [
+            "Epclusa : Sofosbuvir + Velpatasvir pendant une durée de 12 semaines",
+            "Maviret : Glécaprévir + Pibrentasvir pendant une durée de 8 semaines",
+            "L'indication du traitement concerne aujourd'hui TOUS les patients porteurs d'une hépatite C chronique",
+            "Le traitement nécessite des injections intraveineuses quotidiennes à l'hôpital"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Les AAD pan-génotypiques par voie orale (Epclusa 12 sem, Maviret 8 sem) guérissent plus de 95 % des patients. L'indication est universelle pour tout patient infecté."
+    },
+    {
+        id: 39,
+        question: "Quels sont les bénéfices individuels et de santé publique démontrés après obtention d'une Réponse Virologique Soutenue (RVS / guérison virologique) dans l'hépatite C ?",
+        options: [
+            "Mortalité liée au foie à 10 ans réduite à 1,9 % (contre 27,4 % sans RVS)",
+            "Réduction de 94 % de la mortalité globale et du recours à la transplantation hépatique",
+            "Régression de la fibrose hépatique chez les patients F3 et diminution du risque de cancer du foie",
+            "Réduction de la transmission communautaire par élimination du réservoir humain"
+        ],
+        correct: [0, 1, 2, 3],
+        rationale: "La guérison du VHC transforme le pronostic : baisse drastique de la cirrhose, du cancer du foie et de la mortalité, tout en asséchant le réservoir de transmission."
+    },
+    {
+        id: 40,
+        question: "Quels sont les piliers de la prévention de la transmission du virus de l'hépatite C (VHC) ?",
+        options: [
+            "Mise à disposition de matériel d'injection et seringues stériles à usage unique (RDR chez les usagers de drogues)",
+            "Application stricte des précautions standard / universelles d'hygiène lors des soins",
+            "Utilisation de préservatifs lors des rapports à risque",
+            "Vaccination obligatoire de tous les soignants à l'embauche"
+        ],
+        correct: [0, 1, 2],
+        rationale: "Attention piège partiel : il n'existe AUCUN vaccin contre l'hépatite C ! La prévention repose sur la RDR (seringues à usage unique), les précautions universelles de soins et le préservatif."
+    }
+];
+
+let currentIndex = 0;
+let userAnswers = {};
+let reviewMode = false;
+let displayedQuestions = [...questions];
+
+function init() {
+    renderGrid();
+    loadQuestion(currentIndex);
+    updateStats();
+}
+
+function getErrorQuestions() {
+    return questions.filter(q => {
+        const userAns = userAnswers[q.id];
+        if (!userAns) return false;
+        const sortedUser = [...userAns].sort().join(',');
+        const sortedCorr = [...q.correct].sort().join(',');
+        return sortedUser !== sortedCorr;
+    });
+}
+
+function renderGrid() {
+    const grid = document.getElementById('question-grid');
+    grid.innerHTML = '';
+    displayedQuestions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        item.textContent = q.id;
+        if (idx === currentIndex) item.classList.add('active');
+
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) {
+                item.classList.add('correct');
+            } else {
+                item.classList.add('incorrect');
+            }
+        }
+
+        item.onclick = () => {
+            currentIndex = idx;
+            loadQuestion(currentIndex);
+        };
+        grid.appendChild(item);
+    });
+}
+
+function loadQuestion(index) {
+    if (displayedQuestions.length === 0) {
+        document.getElementById('q-label').textContent = "Terminé";
+        document.getElementById('q-text').textContent = "Aucune erreur enregistrée ! Toutes vos réponses sont exactes.";
+        document.getElementById('options-container').innerHTML = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('validate-btn').disabled = true;
+        return;
+    }
+
+    const q = displayedQuestions[index];
+    document.getElementById('q-label').textContent = `Question ${q.id} sur 40 ${reviewMode ? '(Mode Erreurs)' : ''}`;
+    document.getElementById('q-text').textContent = q.question;
+
+    const optContainer = document.getElementById('options-container');
+    optContainer.innerHTML = '';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    const currentSelections = userAnswers[q.id] || [];
+    const isAnswered = userAnswers[q.id] !== undefined;
+
+    q.options.forEach((optText, optIdx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'option-item';
+        if (currentSelections.includes(optIdx)) optDiv.classList.add('selected');
+
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = currentSelections.includes(optIdx);
+
+        const label = document.createElement('span');
+        label.innerHTML = `<span class="opt-letter">${letters[optIdx]}.</span> ${optText}`;
+
+        optDiv.appendChild(chk);
+        optDiv.appendChild(label);
+
+        if (!isAnswered) {
+            optDiv.onclick = () => {
+                chk.checked = !chk.checked;
+                if (chk.checked) {
+                    optDiv.classList.add('selected');
+                } else {
+                    optDiv.classList.remove('selected');
+                }
+            };
+        } else {
+            optDiv.style.cursor = 'default';
+        }
+
+        optContainer.appendChild(optDiv);
+    });
+
+    const feedback = document.getElementById('feedback');
+    if (isAnswered) {
+        showFeedbackUI(q);
+        document.getElementById('validate-btn').disabled = true;
+    } else {
+        feedback.style.display = 'none';
+        feedback.className = 'feedback-box';
+        document.getElementById('validate-btn').disabled = false;
+    }
+
+    document.getElementById('prev-btn').disabled = (index === 0);
+    document.getElementById('next-btn').disabled = (index === displayedQuestions.length - 1);
+
+    renderGrid();
+}
+
+function validateCurrent() {
+    const q = displayedQuestions[currentIndex];
+    const optContainer = document.getElementById('options-container');
+    const checkboxes = optContainer.querySelectorAll('input[type="checkbox"]');
+    const selected = [];
+    checkboxes.forEach((cb, idx) => {
+        if (cb.checked) selected.push(idx);
+    });
+
+    if (selected.length === 0) {
+        alert("Veuillez sélectionner au moins une proposition.");
+        return;
+    }
+
+    userAnswers[q.id] = selected;
+    showFeedbackUI(q);
+    document.getElementById('validate-btn').disabled = true;
+    updateStats();
+    renderGrid();
+}
+
+function showFeedbackUI(q) {
+    const feedback = document.getElementById('feedback');
+    const letters = ['A', 'B', 'C', 'D'];
+    const sortedUser = [...(userAnswers[q.id] || [])].sort().join(',');
+    const sortedCorr = [...q.correct].sort().join(',');
+    const isCorrect = (sortedUser === sortedCorr);
+
+    const corrLetters = q.correct.map(i => letters[i]).join(', ');
+
+    feedback.style.display = 'block';
+    if (isCorrect) {
+        feedback.className = 'feedback-box correct';
+        feedback.innerHTML = `<strong>Exact !</strong> (Réponse : ${corrLetters})<br>${q.rationale}`;
+    } else {
+        feedback.className = 'feedback-box incorrect';
+        feedback.innerHTML = `<strong>Inexact ou incomplet.</strong> Bonne(s) réponse(s) : <strong>${corrLetters}</strong><br>${q.rationale}
+        <div class="feynman-tip">💡 <strong>Astuce Feynman :</strong> Expliquez simplement pourquoi ${corrLetters} est la seule interprétation virologique ou clinique valable.</div>`;
+    }
+}
+
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadQuestion(currentIndex);
+    }
+}
+
+function nextQuestion() {
+    if (currentIndex < displayedQuestions.length - 1) {
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+}
+
+function updateStats() {
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    document.getElementById('progress-indicator').textContent = `Question ${currentIndex + 1} / ${displayedQuestions.length}`;
+    document.getElementById('score-indicator').textContent = `Score : ${score} / ${totalAnswered} validées`;
+}
+
+function toggleFilterErrors() {
+    const btn = document.getElementById('filter-btn');
+    if (!reviewMode) {
+        const errors = getErrorQuestions();
+        if (errors.length === 0) {
+            alert("Aucune erreur détectée pour le moment ! Continuez l'épreuve.");
+            return;
+        }
+        reviewMode = true;
+        displayedQuestions = errors;
+        currentIndex = 0;
+        btn.textContent = "Retour épreuve";
+        btn.style.background = "var(--warning)";
+    } else {
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        btn.textContent = "Mode normal";
+        btn.style.background = "var(--primary)";
+    }
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function showResultsModal() {
+    const modal = document.getElementById('results-modal');
+    const circle = document.getElementById('modal-score-circle');
+    const title = document.getElementById('modal-title');
+    const text = document.getElementById('modal-feedback-text');
+
+    const totalAnswered = Object.keys(userAnswers).length;
+    let score = 0;
+    questions.forEach(q => {
+        if (userAnswers[q.id]) {
+            const sortedUser = [...userAnswers[q.id]].sort().join(',');
+            const sortedCorr = [...q.correct].sort().join(',');
+            if (sortedUser === sortedCorr) score++;
+        }
+    });
+
+    const percent = Math.round((score / questions.length) * 100);
+    circle.textContent = `${score} / 40`;
+
+    if (score >= 32) {
+        circle.className = 'score-circle score-pass';
+        title.textContent = "Validation Réussie (Niveau A)";
+        text.textContent = `Félicitations ! Vous validez ${percent} % du CM6 Hépatites. Les sérologies VHB, les risques du VHE chez la femme enceinte et les traitements du VHC sont parfaitement acquis.`;
+    } else {
+        circle.className = 'score-circle score-fail';
+        title.textContent = "Risque d'Ajournement (Niveau B/C)";
+        text.textContent = `Score actuel : ${score}/40 (${percent} %). Des notions éliminatoires (tableau des marqueurs VHB, absence de vaccin VHC, schémas vaccinaux VHB ou seuils du FibroScan) doivent être impérativement révisées.`;
+    }
+
+    modal.style.display = 'flex';
+}
+
+function closeResultsModal() {
+    document.getElementById('results-modal').style.display = 'none';
+}
+
+function startErrorReview() {
+    closeResultsModal();
+    const errors = getErrorQuestions();
+    if (errors.length === 0) {
+        alert("Félicitations, vous n'avez aucune erreur à réviser !");
+        return;
+    }
+    reviewMode = true;
+    displayedQuestions = errors;
+    currentIndex = 0;
+    document.getElementById('filter-btn').textContent = "Retour épreuve";
+    document.getElementById('filter-btn').style.background = "var(--warning)";
+    loadQuestion(currentIndex);
+    renderGrid();
+}
+
+function restartQuiz() {
+    if (confirm("Voulez-vous réinitialiser toutes vos réponses et recommencer ?")) {
+        userAnswers = {};
+        reviewMode = false;
+        displayedQuestions = [...questions];
+        currentIndex = 0;
+        document.getElementById('filter-btn').textContent = "Mode normal";
+        document.getElementById('filter-btn').style.background = "var(--primary)";
+        closeResultsModal();
+        updateStats();
+        loadQuestion(0);
+        renderGrid();
+    }
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
